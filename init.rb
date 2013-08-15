@@ -7,4 +7,7 @@ Redmine::Plugin.register :scrum do
   version     "0.1.0"
   url         "https://redmine.ociotec.com/projects/redmine-plugin-scrum"
   author_url  "http://ociotec.com"
+
+  settings    :default => {"sequence_custom_field" => ""},
+              :partial => "settings/scrum_settings"
 end
