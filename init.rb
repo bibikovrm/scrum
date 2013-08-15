@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 Issue.send(:include, Scrum::IssuePatch)
+Project.send(:include, Scrum::ProjectPatch)
 
 Redmine::Plugin.register :scrum do
   name              "Scrum Redmine plugin"
