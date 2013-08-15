@@ -1,0 +1,10 @@
+<%- defaults = Redmine::Plugin::registered_plugins[:scrum].settings[:default] -%>
+
+<%- sequence_custom_fields = CustomField.find(:all, :conditions => "type = 'IssueCustomField'")
+    sequence_custom_field_options = options_for_select([["", 0]] + sequence_custom_fields.collect{|c| [c.name, c.id]},
+      (@settings["sequence_custom_field"] || defaults["sequence_custom_field"]).to_i) -%>
+
+<p>
+  <label><%= l(:label_setting_sequence_custom_field) %>:</label>
+  <%= select_tag("settings[sequence_custom_field]", sequence_custom_field_options) %>
+</p>
