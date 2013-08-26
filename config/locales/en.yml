@@ -1,2 +1,12 @@
+# encoding: UTF-8
 en:
+  field_end_date: "End date"
   label_setting_sequence_custom_field: "Sequence custom field"
+  label_sprint_new: "New Sprint"
+  label_sprint: "Sprint"
+  label_sprint_plural: "Sprints"
+  notice_sprint_has_issues: "The Sprint has issues"
+  notice_unable_delete_sprint: "Fail to delete Sprint"
+  project_module_sprints: "Sprints"
+  permission_delete_sprints: "Borrar Sprints"
+  permission_edit_sprints: "Editar Sprints"

@@ -1,0 +1,38 @@
+<%- if @project.sprints.empty? -%>
+  <p class="nodata"><%= l(:label_no_data) %></p>
+<%- else -%>
+  <table class="list">
+    <thead>
+      <tr>
+        <th><%= l(:field_name) %></th>
+        <th><%= l(:field_description) %></th>
+        <th><%= l(:field_start_date) %></th>
+        <th><%= l(:field_end_date) %></th>
+        <th><%= l(:label_issue_plural) %></th>
+        <th style="width:15%"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for sprint in @project.sprints.sort %>
+        <tr class="<%= cycle 'odd', 'even' %>">
+          <td><%= link_to h(sprint.name), sprint %></td>
+          <td><%= h(sprint.description) %></td>
+          <td align="center"><%= format_date(sprint.start_date) %></td>
+          <td align="center"><%= format_date(sprint.end_date) %></td>
+          <td align="center"><%= sprint.issues.count %></td>
+          <td class="buttons">
+            <%- if User.current.allowed_to?(:edit_sprints, @project) -%>
+              <%= link_to l(:button_edit), edit_sprint_path(sprint), :class => "icon icon-edit" %>
+            <%- end -%>
+            <%- if User.current.allowed_to?(:delete_sprints, @project) -%>
+              <%= delete_link sprint_path(sprint) %>
+            <%- end -%>
+          </td>
+        </tr>
+      <% end; reset_cycle %>
+    <tbody>
+  </table>
+<%- end -%>
+
+<p><%= link_to l(:label_sprint_new), new_project_sprint_path(@project, :back_url => ""),
+               :class => "icon icon-add" if User.current.allowed_to?(:edit_sprints, @project) %></p>

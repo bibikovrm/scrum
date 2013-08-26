@@ -1,0 +1,6 @@
+<h2><%=l(:label_sprint_new)%></h2>
+
+<%= labelled_form_for @sprint, :url => project_sprints_path(@project) do |f| %>
+  <%= render :partial => "sprints/form", :locals => { :f => f } %>
+  <%= submit_tag l(:button_create) %>
+<% end %>
