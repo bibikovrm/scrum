@@ -9,6 +9,9 @@ Issue.send(:include, Scrum::IssuePatch)
 Project.send(:include, Scrum::ProjectPatch)
 ProjectsHelper.send(:include, Scrum::ProjectsHelperPatch)
 
+require_dependency "scrum/helper_hooks"
+require_dependency "scrum/view_hooks"
+
 Redmine::Plugin.register :scrum do
   name              "Scrum Redmine plugin"
   author            "Emilio González Montaña"

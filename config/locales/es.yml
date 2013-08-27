@@ -1,6 +1,7 @@
 # encoding: UTF-8
 es:
   field_end_date: "Fecha de fin"
+  field_sprint: "Sprint"
   label_setting_sequence_custom_field: "Campo personalizado para secuencia"
   label_sprint_new: "Nuevo Sprint"
   label_sprint: "Sprint"

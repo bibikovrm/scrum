@@ -1,0 +1,4 @@
+<tr>
+  <th class="fixed-version"><%=l(:label_sprint)%>:</th>
+  <td class="fixed-version"><%= link_to(@issue.sprint.name, @issue.sprint) unless @issue.sprint.nil? %></td>
+</tr>

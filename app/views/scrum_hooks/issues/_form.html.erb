@@ -1,0 +1,8 @@
+<div class="splitcontent">
+  <div class="splitcontentleft">
+    <p>
+      <%- sprint_options = @issue.project.sprints.collect {|sprint| [sprint.name, sprint.id]} -%>
+      <%= form.select :sprint_id, sprint_options, :include_blank => true %>
+    </p>
+  </div>
+</div>
