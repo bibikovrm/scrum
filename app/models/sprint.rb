@@ -14,9 +14,24 @@ class Sprint < ActiveRecord::Base
 
   validates :end_date, :date => true
   validates_presence_of :end_date
+  
+  before_destroy :update_project_product_backlog
 
   def to_s
     name
+  end
+
+  def is_product_backlog?
+    project and project.product_backlog == self
+  end
+
+private
+
+  def update_project_product_backlog
+    if is_product_backlog?
+      project.product_backlog = nil
+      project.save!
+    end
   end
 
 end

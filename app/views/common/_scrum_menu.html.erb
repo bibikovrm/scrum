@@ -1,0 +1,3 @@
+<div class="contextual">
+  <%= link_to(l(:label_product_backlog), project_product_backlog_index_path(@project), :class => 'icon icon-edit') if User.current.allowed_to?(:view_product_backlog, @project) %>
+</div>

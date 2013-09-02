@@ -5,7 +5,8 @@ module Scrum
     def self.included(base)
       base.class_eval do
 
-        has_many :sprints
+        has_many :sprints, :dependent => :destroy, :order => "start_date ASC, name ASC"
+        belongs_to :product_backlog, :class_name => "Sprint"
 
       end
     end

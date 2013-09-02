@@ -1,0 +1,59 @@
+ul.user-stories {
+	padding: 0px;
+	margin: 0px;
+	width: 100%;
+	cursor: ns-resize;
+}
+
+ul.user-stories li {
+	list-style: none;
+	padding: 3px 20px 3px 20px;
+	margin-bottom: 1px;
+	border: 1px solid lightgrey;
+	background-image: -ms-linear-gradient(top, #FFFFFF 0%, #EFE70C 100%);
+	background-image: -moz-linear-gradient(top, #FFFFFF 0%, #EFE70C 100%);
+	background-image: -o-linear-gradient(top, #FFFFFF 0%, #EFE70C 100%);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #FFFFFF), color-stop(1, #EFE70C));
+	background-image: -webkit-linear-gradient(top, #FFFFFF 0%, #EFE70C 100%);
+	background-image: linear-gradient(to bottom, #FFFFFF 0%, #EFE70C 100%);
+}
+
+ul.user-stories li table {
+	width: 100%;
+}
+
+ul.user-stories li table tr {
+	vertical-align: middle;
+}
+
+ul.user-stories li table tr td.header-1, ul.user-stories li table tr td.header-2 {
+	font-size: 0.6em;
+	font-style: italic;
+	color: darkgrey;
+	width: 50%;
+}
+
+ul.user-stories li table tr td.header-1 {
+	text-align: left;
+}
+
+ul.user-stories li table tr td.header-2 {
+	text-align: right;
+}
+
+ul.user-stories li table tr td.story-points {
+	font-size: 2em;
+	font-style: bold;
+	text-align: right;
+	min-width: 60px;
+}
+
+ul.user-stories li table tr td.story-points-legend {
+	font-style: italic;
+	color: darkgrey;
+	min-width: 20px;
+}
+
+ul.user-stories li table tr td.content {
+	width: 100%;
+}

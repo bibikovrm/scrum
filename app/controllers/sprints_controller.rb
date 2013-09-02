@@ -1,11 +1,11 @@
 class SprintsController < ApplicationController
 
+  menu_item :scrum
   model_object Sprint
 
-  before_filter :find_model_object, :except => [:index, :new, :create]
-  before_filter :find_project_from_association, :except => [:index, :new, :create]
-  before_filter :find_project, :only => [:index]
-  before_filter :find_project_by_project_id, :only => [:new, :create]
+  before_filter :find_model_object, :only => [:show, :edit, :update, :destroy]
+  before_filter :find_project_from_association, :only => [:show, :edit, :update, :destroy]
+  before_filter :find_project_by_project_id, :only => [:index, :new, :create]
   before_filter :authorize
 
   helper :custom_fields
@@ -14,7 +14,6 @@ class SprintsController < ApplicationController
   include ProjectsHelper
 
   def index
-    redirect_to :controller => :projects, :action => :settings, :tab => "sprints", :id => @project
   end
 
   def show
@@ -22,13 +21,23 @@ class SprintsController < ApplicationController
 
   def new
     @sprint = Sprint.new(:project => @project)
+    if params[:create_product_backlog]
+      @sprint.name = l(:label_product_backlog)
+      @sprint.start_date = @sprint.end_date = Date.today
+    end
   end
 
   def create
+    raise "Product backlog is already set" if params[:create_product_backlog] and
+                                              !(@project.product_backlog.nil?)
     @sprint = Sprint.new(params[:sprint].merge(:user => User.current, :project => @project))
     if request.post? and @sprint.save
+      if params[:create_product_backlog]
+        @project.product_backlog = @sprint
+        raise "Fail to update project with product backlog" unless @project.save!
+      end
       flash[:notice] = l(:notice_successful_create)
-      redirect_to :controller => :projects, :action => :settings, :tab => "sprints", :id => @project
+      redirect_to settings_project_path(@project, :tab => "sprints")
     end
   rescue ActiveRecord::RecordNotFound
     render_404
