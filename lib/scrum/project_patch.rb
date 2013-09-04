@@ -12,7 +12,7 @@ module Scrum
                  :order => "start_date ASC, name ASC"
 
         def last_sprint
-          sprints.sort{|a, b| a.end_date <=> b.end_date}.first
+          sprints.sort{|a, b| a.end_date <=> b.end_date}.last
         end
 
       end
