@@ -6,6 +6,7 @@ class SprintsController < ApplicationController
   before_filter :find_model_object, :only => [:show, :edit, :update, :destroy]
   before_filter :find_project_from_association, :only => [:show, :edit, :update, :destroy]
   before_filter :find_project_by_project_id, :only => [:index, :new, :create]
+  before_filter :find_selected_sprint, :only => [:index]
   before_filter :authorize
 
   helper :custom_fields
@@ -63,6 +64,17 @@ class SprintsController < ApplicationController
     flash[:error] = l(:notice_unable_delete_sprint)
   ensure
     redirect_to settings_project_path(@project, :tab => "sprints")
+  end
+
+private
+
+  def find_selected_sprint
+    if params[:selected_sprint_id].nil? or
+       @project.product_backlog.nil? or params[:selected_sprint_id] == @project.product_backlog.id
+      @sprint = @project.sprints.max_by(&:end_date)
+    else
+      @sprint = @project.sprints.find(params[:selected_sprint_id])
+    end
   end
 
 end

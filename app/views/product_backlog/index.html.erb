@@ -4,7 +4,7 @@
 
 <ul id="user_stories" class="user-stories">
   <%- @user_stories.each do |user_story| -%>
-    <li id="user_story_<%= user_story.id %>">
+    <li id="user_story_<%= user_story.id %>" class="post-it-color-1">
       <table>
         <tr>
           <td class="header-1">
@@ -17,8 +17,8 @@
           <td class="story-points" rowspan="2">
             <%= user_story.story_points %>
           </td>
-          <td class="story-points-legend" rowspan="2">
-            <%= l(:label_story_points_legend, user_story.story_points) unless user_story.story_points.nil? %>
+          <td class="story-points-legend" rowspan="2" title="<%= l(:label_story_points) %>">
+            <%= l(:label_story_point_unit, user_story.story_points) unless user_story.story_points.nil? %>
           </td>
         </tr>
         <tr>

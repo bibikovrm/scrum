@@ -25,6 +25,11 @@ class Sprint < ActiveRecord::Base
     project and project.product_backlog == self
   end
 
+  def user_stories
+    user_stories_trackers = Setting.plugin_scrum[:user_story_trakers].collect{|tracker| tracker.to_i}
+    issues.all(:conditions => {:tracker_id => user_stories_trackers})
+  end
+
 private
 
   def update_project_product_backlog

@@ -6,8 +6,10 @@ if (Rails.env == "development")
 end
 
 Issue.send(:include, Scrum::IssuePatch)
+IssueStatus.send(:include, Scrum::IssueStatusPatch)
 Project.send(:include, Scrum::ProjectPatch)
 ProjectsHelper.send(:include, Scrum::ProjectsHelperPatch)
+Tracker.send(:include, Scrum::TrackerPatch)
 
 require_dependency "scrum/helper_hooks"
 require_dependency "scrum/view_hooks"
@@ -22,8 +24,8 @@ Redmine::Plugin.register :scrum do
   requires_redmine  :version_or_higher => "2.1.2"
 
   project_module    :sprints do
-    permission      :view_sprints, {:sprints => [:show]}, :public => true
-    permission      :edit_sprints, {:sprints => [:index, :new, :create, :edit, :update]}, :require => :member
+    permission      :view_sprints, {:sprints => [:index, :show]}, :public => true
+    permission      :edit_sprints, {:sprints => [:new, :create, :edit, :update]}, :require => :member
     permission      :delete_sprints, {:sprints => [:destroy]}, :require => :member
     permission      :view_product_backlog, {:product_backlog => [:index]}, :require => :member
     permission      :edit_product_backlog, {:product_backlog => [:sort]}, :require => :member
@@ -32,8 +34,12 @@ Redmine::Plugin.register :scrum do
   menu :project_menu, :scrum, {:controller => :sprints, :action => :index},
        :caption => :label_scrum, :after => :activity, :param => :project_id
 
-  settings          :default => {"story_points_custom_field" => "",
+  settings          :default => {"doer_color" => "post-it-color-5",
+                                 "reviewer_color" => "post-it-color-3",
+                                 "story_points_custom_field" => "",
+                                 "task_statuses" => "",
                                  "task_trakers" => "",
-                                 "user_story_trakers" => ""},
+                                 "user_story_trakers" => "",
+                                 "verification_activities" => ""},
                     :partial => "settings/scrum_settings"
 end

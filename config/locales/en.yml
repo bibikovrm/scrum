@@ -2,14 +2,20 @@
 en:
   field_end_date: "End date"
   field_sprint: "Sprint"
+  label_doer: "Doer"
+  label_post_it: "Post-it"
   label_product_backlog: "Product backlog"
   label_product_backlog_new: "New product backlog"
+  label_reviewer: "Reviewer"
   label_setting_story_points_custom_field: "Story points custom field"
+  label_setting_task_statuses: "Task statuses for Sprint board"
+  label_setting_verification_activities: "Verification activities"
   label_scrum: "Scrum"
-  label_sprint_new: "New Sprint"
   label_sprint: "Sprint"
+  label_sprint_board: "Sprint board"
+  label_sprint_new: "New Sprint"
   label_sprint_plural: "Sprints"
-  label_story_points_legend:
+  label_story_point_unit:
     one: "SP"
     other: "SPs"
   label_task_plural: "Tasks"
