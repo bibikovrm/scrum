@@ -11,6 +11,10 @@ module Scrum
         has_many :sprints_and_product_backlog, :class_name => "Sprint", :dependent => :destroy,
                  :order => "start_date ASC, name ASC"
 
+        def last_sprint
+          sprints.sort{|a, b| a.end_date <=> b.end_date}.first
+        end
+
       end
     end
   end

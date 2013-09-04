@@ -6,7 +6,7 @@ class SprintsController < ApplicationController
   before_filter :find_model_object, :only => [:show, :edit, :update, :destroy]
   before_filter :find_project_from_association, :only => [:show, :edit, :update, :destroy]
   before_filter :find_project_by_project_id, :only => [:index, :new, :create]
-  before_filter :find_selected_sprint, :only => [:index]
+  before_filter :find_selected_sprint, :only => []
   before_filter :authorize
 
   helper :custom_fields
@@ -15,6 +15,9 @@ class SprintsController < ApplicationController
   include ProjectsHelper
 
   def index
+    redirect_to sprint_path(@project.last_sprint)
+  rescue
+    render_404
   end
 
   def show
@@ -31,7 +34,9 @@ class SprintsController < ApplicationController
   def create
     raise "Product backlog is already set" if params[:create_product_backlog] and
                                               !(@project.product_backlog.nil?)
-    @sprint = Sprint.new(params[:sprint].merge(:user => User.current, :project => @project))
+    @sprint = Sprint.new(params[:sprint].merge(:user => User.current,
+                                               :project => @project,
+                                               :is_product_backlog => (!(params[:create_product_backlog].nil?))))
     if request.post? and @sprint.save
       if params[:create_product_backlog]
         @project.product_backlog = @sprint

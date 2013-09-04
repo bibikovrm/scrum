@@ -73,6 +73,15 @@
 	background-image: linear-gradient(to bottom, #FFC375 0%, #FFA64D 100%);
 }
 
+.post-it-color-6 {
+	background-image: -ms-linear-gradient(top, #FF6F59 0%, #FF2605 100%);
+	background-image: -moz-linear-gradient(top, #FF6F59 0%, #FF2605 100%);
+	background-image: -o-linear-gradient(top, #FF6F59 0%, #FF2605 100%);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #FF6F59), color-stop(1, #FF2605));
+	background-image: -webkit-linear-gradient(top, #FF6F59 0%, #FF2605 100%);
+	background-image: linear-gradient(to bottom, #FF6F59 0%, #FF2605 100%);
+}
+
 .post-it-rotation-0 {
 	-o-transform: rotate(-1deg);  
 	-webkit-transform: rotate(-1deg);  
