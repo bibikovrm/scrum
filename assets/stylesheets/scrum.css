@@ -1,10 +1,8 @@
-.icon-sprint-board
-{
+.icon-sprint-board {
 	background-image: url(../images/icon-sprint-board-16.png);
 }
 
-.icon-product-backlog
-{
+.icon-product-backlog {
 	background-image: url(../images/icon-product-backlog-16.png);
 }
 
@@ -13,6 +11,9 @@
 	-moz-box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.7);
 	-webkit-box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.7);
 	box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.7);
+	-moz-transition:-moz-transform 0.15s linear;  
+	-o-transition:-o-transform 0.15s linear;  
+	-webkit-transition:-webkit-transform 0.15s linear;
 }
 
 .big-post-it:hover {
@@ -22,6 +23,7 @@
 	-webkit-transform: scale(1.14);
 	-moz-transform: scale(1.14);
 	-o-transform: scale(1.14);
+	z-index: 100;
 }
 
 .settings-post-it {
@@ -83,9 +85,6 @@
 }
 
 .post-it-rotation-0 {
-	-o-transform: rotate(-1deg);  
-	-webkit-transform: rotate(-1deg);  
-	-moz-transform: rotate(-1deg);
 }
 
 .post-it-rotation-1 {
@@ -95,12 +94,15 @@
 }
 
 .post-it-rotation-2 {
-}
-
-.post-it-rotation-3 {
 	-o-transform: rotate(0.5deg);  
 	-webkit-transform: rotate(0.5deg);  
 	-moz-transform: rotate(0.5deg);
+}
+
+.post-it-rotation-3 {
+	-o-transform: rotate(-1deg);  
+	-webkit-transform: rotate(-1deg);  
+	-moz-transform: rotate(-1deg);
 }
 
 .post-it-rotation-4 {
@@ -164,23 +166,30 @@ ul.user-stories li table tr td.content {
 }
 
 table.sprint-board {
-	width: 100%;
 	border-collapse: collapse;
+	overflow: auto;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 table.sprint-board tr.sprint-board {
-	vertical-align: middle;
+	vertical-align: top;
 }
 
 table.sprint-board tr.sprint-board th.sprint-board {
 }
 
 table.sprint-board tr.sprint-board td.sprint-board {
-	border: 3px solid darkgrey;
+	border: 5px solid darkgrey;
+	min-width: 160px;
+	padding-left: 10px;
+	padding-top: 10px;
 }
 
 table.sprint-user-story, table.sprint-task {
 	height: 100px;
+	margin-right: 10px;
+	margin-bottom: 10px;
 }
 
 table.sprint-user-story {
@@ -189,6 +198,8 @@ table.sprint-user-story {
 
 table.sprint-task {
 	width: 150px;
+	float: left;
+	cursor: ew-resize;
 }
 
 table.sprint-user-story tr, table.sprint-task tr {

@@ -58,44 +58,82 @@
         </td>
         <%- tasks = user_story.tasks_by_status_id
             task_statuses.each do |status| -%>
-          <td class="sprint-board">
-            <table>
-              <tr>
-                <%- tasks[status.id].each do |task| -%>
-                  <td>
-                    <table class="<%= task.post_it_css_class %>">
-                      <tr>
-                        <td class="content" colspan="2">
-                          <%= link_to_issue(task, :tracker => false, :truncate => 100) %>
-                          <div class="doers-reviewers-post-its-container">
-                            <%- task.doers.each do |doer| -%>
-                              <div class="<%= Issue.doer_post_it_css_class %>">
-                                <%= link_to_user(doer) %>
-                              </div>
-                            <%- end -%>
-                            <%- task.reviewers.each do |reviewer| -%>
-                              <div class="<%= Issue.reviewer_post_it_css_class %>">
-                                <%= link_to_user(reviewer) %>
-                              </div>
-                            <%- end -%>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="estimation">
-                          <%= "#{task.estimated_hours.to_i} h" unless task.estimated_hours.blank? %>
-                        </td>
-                        <td class="spent">
-                          <%- spent = task.spent_hours -%>
-                          <%= "#{spent.to_i} h" unless spent.blank? or (spent.to_i == 0) %>
-                        </td>
-                      </tr>
-                    </table>
+          <%- user_story_status_id = "user_story_#{user_story.id}_status_#{status.id}"
+              other_user_story_status_ids = task_statuses.select{|other| other != status}.collect{
+                |other| "user_story_#{user_story.id}_status_#{other.id}"
+              } -%>
+          <td id="<%= user_story_status_id %>" class="sprint-board">
+            <%- tasks[status.id].each do |task|
+                task_id = "task_#{task.id}" -%>
+              <table id="<%= task_id %>" class="<%= task.post_it_css_class %>">
+                <tr>
+                  <td class="content" colspan="2">
+                    <%= link_to_issue(task, :tracker => false, :truncate => 100) %>
+                    <div class="doers-reviewers-post-its-container">
+                      <%- task.doers.each do |doer| -%>
+                        <div class="<%= Issue.doer_post_it_css_class %>">
+                          <%= link_to_user(doer) %>
+                        </div>
+                      <%- end -%>
+                      <%- task.reviewers.each do |reviewer| -%>
+                        <div class="<%= Issue.reviewer_post_it_css_class %>">
+                          <%= link_to_user(reviewer) %>
+                        </div>
+                      <%- end -%>
+                    </div>
                   </td>
+                </tr>
+                <tr>
+                  <td class="estimation">
+                    <%= "#{task.estimated_hours.to_i} h" unless task.estimated_hours.blank? %>
+                  </td>
+                  <td class="spent">
+                    <%- spent = task.spent_hours -%>
+                    <%= "#{spent.to_i} h" unless spent.blank? or (spent.to_i == 0) %>
+                  </td>
+                </tr>
+              </table>
+              <%= javascript_tag do %>
+                <%- other_user_story_status_ids.each do |user_story_status_id| -%>
+                  $(document).ready(function() {
+                    $("#<%= task_id %>").draggable({
+                      revert: "invalid",
+                      axis: "x",
+                      containment: "<%= user_story_status_id %>",
+                      cursor: "ew-resize",
+                      stack: "table"
+                    });
+                  });
                 <%- end -%>
-              </tr>
-            </table>
+              <% end %>
+            <%- end -%>
           </td>
+          <%= javascript_tag do %>
+            $(document).ready(function() {
+              $("#<%= user_story_status_id %>").droppable({
+                accept: ".sprint-task",
+                drop: function(event, ui) {
+                  setupAjaxIndicator();
+                  if (!(ui.draggable.is($(this).children()))) {
+                    $.ajax({
+                      url: "<%= project_sprints_change_task_status_path(@project) %>",
+                      type: "POST",
+                      data: {task: encodeURIComponent($(ui.draggable).attr("id")),
+                             status: encodeURIComponent("<%= status.id %>")},
+                      error: function() {
+                        alert("<%= l(:error_changing_task_status) %>");
+                      },
+                      complete: function() {
+                        hideOnLoad();
+                      }
+                    });
+                  }
+                  ui.draggable.appendTo($(this)).removeAttr("style");
+                  ui.draggable.attr("style", "position: relative; " + ui.draggable.attr("style"));
+                }
+              });
+            });
+          <% end %>
         <%- end -%>
       </tr>
     <%- end -%>

@@ -14,8 +14,9 @@ class ProductBacklogController < ApplicationController
     @user_stories = Issue.find_all_by_sprint_id(@project.product_backlog, :order => "position ASC")
     @user_stories.each do |user_story|
       user_story.position = params["user_story"].index(user_story.id.to_s) + 1
-      user_story.save
+      user_story.save!
     end
+    render :nothing => true
   end
 
 private

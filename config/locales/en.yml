@@ -1,5 +1,6 @@
 # encoding: UTF-8
 en:
+  error_changing_task_status: "Fail to change the task status"
   field_end_date: "End date"
   field_sprint: "Sprint"
   label_doer: "Doer"
@@ -22,6 +23,10 @@ en:
   label_user_story_plural: "User stories"
   notice_sprint_has_issues: "The Sprint has issues"
   notice_unable_delete_sprint: "Fail to delete Sprint"
-  project_module_sprints: "Sprints"
+  project_module_scrum: "Scrum"
   permission_delete_sprints: "Borrar Sprints"
+  permission_edit_product_backlog: "Edit product backlog"
   permission_edit_sprints: "Editar Sprints"
+  permission_edit_sprint_board: "Edit Sprint board"
+  permission_view_product_backlog: "View product backlog"
+  permission_view_sprints: "View Sprints"

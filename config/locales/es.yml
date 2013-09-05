@@ -1,5 +1,6 @@
 # encoding: UTF-8
 es:
+  error_changing_task_status: "No se pudo cambiar el estado de la tarea"
   field_end_date: "Fecha de fin"
   field_sprint: "Sprint"
   label_doer: "Hacedor"
@@ -22,6 +23,10 @@ es:
   label_user_story_plural: "Historias de usuario"
   notice_sprint_has_issues: "El Sprint tiene peticiones"
   notice_unable_delete_sprint: "Fallo al borrar Sprint"
-  project_module_sprints: "Sprints"
+  project_module_scrum: "Scrum"
   permission_delete_sprints: "Borrar Sprints"
+  permission_edit_product_backlog: "Editar pila de producto"
   permission_edit_sprints: "Editar Sprints"
+  permission_edit_sprint_board: "Editar tablero del Sprint"
+  permission_view_product_backlog: "Ver pila de producto"
+  permission_view_sprints: "Ver Sprints"

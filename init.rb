@@ -23,10 +23,11 @@ Redmine::Plugin.register :scrum do
   author_url        "http://ociotec.com"
   requires_redmine  :version_or_higher => "2.1.2"
 
-  project_module    :sprints do
+  project_module    :scrum do
     permission      :view_sprints, {:sprints => [:index, :show]}, :public => true
     permission      :edit_sprints, {:sprints => [:new, :create, :edit, :update]}, :require => :member
     permission      :delete_sprints, {:sprints => [:destroy]}, :require => :member
+    permission      :edit_sprint_board, {:sprints => [:change_task_status]}, :require => :member
     permission      :view_product_backlog, {:product_backlog => [:index]}, :require => :member
     permission      :edit_product_backlog, {:product_backlog => [:sort]}, :require => :member
   end

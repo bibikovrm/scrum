@@ -5,8 +5,7 @@ class SprintsController < ApplicationController
 
   before_filter :find_model_object, :only => [:show, :edit, :update, :destroy]
   before_filter :find_project_from_association, :only => [:show, :edit, :update, :destroy]
-  before_filter :find_project_by_project_id, :only => [:index, :new, :create]
-  before_filter :find_selected_sprint, :only => []
+  before_filter :find_project_by_project_id, :only => [:index, :new, :create, :change_task_status]
   before_filter :authorize
 
   helper :custom_fields
@@ -69,6 +68,14 @@ class SprintsController < ApplicationController
     flash[:error] = l(:notice_unable_delete_sprint)
   ensure
     redirect_to settings_project_path(@project, :tab => "sprints")
+  end
+
+  def change_task_status
+    task = Issue.find(params[:task].match(/^task_(\d+)$/)[1].to_i)
+    task.init_journal(User.current)
+    task.status = IssueStatus.find(params[:status].to_i)
+    task.save!
+    render :nothing => true
   end
 
 private
