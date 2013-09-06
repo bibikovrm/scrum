@@ -111,11 +111,18 @@
 	-moz-transform: rotate(1deg);
 }
 
+.post-it-horizontal-move-cursor {
+	cursor: ew-resize;
+}
+
+.post-it-vertical-move-cursor {
+	cursor: ns-resize;
+}
+
 ul.user-stories {
 	padding: 0px;
 	margin: 0px;
 	width: 100%;
-	cursor: ns-resize;
 }
 
 ul.user-stories li {
@@ -200,7 +207,6 @@ table.sprint-user-story {
 table.sprint-task {
 	width: 150px;
 	float: left;
-	cursor: ew-resize;
 }
 
 table.sprint-user-story tr, table.sprint-task tr {

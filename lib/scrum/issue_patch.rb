@@ -63,6 +63,9 @@ module Scrum
           else
             classes << "sprint-task"
           end
+          if User.current.allowed_to?(:edit_product_backlog, @project) and editable?
+            classes << is_user_story? ? "post-it-vertical-move-cursor" : "post-it-horizontal-move-cursor"
+          end
           classes << "post-it-rotation-#{rand(5)}"
           classes.join(" ")
         end
