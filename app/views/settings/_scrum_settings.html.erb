@@ -27,14 +27,14 @@
   <legend><%= l(:label_tracker_plural) %></legend>
   <%- trackers = Tracker.all.collect{|t| [t.name, t.id]} -%>
   <p>
-    <label><%= l(:label_user_story_plural) %>:</label>
+    <label><%= l(:lable_product_backlog_item_plural) %>:</label>
     <%- options = options_for_select(trackers, @settings["user_story_trakers"]) -%>
-    <%= select_tag "settings[user_story_trakers]", options, :multiple => true, :include_blank => true %>
+    <%= select_tag "settings[user_story_trakers]", options, :multiple => true %>
   </p>
   <p>
     <label><%= l(:label_task_plural) %>:</label>
     <%- options = options_for_select(trackers, @settings["task_trakers"]) -%>
-    <%= select_tag "settings[task_trakers]", options, :multiple => true, :include_blank => true %>
+    <%= select_tag "settings[task_trakers]", options, :multiple => true %>
   </p>
 </fieldset>
 

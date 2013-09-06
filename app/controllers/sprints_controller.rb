@@ -78,15 +78,4 @@ class SprintsController < ApplicationController
     render :nothing => true
   end
 
-private
-
-  def find_selected_sprint
-    if params[:selected_sprint_id].nil? or
-       @project.product_backlog.nil? or params[:selected_sprint_id] == @project.product_backlog.id
-      @sprint = @project.sprints.max_by(&:end_date)
-    else
-      @sprint = @project.sprints.find(params[:selected_sprint_id])
-    end
-  end
-
 end

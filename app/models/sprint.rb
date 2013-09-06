@@ -27,7 +27,7 @@ class Sprint < ActiveRecord::Base
 
   def user_stories
     user_stories_trackers = Setting.plugin_scrum[:user_story_trakers].collect{|tracker| tracker.to_i}
-    issues.all(:conditions => {:tracker_id => user_stories_trackers})
+    issues.all(:conditions => {:tracker_id => user_stories_trackers}).select{|issue| issue.visible?}
   end
 
 private

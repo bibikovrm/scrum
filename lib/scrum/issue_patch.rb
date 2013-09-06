@@ -29,7 +29,7 @@ module Scrum
           raise "Issue is not an user story" unless is_user_story?
           statuses = {}
           IssueStatus.task_statuses.each do |status|
-            statuses[status.id] = children.select{|issue| issue.status == status}
+            statuses[status.id] = children.select{|issue| (issue.status == status) and issue.visible?}
           end
           statuses
         end

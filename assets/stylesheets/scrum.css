@@ -134,9 +134,9 @@ ul.user-stories li table tr {
 }
 
 ul.user-stories li table tr td.header-1, ul.user-stories li table tr td.header-2 {
-	font-size: 0.6em;
+	font-size: 0.8em;
 	font-style: italic;
-	color: darkgrey;
+	color: grey;
 	width: 50%;
 }
 
@@ -163,6 +163,7 @@ ul.user-stories li table tr td.story-points-legend {
 
 ul.user-stories li table tr td.content {
 	width: 100%;
+	font-size: 1.2em;
 }
 
 table.sprint-board {

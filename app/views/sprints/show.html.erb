@@ -34,7 +34,7 @@
 <%- else -%>
   <table class="sprint-board">
     <tr class="sprint-board">
-      <th class="sprint-board"><%= l(:label_user_story_plural) %></th>
+      <th class="sprint-board"><%= l(:lable_product_backlog_item_plural) %></th>
       <%- task_statuses = IssueStatus.task_statuses
           task_statuses.each do |status| -%>
         <th class="sprint-board"><%= status.name %></th>

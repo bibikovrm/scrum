@@ -6,6 +6,7 @@ es:
   label_doer: "Hacedor"
   label_post_it: "Post-it"
   label_product_backlog: "Pila de producto"
+  lable_product_backlog_item_plural: "Elementos de la pila de producto"
   label_product_backlog_new: "Nueva pila de producto"
   label_reviewer: "Revisor"
   label_setting_story_points_custom_field: "Campo personalizado para historias de usuario"
