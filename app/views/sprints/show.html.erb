@@ -113,7 +113,9 @@
               $("#<%= user_story_status_id %>").droppable({
                 accept: ".sprint-task",
                 drop: function(event, ui) {
-                  setupAjaxIndicator();
+                  if ($.isFunction($.fn.setupAjaxIndicator)) {
+                    setupAjaxIndicator();
+                  }
                   if (!(ui.draggable.is($(this).children()))) {
                     $.ajax({
                       url: "<%= project_sprints_change_task_status_path(@project) %>",
@@ -124,7 +126,9 @@
                         alert("<%= l(:error_changing_task_status) %>");
                       },
                       complete: function() {
-                        hideOnLoad();
+                        if ($.isFunction($.fn.hideOnLoad)) {
+                          hideOnLoad();
+                        }
                       }
                     });
                   }

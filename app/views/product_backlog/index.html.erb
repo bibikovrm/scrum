@@ -38,7 +38,9 @@
     $(document).ready(function() {
       $("#user_stories").sortable({
         update: function() {
-          setupAjaxIndicator();
+          if ($.isFunction($.fn.setupAjaxIndicator)) {
+            setupAjaxIndicator();
+          }
           $.ajax({
             url: "<%= sort_project_product_backlog_index_path(@project) %>",
             type: "POST",
@@ -48,7 +50,9 @@
               alert("<%= l(:error_changing_task_status) %>");
             },
             complete: function() {
-              hideOnLoad();
+              if ($.isFunction($.fn.hideOnLoad)) {
+                hideOnLoad();
+              }
             }
           });
         }
