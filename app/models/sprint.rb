@@ -9,10 +9,8 @@ class Sprint < ActiveRecord::Base
   validates_length_of :name, :maximum => 60
   validates_presence_of :name
 
-  validates :start_date, :date => true
   validates_presence_of :start_date
 
-  validates :end_date, :date => true
   validates_presence_of :end_date
   
   before_destroy :update_project_product_backlog
