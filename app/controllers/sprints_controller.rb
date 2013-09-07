@@ -20,6 +20,7 @@ class SprintsController < ApplicationController
   end
 
   def show
+    redirect_to project_product_backlog_index_path(@project) if @sprint.is_product_backlog
   end
 
   def new

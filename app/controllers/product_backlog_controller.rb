@@ -7,12 +7,12 @@ class ProductBacklogController < ApplicationController
   before_filter :authorize
 
   def index
-    @user_stories = Issue.find_all_by_sprint_id(@project.product_backlog, :order => "position ASC")
+    @user_stories = @project.product_backlog.user_stories
   end
 
   def sort
-    @user_stories = Issue.find_all_by_sprint_id(@project.product_backlog, :order => "position ASC")
-    @user_stories.each do |user_story|
+    @project.product_backlog.user_stories.each do |user_story|
+      user_story.init_journal(User.current)
       user_story.position = params["user_story"].index(user_story.id.to_s) + 1
       user_story.save!
     end

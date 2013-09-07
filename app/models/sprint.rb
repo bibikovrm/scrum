@@ -25,12 +25,16 @@ class Sprint < ActiveRecord::Base
 
   def user_stories
     user_stories_trackers = Setting.plugin_scrum[:user_story_trakers].collect{|tracker| tracker.to_i}
-    issues.all(:conditions => {:tracker_id => user_stories_trackers}).select{|issue| issue.visible?}
+    issues.all(:conditions => {:tracker_id => user_stories_trackers},
+               :order => "position ASC").select{|issue| issue.visible?}
   end
 
   def self.fields_for_order_statement(table = nil)
     table ||= table_name
-    ["(CASE WHEN #{table}.end_date IS NULL THEN 1 ELSE 0 END)", "#{table}.end_date", "#{table}.name", "#{table}.id"]
+    ["(CASE WHEN #{table}.end_date IS NULL THEN 1 ELSE 0 END)",
+     "#{table}.end_date",
+     "#{table}.name",
+     "#{table}.id"]
   end
 
   scope :sorted, order(fields_for_order_statement)

@@ -2,6 +2,7 @@
 en:
   error_changing_task_status: "Fail to change the task status"
   field_end_date: "End date"
+  field_position: "Position"
   field_sprint: "Sprint"
   label_doer: "Doer"
   label_post_it: "Post-it"

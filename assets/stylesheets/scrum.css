@@ -16,7 +16,7 @@
 	-webkit-transition:-webkit-transform 0.15s linear;
 }
 
-.post-it-scalable:hover, .post-it-scalable:hover {
+.post-it-scale:hover, .post-it-scale:hover {
 	z-index: 100;
 }
 

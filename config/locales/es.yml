@@ -2,6 +2,7 @@
 es:
   error_changing_task_status: "No se pudo cambiar el estado de la tarea"
   field_end_date: "Fecha de fin"
+  field_position: "Posición"
   field_sprint: "Sprint"
   label_doer: "Hacedor"
   label_post_it: "Post-it"

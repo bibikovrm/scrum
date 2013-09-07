@@ -13,7 +13,8 @@
         <table>
           <tr>
             <td class="header-1">
-              <%= "#{l(:field_category)}: #{h(user_story.category.name)}" unless user_story.category.nil? %>
+              <%= "#{l(:field_position)}: #{user_story.position}" %>
+              <%= ", #{l(:field_category)}: #{h(user_story.category.name)}" unless user_story.category.nil? %>
             </td>
             <td class="header-2">
               <%= authoring user_story.created_on, user_story.author %>
