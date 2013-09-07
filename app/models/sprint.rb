@@ -28,6 +28,13 @@ class Sprint < ActiveRecord::Base
     issues.all(:conditions => {:tracker_id => user_stories_trackers}).select{|issue| issue.visible?}
   end
 
+  def self.fields_for_order_statement(table = nil)
+    table ||= table_name
+    ["(CASE WHEN #{table}.end_date IS NULL THEN 1 ELSE 0 END)", "#{table}.end_date", "#{table}.name", "#{table}.id"]
+  end
+
+  scope :sorted, order(fields_for_order_statement)
+
 private
 
   def update_project_product_backlog

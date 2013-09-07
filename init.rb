@@ -6,6 +6,7 @@ if (Rails.env == "development")
 end
 
 Issue.send(:include, Scrum::IssuePatch)
+IssueQuery.send(:include, Scrum::IssueQueryPatch)
 IssueStatus.send(:include, Scrum::IssueStatusPatch)
 Project.send(:include, Scrum::ProjectPatch)
 ProjectsHelper.send(:include, Scrum::ProjectsHelperPatch)
