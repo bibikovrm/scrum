@@ -56,17 +56,27 @@ module Scrum
           users.uniq.sort
         end
 
-        def post_it_css_class
+        def post_it_css_class(options = {})
           classes = ["post-it", "big-post-it", tracker.post_it_css_class]
           if is_user_story?
             classes << "sprint-user-story"
+            if options[:draggable] and
+               User.current.allowed_to?(:edit_product_backlog, project) and
+               editable?
+              classes << "post-it-vertical-move-cursor"
+            end
           else
             classes << "sprint-task"
+            if options[:draggable] and
+               User.current.allowed_to?(:edit_sprint_board, project) and
+               editable?
+              classes << "post-it-horizontal-move-cursor"
+            end
           end
-          if User.current.allowed_to?(:edit_product_backlog, @project) and editable?
-            classes << is_user_story? ? "post-it-vertical-move-cursor" : "post-it-horizontal-move-cursor"
-          end
-          classes << "post-it-rotation-#{rand(5)}"
+          classes << "post-it-rotation-#{rand(5)}" if options[:rotate]
+          classes << "post-it-small-rotation-#{rand(5)}" if options[:small_rotate]
+          classes << "post-it-scale" if options[:scale]
+          classes << "post-it-small-scale" if options[:small_scale]
           classes.join(" ")
         end
 

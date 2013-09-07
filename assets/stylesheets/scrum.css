@@ -16,14 +16,20 @@
 	-webkit-transition:-webkit-transform 0.15s linear;
 }
 
-.big-post-it:hover {
-	-moz-box-shadow: 10px 10px 7px rgba(0, 0, 0, 0.7);
-	-webkit-box-shadow: 10px 10px 7px rgba(0, 0, 0, 0.7);
-	box-shadow: 10px 10px 7px rgba(0, 0, 0, 0.7);
+.post-it-scalable:hover, .post-it-scalable:hover {
+	z-index: 100;
+}
+
+.post-it-scale:hover {
 	-webkit-transform: scale(1.14);
 	-moz-transform: scale(1.14);
 	-o-transform: scale(1.14);
-	z-index: 100;
+}
+
+.post-it-small-scale:hover {
+	-webkit-transform: scale(1.02, 1.14);
+	-moz-transform: scale(1.02, 1.14);
+	-o-transform: scale(1.02, 1.14);
 }
 
 .settings-post-it {
@@ -111,6 +117,33 @@
 	-moz-transform: rotate(1deg);
 }
 
+.post-it-small-rotation-0 {
+}
+
+.post-it-small-rotation-1 {
+	-o-transform: rotate(-0.1deg);  
+	-webkit-transform: rotate(-0.1deg);  
+	-moz-transform: rotate(-0.1deg);
+}
+
+.post-it-small-rotation-2 {
+	-o-transform: rotate(0.1deg);  
+	-webkit-transform: rotate(0.1deg);  
+	-moz-transform: rotate(0.1deg);
+}
+
+.post-it-small-rotation-3 {
+	-o-transform: rotate(-0.2deg);  
+	-webkit-transform: rotate(-0.2deg);  
+	-moz-transform: rotate(-0.2deg);
+}
+
+.post-it-small-rotation-4 {
+	-o-transform: rotate(0.2deg);  
+	-webkit-transform: rotate(0.2deg);  
+	-moz-transform: rotate(0.2deg);
+}
+
 .post-it-horizontal-move-cursor {
 	cursor: ew-resize;
 }
@@ -121,15 +154,14 @@
 
 ul.user-stories {
 	padding: 0px;
-	margin: 0px;
-	width: 100%;
+	width: 95%;
+	margin: 0px auto 0px auto;
 }
 
 ul.user-stories li {
 	list-style: none;
 	padding: 3px 20px 3px 20px;
-	margin-bottom: 1px;
-	border: 1px solid lightgrey;
+	margin-bottom: 10px;
 }
 
 ul.user-stories li table {

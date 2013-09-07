@@ -6,8 +6,10 @@
   <p class="nodata"><%= l(:label_no_data) %></p>
 <%- else -%>
   <ul id="user_stories" class="user-stories">
-    <%- @user_stories.each do |user_story| -%>
-      <li id="user_story_<%= user_story.id %>" class="<%= user_story.tracker.post_it_css_class %>">
+    <%- @user_stories.each do |user_story|
+        user_story_id = "user_story_#{user_story.id}" -%>
+      <li id="<%= user_story_id %>"
+          class="<%= user_story.post_it_css_class(:small_rotate => :true, :small_scale => true, :draggable => true) %>">
         <table>
           <tr>
             <td class="header-1">
@@ -31,6 +33,11 @@
           </tr>
         </table>
       </li>
+      <%- if User.current.allowed_to?(:edit_product_backlog, @project) and user_story.editable? -%>
+        <%= javascript_tag do %>
+          draggableOnTouchScreen("<%= user_story_id %>");
+        <% end %>
+      <%- end -%>
     <%- end -%>
   </ul>
 
