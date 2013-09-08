@@ -10,6 +10,7 @@ es:
   lable_product_backlog_item_plural: "Elementos de la pila de producto"
   label_product_backlog_new: "Nueva pila de producto"
   label_reviewer: "Revisor"
+  label_setting_pending_effort_custom_field: "Campo personalizado para esfuerzo pendiente"
   label_setting_story_points_custom_field: "Campo personalizado para historias de usuario"
   label_setting_task_statuses: "Estados de las tareas para el tablero del Sprint"
   label_setting_verification_activities: "Actividades de verificación"
@@ -18,6 +19,7 @@ es:
   label_sprint_board: "Tablero del Sprint"
   label_sprint_new: "Nuevo Sprint"
   label_sprint_plural: "Sprints"
+  label_story_point_plural: "Puntos de historia"
   label_story_point_unit:
     one: "SP"
     other: "SPs"

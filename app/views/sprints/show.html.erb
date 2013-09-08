@@ -4,30 +4,9 @@
   <%= l(:label_sprint_board) %>
 </h2>
 
-<div class="box tabular">
-  <div class="contextual">
-  </div>
-  <p>
-    <label><%= l(:label_sprint) %>:</label>
-    <%- options = @project.sprints.collect{|sprint| [sprint.name, sprint_path(sprint)]}
-        options = options_for_select(options, sprint_path(@sprint)) -%>
-    <%= select_tag "selected_sprint_id", options, :onchange => "if (this.value != '') { window.location = this.value; }" %>
-  </p>
-  <p>
-    <label><%= l(:field_start_date) %>:</label>
-    <%= format_date @sprint.start_date %>
-  </p>
-  <p>
-    <label><%= l(:field_end_date) %>:</label>
-    <%= format_date @sprint.end_date %>
-  </p>
-  <%- if !(@sprint.description.blank?) -%>
-    <p>
-      <label><%= l(:field_description) %>:</label>
-      <%= h @sprint.description %>
-    </p>
-  <%- end -%>
-</div>
+<%= render :partial => "post_its/sprint_board/head",
+           :locals => {:project => @project,
+                       :sprint => @sprint} %>
 
 <%- if @sprint.user_stories.empty? -%>
   <p class="nodata"><%= l(:label_no_data) %></p>
@@ -43,18 +22,8 @@
     <%- @sprint.user_stories.each do |user_story| -%>
       <tr class="sprint-board">
         <td class="sprint-board">
-          <table class="<%= user_story.post_it_css_class(:rotate => true, :scale => true) %>">
-            <tr>
-              <td class="content" colspan="2">
-                <%= link_to_issue(user_story, :tracker => false, :truncate => 150) %>
-              </td>
-            </tr>
-            <tr>
-              <td class="estimation">
-                <%= "#{user_story.story_points} #{l(:label_story_point_unit, user_story.story_points)}" unless user_story.story_points.nil? %>
-              </td>
-            </tr>
-          </table>
+          <%= render :partial => "post_its/sprint_board/user_story",
+                     :locals => {:user_story => user_story} %>
         </td>
         <%- tasks = user_story.tasks_by_status_id
             task_statuses.each do |status| -%>
@@ -63,84 +32,19 @@
                 |other| "user_story_#{user_story.id}_status_#{other.id}"
               } -%>
           <td id="<%= user_story_status_id %>" class="sprint-board">
-            <%- tasks[status.id].each do |task|
-                task_id = "task_#{task.id}" -%>
-              <table id="<%= task_id %>" class="<%= task.post_it_css_class(:rotate => true, :scale => true, :draggable => true) %>">
-                <tr>
-                  <td class="content" colspan="2">
-                    <%= link_to_issue(task, :tracker => false, :truncate => 100) %>
-                    <div class="doers-reviewers-post-its-container">
-                      <%- task.doers.each do |doer| -%>
-                        <div class="<%= Issue.doer_post_it_css_class %>">
-                          <%= link_to_user(doer) %>
-                        </div>
-                      <%- end -%>
-                      <%- task.reviewers.each do |reviewer| -%>
-                        <div class="<%= Issue.reviewer_post_it_css_class %>">
-                          <%= link_to_user(reviewer) %>
-                        </div>
-                      <%- end -%>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="estimation">
-                    <%= "#{task.estimated_hours.to_i} h" unless task.estimated_hours.blank? %>
-                  </td>
-                  <td class="spent">
-                    <%- spent = task.spent_hours -%>
-                    <%= "#{spent.to_i} h" unless spent.blank? or (spent.to_i == 0) %>
-                  </td>
-                </tr>
-              </table>
-              <%- if User.current.allowed_to?(:edit_sprint_board, @project) and task.editable? -%>
-                <%= javascript_tag do %>
-                  <%- other_user_story_status_ids.each do |user_story_status_id| -%>
-                    $(document).ready(function() {
-                      $("#<%= task_id %>").draggable({
-                        revert: "invalid",
-                        axis: "x",
-                        containment: "<%= user_story_status_id %>",
-                        cursor: "ew-resize",
-                        stack: "table"
-                      });
-                      draggableOnTouchScreen("<%= task_id %>");
-                    });
-                  <%- end -%>
-                <% end %>
-              <%- end -%>
+            <%- tasks[status.id].each do |task| -%>
+              <%= render :partial => "post_its/sprint_board/task",
+                         :locals => {:project => @project,
+                                     :task => task,
+                                     :user_story_status_id => user_story_status_id,
+                                     :other_user_story_status_ids => other_user_story_status_ids} %>
             <%- end -%>
           </td>
-          <%= javascript_tag do %>
-            $(document).ready(function() {
-              $("#<%= user_story_status_id %>").droppable({
-                accept: ".sprint-task",
-                drop: function(event, ui) {
-                  if ($.isFunction($.fn.setupAjaxIndicator)) {
-                    setupAjaxIndicator();
-                  }
-                  if (!(ui.draggable.is($(this).children()))) {
-                    $.ajax({
-                      url: "<%= project_sprints_change_task_status_path(@project) %>",
-                      type: "POST",
-                      data: {task: encodeURIComponent($(ui.draggable).attr("id")),
-                             status: encodeURIComponent("<%= status.id %>")},
-                      error: function() {
-                        alert("<%= l(:error_changing_task_status) %>");
-                      },
-                      complete: function() {
-                        if ($.isFunction($.fn.hideOnLoad)) {
-                          hideOnLoad();
-                        }
-                      }
-                    });
-                  }
-                  ui.draggable.appendTo($(this)).removeAttr("style");
-                  ui.draggable.attr("style", "position: relative; " + ui.draggable.attr("style"));
-                }
-              });
-            });
-          <% end %>
+          <%= render :partial => "post_its/sprint_board/user_story_status",
+                     :formats => [:js],
+                     :locals => {:project => @project,
+                                 :user_story_status_id => user_story_status_id,
+                                 :status => status} %>
         <%- end -%>
       </tr>
     <%- end -%>

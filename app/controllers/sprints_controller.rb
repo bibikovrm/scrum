@@ -8,6 +8,8 @@ class SprintsController < ApplicationController
   before_filter :find_project_by_project_id, :only => [:index, :new, :create, :change_task_status]
   before_filter :authorize
 
+  helper :scrum
+
   def index
     redirect_to sprint_path(@project.last_sprint)
   rescue

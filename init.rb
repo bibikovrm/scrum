@@ -37,6 +37,7 @@ Redmine::Plugin.register :scrum do
        :caption => :label_scrum, :after => :activity, :param => :project_id
 
   settings          :default => {"doer_color" => "post-it-color-5",
+                                 "pending_effort_custom_field" => "",
                                  "reviewer_color" => "post-it-color-3",
                                  "story_points_custom_field" => "",
                                  "task_statuses" => "",

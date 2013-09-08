@@ -250,10 +250,20 @@ table.sprint-user-story tr td.content, table.sprint-task tr td.content {
 	position: relative;
 }
 
+table.sprint-user-story tr td.estimation, table.sprint-task tr td.estimation,
+table.sprint-user-story tr td.spent, table.sprint-task tr td.spent,
+table.sprint-user-story tr td.pending, table.sprint-task tr td.pending {
+	width: 33%;
+}
+
 table.sprint-user-story tr td.estimation, table.sprint-task tr td.estimation {
 }
 
 table.sprint-user-story tr td.spent, table.sprint-task tr td.spent {
+	text-align: center;
+}
+
+table.sprint-user-story tr td.pending, table.sprint-task tr td.pending {
 	text-align: right;
 }
 

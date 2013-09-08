@@ -4,10 +4,15 @@
   <legend><%= l(:label_settings) %></legend>
   <p>
     <label><%= l(:label_setting_story_points_custom_field) %>:</label>
-    <%- custom_fields = CustomField.find_all_by_type_and_field_format("IssueCustomField", "int")
+    <%- custom_fields = CustomField.find_all_by_type_and_field_format("IssueCustomField", ["int", "float", "string", "list"])
         custom_fields = custom_fields.collect{|c| [c.name, c.id]}
         options = options_for_select(custom_fields, @settings["story_points_custom_field"]) -%>
     <%= select_tag "settings[story_points_custom_field]", options, :include_blank => true %>
+  </p>
+  <p>
+    <label><%= l(:label_setting_pending_effort_custom_field) %>:</label>
+    <%- options = options_for_select(custom_fields, @settings["pending_effort_custom_field"]) -%>
+    <%= select_tag "settings[pending_effort_custom_field]", options, :include_blank => true %>
   </p>
   <p>
     <label><%= l(:label_setting_task_statuses) %>:</label>

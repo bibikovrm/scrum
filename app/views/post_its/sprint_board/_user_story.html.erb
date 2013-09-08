@@ -1,0 +1,12 @@
+<table class="<%= user_story.post_it_css_class(:rotate => true, :scale => true) %>">
+  <tr>
+    <td class="content" colspan="2">
+      <%= link_to_issue(user_story, :tracker => false, :truncate => 150) %>
+    </td>
+  </tr>
+  <tr>
+    <td class="estimation">
+      <%= render_story_points(user_story.story_points, :title => l(:label_story_point_plural)) %>
+    </td>
+  </tr>
+</table>

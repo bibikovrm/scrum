@@ -17,9 +17,7 @@ module Scrum
           if !((custom_field_id = Setting.plugin_scrum[:story_points_custom_field]).nil?) and
              !((custom_value = self.custom_value_for(custom_field_id)).nil?) and
              !((value = custom_value.value).blank?)
-            value.to_i
-          else
-            nil
+            value
           end
         end
 
@@ -81,6 +79,23 @@ module Scrum
 
         def self.reviewer_post_it_css_class
           doer_or_reviewer_post_it_css_class(false)
+        end
+
+        def self.label_pending_effort
+          if !((custom_field_id = Setting.plugin_scrum[:pending_effort_custom_field]).nil?) and
+             !((custom_field = CustomField.find(custom_field_id)).nil?)
+            custom_field.name
+          end
+        end
+
+        def pending_effort
+          if !((custom_field_id = Setting.plugin_scrum[:pending_effort_custom_field]).nil?) and
+             !((custom_value = self.custom_value_for(custom_field_id)).nil?) and
+             !((custom_field = CustomField.find(custom_field_id)).nil?) and
+             (custom_field.trackers.include?(tracker)) and
+             !((value = custom_value.value).blank?)
+            value
+          end
         end
 
       private

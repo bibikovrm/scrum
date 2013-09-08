@@ -6,6 +6,8 @@ class ProductBacklogController < ApplicationController
   before_filter :check_issue_positions, :only => [:index]
   before_filter :authorize
 
+  helper :scrum
+
   def index
     @user_stories = @project.product_backlog.user_stories
   end

@@ -1,0 +1,49 @@
+<%- task_id = "task_#{task.id}" %>
+
+<table id="<%= task_id %>" class="<%= task.post_it_css_class(:rotate => true, :scale => true, :draggable => true) %>">
+  <tr>
+    <td class="content" colspan="3">
+      <%= link_to_issue(task, :tracker => false, :truncate => 100) %>
+      <div class="doers-reviewers-post-its-container">
+        <%- task.doers.each do |doer| -%>
+          <div class="<%= Issue.doer_post_it_css_class %>">
+            <%= link_to_user(doer) %>
+          </div>
+        <%- end -%>
+        <%- task.reviewers.each do |reviewer| -%>
+          <div class="<%= Issue.reviewer_post_it_css_class %>">
+            <%= link_to_user(reviewer) %>
+          </div>
+        <%- end -%>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td class="estimation">
+      <%= render_hours(task.estimated_hours, :title => l(:field_estimated_hours)) %>
+    </td>
+    <td class="spent">
+      <%= render_hours(task.spent_hours, :title => l(:label_spent_time), :ignore_zero => true) %>
+    </td>
+    <td class="pending">
+      <%= render_hours(task.pending_effort, :title => Issue.label_pending_effort) %>
+    </td>
+  </tr>
+</table>
+
+<%- if User.current.allowed_to?(:edit_sprint_board, project) and task.editable? -%>
+  <%= javascript_tag do %>
+    <%- other_user_story_status_ids.each do |user_story_status_id| -%>
+      $(document).ready(function() {
+        $("#<%= task_id %>").draggable({
+          revert: "invalid",
+          axis: "x",
+          containment: "<%= user_story_status_id %>",
+          cursor: "ew-resize",
+          stack: "table"
+        });
+        draggableOnTouchScreen("<%= task_id %>");
+      });
+    <%- end -%>
+  <% end %>
+<%- end -%>
