@@ -8,11 +8,6 @@ class SprintsController < ApplicationController
   before_filter :find_project_by_project_id, :only => [:index, :new, :create, :change_task_status]
   before_filter :authorize
 
-  helper :custom_fields
-  helper :projects
-  include CustomFieldsHelper
-  include ProjectsHelper
-
   def index
     redirect_to sprint_path(@project.last_sprint)
   rescue
