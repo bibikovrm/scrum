@@ -4,6 +4,7 @@ class ProductBacklogController < ApplicationController
 
   before_filter :find_project_by_project_id, :only => [:index, :sort]
   before_filter :check_issue_positions, :only => [:index]
+  before_filter :find_issue, :only => [:change_story_points, :change_pending_effort]
   before_filter :authorize
 
   helper :scrum
@@ -19,6 +20,14 @@ class ProductBacklogController < ApplicationController
       user_story.save!
     end
     render :nothing => true
+  end
+
+  def change_story_points
+    change_custom_field(:story_points_custom_field, @issue, params[:value])
+  end
+
+  def change_pending_effort
+    change_custom_field(:pending_effort_custom_field, @issue, params[:value])
   end
 
 private
@@ -41,6 +50,18 @@ private
     else
       raise "Invalid type: #{issue.inspect}"
     end
+  end
+
+  def change_custom_field(setting, issue, value)
+    status = 503
+    if !((custom_field_id = Setting.plugin_scrum[setting]).nil?) and
+       !((custom_field = CustomField.find(custom_field_id)).nil?) and
+       custom_field.validate_field_value(value).empty?
+      issue.custom_field_values = {custom_field_id => value}
+      issue.save_custom_field_values
+      status = 200
+    end
+    render :nothing => true, :status => status
   end
 
 end

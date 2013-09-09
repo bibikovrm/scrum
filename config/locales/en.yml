@@ -1,6 +1,7 @@
 # encoding: UTF-8
 en:
   error_changing_task_status: "Fail to change the task status"
+  error_changing_value: "Fail to change the value"
   field_end_date: "End date"
   field_position: "Position"
   field_sprint: "Sprint"
@@ -20,9 +21,7 @@ en:
   label_sprint_new: "New Sprint"
   label_sprint_plural: "Sprints"
   label_story_point_plural: "Story points"
-  label_story_point_unit:
-    one: "SP"
-    other: "SPs"
+  label_story_point_unit: "sp"
   label_task_plural: "Tasks"
   label_user_story_plural: "User stories"
   notice_sprint_has_issues: "The Sprint has issues"

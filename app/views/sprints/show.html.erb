@@ -23,7 +23,7 @@
       <tr class="sprint-board">
         <td class="sprint-board">
           <%= render :partial => "post_its/sprint_board/user_story",
-                     :locals => {:user_story => user_story} %>
+                     :locals => {:project => @project, :user_story => user_story} %>
         </td>
         <%- tasks = user_story.tasks_by_status_id
             task_statuses.each do |status| -%>

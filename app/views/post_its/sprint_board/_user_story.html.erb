@@ -6,7 +6,9 @@
   </tr>
   <tr>
     <td class="estimation">
-      <%= render_story_points(user_story.story_points, :title => l(:label_story_point_plural)) %>
+      <%= render :partial => "common/scrum_story_points",
+                 :locals => {:project => project, :user_story => user_story} %>
+      <span title="<%= l(:label_story_point_plural) %>"><%= l(:label_story_point_unit) %></span>
     </td>
   </tr>
 </table>

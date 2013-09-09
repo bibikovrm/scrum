@@ -187,11 +187,11 @@ ul.user-stories li table tr td.header-2 {
 	text-align: right;
 }
 
-ul.user-stories li table tr td.story-points {
+ul.user-stories li table tr td.story-points input {
 	font-size: 2em;
 	font-style: bold;
 	text-align: right;
-	min-width: 60px;
+	min-width: 50px;
 }
 
 ul.user-stories li table tr td.story-points-legend {
@@ -265,6 +265,19 @@ table.sprint-user-story tr td.spent, table.sprint-task tr td.spent {
 
 table.sprint-user-story tr td.pending, table.sprint-task tr td.pending {
 	text-align: right;
+}
+
+table.sprint-user-story input, table.sprint-task input {
+	text-align: right;
+	width: 30px;
+	margin-bottom: 5px;
+}
+
+.editable-time {
+	font-size: 1.1em;
+	padding: 0px;
+	background: transparent;
+	border: none;
 }
 
 .doers-reviewers-post-its-container {

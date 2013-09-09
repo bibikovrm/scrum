@@ -30,7 +30,9 @@ Redmine::Plugin.register :scrum do
     permission      :view_sprint_board, {:sprints => [:index, :show]}
     permission      :edit_sprint_board, {:sprints => [:change_task_status]}, :require => :member
     permission      :view_product_backlog, {:product_backlog => [:index]}
-    permission      :edit_product_backlog, {:product_backlog => [:sort]}, :require => :member
+    permission      :edit_product_backlog,
+                    {:product_backlog => [:sort, :change_story_points, :change_pending_effort]},
+                    :require => :member
   end
 
   menu :project_menu, :scrum, {:controller => :sprints, :action => :index},

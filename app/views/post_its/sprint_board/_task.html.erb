@@ -26,7 +26,9 @@
       <%= render_hours(task.spent_hours, :title => l(:label_spent_time), :ignore_zero => true) %>
     </td>
     <td class="pending">
-      <%= render_hours(task.pending_effort, :title => Issue.label_pending_effort) %>
+      <%= render :partial => "common/scrum_pending_effort",
+                 :locals => {:project => project, :task => task} %>
+      <span title="<%= Issue.label_pending_effort %>">h</span>
     </td>
   </tr>
 </table>
