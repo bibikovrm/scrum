@@ -13,8 +13,14 @@ module Scrum
 
         before_save :update_position, :if => lambda {|issue| issue.sprint_id_changed? and issue.is_user_story?}
 
+        def has_story_points?
+          ((!((custom_field_id = Setting.plugin_scrum[:story_points_custom_field]).nil?)) and
+           visible_custom_field_values.collect{|value| value.custom_field.id.to_s}.include?(custom_field_id))
+        end
+
         def story_points
-          if !((custom_field_id = Setting.plugin_scrum[:story_points_custom_field]).nil?) and
+          if has_story_points? and
+             !((custom_field_id = Setting.plugin_scrum[:story_points_custom_field]).nil?) and
              !((custom_value = self.custom_value_for(custom_field_id)).nil?) and
              !((value = custom_value.value).blank?)
             value
@@ -88,11 +94,15 @@ module Scrum
           end
         end
 
+        def has_pending_effort?
+          ((!((custom_field_id = Setting.plugin_scrum[:pending_effort_custom_field]).nil?)) and
+           visible_custom_field_values.collect{|value| value.custom_field.id.to_s}.include?(custom_field_id))
+        end
+
         def pending_effort
-          if !((custom_field_id = Setting.plugin_scrum[:pending_effort_custom_field]).nil?) and
+          if has_pending_effort? and
+             !((custom_field_id = Setting.plugin_scrum[:pending_effort_custom_field]).nil?) and
              !((custom_value = self.custom_value_for(custom_field_id)).nil?) and
-             !((custom_field = CustomField.find(custom_field_id)).nil?) and
-             (custom_field.trackers.include?(tracker)) and
              !((value = custom_value.value).blank?)
             value
           end

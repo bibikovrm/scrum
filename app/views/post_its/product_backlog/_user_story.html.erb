@@ -13,11 +13,15 @@
         <%= ". #{l(:label_updated_time, time_tag(user_story.updated_on))}".html_safe if user_story.created_on != user_story.updated_on %>
       </td>
       <td class="story-points" rowspan="2">
-        <%= render :partial => "common/scrum_story_points",
-                   :locals => {:project => project, :user_story => user_story} %>
+        <%- if user_story.has_story_points? -%>
+          <%= render :partial => "common/scrum_story_points",
+                     :locals => {:project => project, :user_story => user_story} %>
+        <%- end -%>
       </td>
       <td class="story-points-legend" rowspan="2">
-        <span title="<%= l(:label_story_point_plural) %>"><%= l(:label_story_point_unit) %></span>
+        <%- if user_story.has_story_points? -%>
+          <span title="<%= l(:label_story_point_plural) %>"><%= l(:label_story_point_unit) %></span>
+        <%- end -%>
       </td>
     </tr>
     <tr>
