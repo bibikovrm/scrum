@@ -39,7 +39,7 @@
     members = task.project.members.collect{|member| [member.user.name, member.user.id]}
     members_options = options_for_select(members, task.assigned_to.nil? ? nil : task.assigned_to.id)
     members_select = select_tag context_menu_assigned_to_id, members_options, :include_blank => true
-    members_select["\n"] = "" -%>
+    members_select.gsub(/\n/, "") -%>
 <div id="<%= context_menu_id %>" class="scrum-custom-menu">
   <label><%= l(:field_assigned_to) %>:</label>
   <%= members_select %>
