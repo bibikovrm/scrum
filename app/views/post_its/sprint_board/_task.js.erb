@@ -1,0 +1,53 @@
+<%- if User.current.allowed_to?(:edit_sprint_board, project) and task.editable? -%>
+	<%= javascript_tag do %>
+		<%- other_user_story_status_ids.each do |user_story_status_id| -%>
+			$(document).ready(function() {
+				$("#<%= task_id %>").draggable({
+					revert: "invalid",
+					axis: "x",
+					containment: "<%= user_story_status_id %>",
+					cursor: "ew-resize",
+					stack: "table"
+				});
+				draggableOnTouchScreen("<%= task_id %>");
+			});
+		<%- end -%>
+		$("#<%= task_id %>").bind("contextmenu", function(event) {
+			$(".scrum-custom-menu").hide();
+			event.preventDefault();
+			var maxX = $(document).width() - $("#<%= context_menu_id %>").width() - 10;
+			var maxY = $(document).height() - $("#<%= context_menu_id %>").height() - 10;
+			var x = (event.pageX > maxX) ? maxX : event.pageX;
+			var y = (event.pageY > maxY) ? maxY : event.pageY;
+			$("#<%= context_menu_id %>").css({
+				left: x + "px",
+				top: y + "px"
+			});
+			$("#<%= context_menu_id %>").show();
+		});
+		$(document).bind("click", function(event) {
+			$(".scrum-custom-menu").hide();
+		});
+		$("#<%= context_menu_assigned_to_id %>").change(function() {
+			$.ajax({
+				url: "<%= change_assigned_to_path(task) %>",
+				type: "POST",
+				data: {value: $(this).val(),
+							 user_story_status_id: "<%= user_story_status_id %>",
+							 other_user_story_status_ids: "<%= other_user_story_status_ids.join(",") %>",
+							 task_id: "<%= task_id %>"},
+				error: function() {
+					alert("<%= l(:error_changing_task_assigned_to) %>");
+				},
+				complete: function() {
+					if ($.isFunction($.fn.hideOnLoad)) {
+						hideOnLoad();
+					}
+				},
+				success: function(data) {
+					$("#<%= task_id %>").replaceWith(data);
+				}
+			});
+		});
+	<% end %>
+<%- end -%>

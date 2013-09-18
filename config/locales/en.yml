@@ -1,6 +1,7 @@
 # encoding: UTF-8
 en:
   error_changing_task_status: "Fail to change the task status"
+  error_changing_task_assigned_to: "Fail to change the task assignee"
   error_changing_value: "Fail to change the value"
   field_end_date: "End date"
   field_position: "Position"

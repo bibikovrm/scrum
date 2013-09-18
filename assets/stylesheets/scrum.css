@@ -299,3 +299,12 @@ table.sprint-user-story input, table.sprint-task input {
 
 .reviewer-post-it {
 }
+
+.scrum-custom-menu {
+	display: none;
+	z-index: 1000;
+	position: absolute;
+	background-color: lightgrey;
+	border: 1px solid grey;
+	padding: 2px;
+}

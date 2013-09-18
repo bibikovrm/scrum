@@ -1,5 +1,4 @@
-<%- task_id = "task_#{task.id}" %>
-
+<%- task_id = "task_#{task.id}" -%>
 <table id="<%= task_id %>" class="<%= task.post_it_css_class(:rotate => true, :scale => true, :draggable => true) %>">
   <tr>
     <td class="content" colspan="3">
@@ -35,19 +34,24 @@
   </tr>
 </table>
 
-<%- if User.current.allowed_to?(:edit_sprint_board, project) and task.editable? -%>
-  <%= javascript_tag do %>
-    <%- other_user_story_status_ids.each do |user_story_status_id| -%>
-      $(document).ready(function() {
-        $("#<%= task_id %>").draggable({
-          revert: "invalid",
-          axis: "x",
-          containment: "<%= user_story_status_id %>",
-          cursor: "ew-resize",
-          stack: "table"
-        });
-        draggableOnTouchScreen("<%= task_id %>");
-      });
-    <%- end -%>
-  <% end %>
-<%- end -%>
+<%- context_menu_id = "task_#{task.id}_context_menu"
+    context_menu_assigned_to_id = "task_#{task.id}_context_menu_assigned_to"
+    members = task.project.members.collect{|member| [member.user.name, member.user.id]}
+    members_options = options_for_select(members, task.assigned_to.nil? ? nil : task.assigned_to.id)
+    members_select = select_tag context_menu_assigned_to_id, members_options, :include_blank => true
+    members_select["\n"] = "" -%>
+<div id="<%= context_menu_id %>" class="scrum-custom-menu">
+  <label><%= l(:field_assigned_to) %>:</label>
+  <%= members_select %>
+</div>
+
+<%= render :partial => "post_its/sprint_board/task",
+           :formats => [:js],
+           :locals => {:project => project,
+                       :user_story_status_id => user_story_status_id,
+                       :other_user_story_status_ids => other_user_story_status_ids,
+                       :task_id => task_id,
+                       :task => task,
+                       :context_menu_id => context_menu_id,
+                       :context_menu_assigned_to_id => context_menu_assigned_to_id,
+                       :container_task_id => task_id} %>

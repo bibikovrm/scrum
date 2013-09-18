@@ -8,7 +8,7 @@
     <td class="estimation">
       <%- if user_story.has_story_points? -%>
         <%= render :partial => "common/scrum_story_points",
-                  :locals => {:project => project, :user_story => user_story} %>
+                   :locals => {:project => project, :user_story => user_story} %>
         <span title="<%= l(:label_story_point_plural) %>"><%= l(:label_story_point_unit) %></span>
       <%- end -%>
     </td>
