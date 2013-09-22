@@ -270,7 +270,7 @@ table.sprint-user-story tr td.pending, table.sprint-task tr td.pending {
 table.sprint-user-story input, table.sprint-task input {
 	text-align: right;
 	width: 30px;
-	margin-bottom: 5px;
+	margin-top: -4px;
 }
 
 .editable-time {
@@ -306,5 +306,33 @@ table.sprint-user-story input, table.sprint-task input {
 	position: absolute;
 	background-color: lightgrey;
 	border: 1px solid grey;
-	padding: 2px;
+	padding: 15px 5px 5px 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.scrum-custom-menu .close-icon {
+	margin-top: -7px;
+	margin-right: -8px;
+}
+
+.scrum-custom-menu fieldset {
+	border: 1px solid white;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	color: white;
+	margin-top: 5px;
+}
+
+.scrum-custom-menu fieldset legend, .scrum-custom-menu label {
+	font-style: italic;
+	color: grey;
+}
+
+.scrum-custom-menu label {
+	float: left;
+}
+
+.scrum-custom-menu p {
+	margin-left: 100px;
 }

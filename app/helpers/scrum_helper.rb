@@ -11,9 +11,13 @@ module ScrumHelper
       else
         text = hours unless options[:ignore_zero] and (hours.blank? or (hours == "0"))
       end
-      render :inline => "<span title=\"#{options[:title]}\">" +
-                          "#{text} h" +
-                        "</span>" unless text.blank?
+      unless text.blank?
+        text = "#{text} h"
+        unless options[:link].nil?
+          text = link_to(text, options[:link])
+        end
+        render :inline => "<span title=\"#{options[:title]}\">#{text}</span>"
+      end
     end
   end
 

@@ -9,6 +9,8 @@ class SprintsController < ApplicationController
   before_filter :authorize
 
   helper :scrum
+  helper :timelog
+  helper :custom_fields
 
   def index
     redirect_to sprint_path(@project.last_sprint)

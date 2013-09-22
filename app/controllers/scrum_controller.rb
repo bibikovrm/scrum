@@ -3,10 +3,12 @@ class ScrumController < ApplicationController
   menu_item :scrum
 
   before_filter :find_issue, :only => [:change_story_points, :change_pending_effort,
-                                       :change_assigned_to]
+                                       :change_assigned_to, :create_time_entry]
   before_filter :authorize
 
   helper :scrum
+  helper :timelog
+  helper :custom_fields
 
   def change_story_points
     change_custom_field(:story_points_custom_field, @issue, params[:value])
@@ -19,16 +21,18 @@ class ScrumController < ApplicationController
   def change_assigned_to
     @issue.init_journal(User.current)
     @issue.assigned_to = params[:value].blank? ? nil : User.find(params[:value].to_i)
-    @issue.save
-    render :partial => "post_its/sprint_board/task",
-           :status => 200,
-           :locals => {:project => @project,
-                       :task => @issue,
-                       :user_story_status_id => params[:user_story_status_id],
-                       :other_user_story_status_ids => params[:other_user_story_status_ids].split(","),
-                       :task_id => params[:task_id]}
-  rescue
-    render :nothing => true, :status => 503
+    @issue.save!
+    render_task(@project, @issue, params)
+  end
+
+  def create_time_entry
+    time_entry = TimeEntry.new(params[:time_entry])
+    time_entry.project_id = @project.id
+    time_entry.issue_id = @issue.id
+    time_entry.user_id = params[:time_entry][:user_id]
+    call_hook(:controller_timelog_edit_before_save, {:params => params, :time_entry => time_entry})
+    time_entry.save!
+    render_task(@project, @issue, params)
   end
 
 private
@@ -43,6 +47,16 @@ private
       status = 200
     end
     render :nothing => true, :status => status
+  end
+
+  def render_task(project, task, params)
+    render :partial => "post_its/sprint_board/task",
+           :status => 200,
+           :locals => {:project => project,
+                       :task => task,
+                       :user_story_status_id => params[:user_story_status_id],
+                       :other_user_story_status_ids => params[:other_user_story_status_ids].split(","),
+                       :task_id => params[:task_id]}
   end
 
 end

@@ -24,3 +24,6 @@ post "issues/:id/pending_effort",
 post "issues/:id/assigned_to",
      :controller => :scrum, :action => :change_assigned_to,
      :as => :change_assigned_to
+post "issues/:id/create_time_entry",
+     :controller => :scrum, :action => :create_time_entry,
+     :as => :create_time_entry
