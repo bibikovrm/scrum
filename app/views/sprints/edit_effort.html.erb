@@ -25,7 +25,7 @@
   <p class="nodata"><%= l(:label_no_data) %></p>
 <%- else -%>
   <%= labelled_form_for @sprint, :url => update_effort_sprint_path(@sprint) do |f| %>
-    <%- days = @sprint.end_date - @sprint.start_date + 1 -%>
+    <%- days = (@sprint.end_date - @sprint.start_date).to_i + 1 -%>
     <table class="list" style="overflow: auto;">
       <thead>
         <tr>
