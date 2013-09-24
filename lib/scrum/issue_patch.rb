@@ -6,6 +6,7 @@ module Scrum
       base.class_eval do
 
         belongs_to :sprint
+        has_many :pending_efforts, :order => "date ASC"
 
         acts_as_list scope: :sprint
 
@@ -29,6 +30,10 @@ module Scrum
 
         def is_user_story?
           tracker.is_user_story?
+        end
+
+        def is_task?
+          tracker.is_task?
         end
 
         def tasks_by_status_id
@@ -87,24 +92,28 @@ module Scrum
           doer_or_reviewer_post_it_css_class(false)
         end
 
-        def self.label_pending_effort
-          if !((custom_field_id = Setting.plugin_scrum[:pending_effort_custom_field]).nil?) and
-             !((custom_field = CustomField.find(custom_field_id)).nil?)
-            custom_field.name
-          end
-        end
-
         def has_pending_effort?
-          ((!((custom_field_id = Setting.plugin_scrum[:pending_effort_custom_field]).nil?)) and
-           visible_custom_field_values.collect{|value| value.custom_field.id.to_s}.include?(custom_field_id))
+          is_task? and pending_efforts.any?
         end
 
         def pending_effort
-          if has_pending_effort? and
-             !((custom_field_id = Setting.plugin_scrum[:pending_effort_custom_field]).nil?) and
-             !((custom_value = self.custom_value_for(custom_field_id)).nil?) and
-             !((value = custom_value.value).blank?)
-            value
+          if has_pending_effort?
+            pending_efforts.last.effort
+          end
+        end
+
+        def pending_effort=(new_effort)
+          if is_task? and id and new_effort
+            effort = PendingEffort.first(:conditions => {:issue_id => id,
+                                                         :date => Date.today})
+            if effort.nil?
+              effort = PendingEffort.new(:issue_id => id,
+                                         :date => Date.today,
+                                         :effort => new_effort)
+            else
+              effort.effort = new_effort
+            end
+            effort.save!
           end
         end
 

@@ -3,6 +3,7 @@ class Sprint < ActiveRecord::Base
   belongs_to :user
   belongs_to :project
   has_many :issues, :dependent => :destroy
+  has_many :efforts, :class_name => "SprintEffort", :dependent => :destroy
 
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => [:project_id]

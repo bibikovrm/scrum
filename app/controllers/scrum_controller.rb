@@ -15,7 +15,8 @@ class ScrumController < ApplicationController
   end
 
   def change_pending_effort
-    change_custom_field(:pending_effort_custom_field, @issue, params[:value])
+    @issue.pending_effort = params[:value]
+    render :nothing => true, :status => 200
   end
 
   def change_assigned_to

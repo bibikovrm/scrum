@@ -7,10 +7,12 @@ end
 
 Issue.send(:include, Scrum::IssuePatch)
 IssueQuery.send(:include, Scrum::IssueQueryPatch)
+IssuesController.send(:include, Scrum::IssuesControllerPatch)
 IssueStatus.send(:include, Scrum::IssueStatusPatch)
 Project.send(:include, Scrum::ProjectPatch)
 ProjectsHelper.send(:include, Scrum::ProjectsHelperPatch)
 Tracker.send(:include, Scrum::TrackerPatch)
+User.send(:include, Scrum::UserPatch)
 
 require_dependency "scrum/helper_hooks"
 require_dependency "scrum/view_hooks"
@@ -19,13 +21,15 @@ Redmine::Plugin.register :scrum do
   name              "Scrum Redmine plugin"
   author            "Emilio González Montaña"
   description       "This plugin for Redmine allows to follow Scrum methodology with Redmine projects"
-  version           "0.1.0"
+  version           "0.2.0"
   url               "https://redmine.ociotec.com/projects/redmine-plugin-scrum"
   author_url        "http://ociotec.com"
   requires_redmine  :version_or_higher => "2.3.0"
 
   project_module    :scrum do
-    permission      :edit_sprints, {:sprints => [:new, :create, :edit, :update]}, :require => :member
+    permission      :edit_sprints,
+                    {:sprints => [:new, :create, :edit, :update, :edit_effort, :update_effort]},
+                    :require => :member
     permission      :delete_sprints, {:sprints => [:destroy]}, :require => :member
     permission      :view_sprint_board, {:sprints => [:index, :show]}
     permission      :edit_sprint_board,
@@ -33,6 +37,7 @@ Redmine::Plugin.register :scrum do
                      :scrum => [:change_story_points, :change_pending_effort, :change_assigned_to,
                                 :create_time_entry]},
                     :require => :member
+    permission      :view_burndown, {:sprints => [:burndown_index, :burndown, :burndown_graph]}
     permission      :view_product_backlog, {:product_backlog => [:index]}
     permission      :edit_product_backlog,
                     {:product_backlog => [:sort]},

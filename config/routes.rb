@@ -2,7 +2,17 @@
 # See: http://guides.rubyonrails.org/routing.html
 
 resources :projects do
-  resources :sprints, :shallow => true
+  resources :sprints, :shallow => true do
+    member do
+      get :edit_effort
+      put :update_effort
+      get :burndown
+      get :burndown_graph
+    end
+    collection do
+      get :burndown_index
+    end
+  end
   post "sprints/change_task_status",
        :controller => :sprints, :action => :change_task_status,
        :as => :sprints_change_task_status

@@ -10,6 +10,11 @@ module Scrum
           user_stories_trackers.include?(id)
         end
 
+        def is_task?
+          tasks_trackers = Setting.plugin_scrum[:task_trakers].collect{|tracker| tracker.to_i}
+          tasks_trackers.include?(id)
+        end
+
         def post_it_css_class
           setting_name = "tracker_#{id}_color"
           Setting.plugin_scrum[setting_name] || Redmine::Plugin::registered_plugins[:scrum].settings[:default][setting_name]

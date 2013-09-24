@@ -32,7 +32,7 @@
   <legend><%= l(:label_tracker_plural) %></legend>
   <%- trackers = Tracker.all.collect{|t| [t.name, t.id]} -%>
   <p>
-    <label><%= l(:lable_product_backlog_item_plural) %>:</label>
+    <label><%= l(:label_product_backlog_item_plural) %>:</label>
     <%- options = options_for_select(trackers, @settings["user_story_trakers"]) -%>
     <%= select_tag "settings[user_story_trakers]", options, :multiple => true %>
   </p>

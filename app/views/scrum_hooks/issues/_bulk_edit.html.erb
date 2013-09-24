@@ -7,3 +7,7 @@
     <%= select_tag "issue[sprint_id]", options %>
   </p>
 <%- end -%>
+<p>
+  <label for="pending_effort"><%= l(:field_pending_effort) %></label>
+  <%= text_field_tag "issue[pending_effort]", "", :size => 3 %>
+</p>

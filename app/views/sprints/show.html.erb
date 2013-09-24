@@ -6,14 +6,15 @@
 
 <%= render :partial => "post_its/sprint_board/head",
            :locals => {:project => @project,
-                       :sprint => @sprint} %>
+                       :sprint => @sprint,
+                       :path => method(:sprint_path)} %>
 
 <%- if @sprint.user_stories.empty? -%>
   <p class="nodata"><%= l(:label_no_data) %></p>
 <%- else -%>
   <table class="sprint-board">
     <tr class="sprint-board">
-      <th class="sprint-board"><%= l(:lable_product_backlog_item_plural) %></th>
+      <th class="sprint-board"><%= l(:label_product_backlog_item_plural) %></th>
       <%- task_statuses = IssueStatus.task_statuses
           task_statuses.each do |status| -%>
         <th class="sprint-board"><%= status.name %></th>

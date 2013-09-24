@@ -4,3 +4,9 @@
   <th><%=l(:field_position)%>:</th>
   <td><%= @issue.position %></td>
 </tr>
+<tr>
+  <%- if @issue.is_task? -%>
+    <th><%=l(:field_pending_effort)%>:</th>
+    <td><%= @issue.pending_effort %></td>
+  <%- end -%>
+</tr>
