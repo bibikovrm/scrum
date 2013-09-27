@@ -144,7 +144,7 @@ class SprintsController < ApplicationController
           @sprint.issues.each do |issue|
             efforts << issue.pending_efforts.last(:conditions => ["date <= ?", date])
           end
-          pending_effort << efforts.compact.collect{|effort| effort.effort}.sum
+          pending_effort << efforts.compact.collect{|effort| effort.effort}.compact.sum
         end
       end
     end
