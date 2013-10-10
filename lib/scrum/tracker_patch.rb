@@ -6,12 +6,12 @@ module Scrum
       base.class_eval do
 
         def is_user_story?
-          user_stories_trackers = Setting.plugin_scrum[:user_story_trakers].collect{|tracker| tracker.to_i}
+          user_stories_trackers = (Setting.plugin_scrum[:user_story_trakers] || []).collect{|tracker| tracker.to_i}
           user_stories_trackers.include?(id)
         end
 
         def is_task?
-          tasks_trackers = Setting.plugin_scrum[:task_trakers].collect{|tracker| tracker.to_i}
+          tasks_trackers = (Setting.plugin_scrum[:task_trakers] || []).collect{|tracker| tracker.to_i}
           tasks_trackers.include?(id)
         end
 
