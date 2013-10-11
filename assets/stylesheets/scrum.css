@@ -353,3 +353,7 @@ table.sprint-user-story input, table.sprint-task input {
 	width: 100%;
 	text-align: center;
 }
+
+.scrum-dialog {
+	display: none;
+}
