@@ -4,17 +4,29 @@
 
 <%- if @user_stories.empty? -%>
   <p class="nodata"><%= l(:label_no_data) %></p>
-<%- else -%>
-  <ul id="user_stories" class="user-stories">
-    <%- @user_stories.each do |user_story| -%>
-      <%= render :partial => "post_its/product_backlog/user_story",
-                 :locals => {:project => @project,
-                             :user_story => user_story} %>
-    <%- end -%>
-  </ul>
-  <%= render :partial => "post_its/product_backlog/user_stories",
-             :formats => [:js],
-             :locals => {:project => @project} %>
 <%- end -%>
 
-<%= render :partial => "common/scrum_footer" %>
+<ul id="user_stories" class="user-stories">
+  <%- @user_stories.each do |user_story| -%>
+    <%= render partial: "post_its/product_backlog/user_story",
+               locals: {project: @project,
+                        user_story: user_story} %>
+  <%- end -%>
+</ul>
+
+<%- if User.current.allowed_to?(:add_issues, @project) -%>
+  <div>
+    <%- Tracker.user_story_trackers.each do |tracker| -%>
+      <%= link_to tracker.name,
+                  project_product_backlog_new_pbi_path(@project, tracker),
+                  remote: true,
+                  method: "GET",
+                  class: "icon icon-add" %>
+    <%- end -%>
+  </div>
+  <%= render partial: "post_its/product_backlog/user_stories",
+             formats: [:js],
+             locals: {project: @project} %>
+<%- end -%>
+
+<%= render partial: "common/scrum_footer" %>

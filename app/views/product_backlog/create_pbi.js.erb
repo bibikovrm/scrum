@@ -1,0 +1,20 @@
+<%- if @continue or defined?(@exception) -%>
+	<%- if defined?(@exception) -%>
+		<%- message = l(:error_creating_pbi)
+				message_class = "error" -%>
+	<%- else -%>
+		$("#new_issue").each (function() {
+			this.reset();
+		});
+		<%- message = l(:notice_pbi_created)
+				message_class = "notice" -%>
+		$("#user_stories").append("<%=
+			escape_javascript(render partial: "post_its/product_backlog/user_story",
+															 locals: {project: @project,
+																				user_story: @pbi}).html_safe
+		%>");
+	<%- end -%>
+	$("#messages").html("<div class=\"flash <%= message_class %>\"><%= message %></div>");
+<%- else -%>
+	$("#ajax-modal").dialog("close");
+<%- end -%>

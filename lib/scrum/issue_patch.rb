@@ -28,6 +28,15 @@ module Scrum
           end
         end
 
+        def story_points=(value)
+          if has_story_points? and
+             !((custom_field_id = Setting.plugin_scrum[:story_points_custom_field]).nil?) and
+             !((custom_value = self.custom_value_for(custom_field_id)).nil?)
+            custom_value.value = value
+            custom_value.save!
+          end
+        end
+
         def is_user_story?
           tracker.is_user_story?
         end

@@ -31,7 +31,7 @@
       <%- if task.has_pending_effort? -%>
         <%= render :partial => "common/scrum_pending_effort",
                    :locals => {:project => project, :task => task} %>
-        <span title="<%= l(:label_pending_effort) %>">h</span>
+        <span title="<%= l(:field_pending_effort) %>">h</span>
       <%- end -%>
     </td>
   </tr>
