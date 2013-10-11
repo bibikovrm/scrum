@@ -8,13 +8,15 @@
 		});
 		<%- message = l(:notice_pbi_created)
 				message_class = "notice" -%>
-		$("#user_stories").append("<%=
-			escape_javascript(render partial: "post_its/product_backlog/user_story",
-															 locals: {project: @project,
-																				user_story: @pbi}).html_safe
-		%>");
 	<%- end -%>
 	$("#messages").html("<div class=\"flash <%= message_class %>\"><%= message %></div>");
 <%- else -%>
 	$("#ajax-modal").dialog("close");
+<%- end -%>
+<%- if !defined?(@exception) -%>
+	$("#user_stories").append("<%=
+		escape_javascript(render partial: "post_its/product_backlog/user_story",
+														 locals: {project: @project,
+																			user_story: @pbi}).html_safe
+	%>");
 <%- end -%>
