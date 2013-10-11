@@ -25,7 +25,6 @@
           </div>
           <%= link_to l("datetime.distance_in_words.x_hours", count: @issue.pending_effort),
                       "#",
-                      id: "pending_effort_link",
                       onclick: "$(\"#pending_effort\").dialog({modal: true});" %>
         <%- end -%>
       </td>
