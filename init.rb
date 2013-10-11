@@ -27,11 +27,8 @@ Redmine::Plugin.register :scrum do
   requires_redmine  :version_or_higher => "2.3.0"
 
   project_module    :scrum do
-    permission      :edit_sprints,
-                    {sprints: [:new, :create, :edit, :update, :edit_effort, :update_effort]},
-                    require: :member
-    permission      :delete_sprints,
-                    {sprints: [:destroy]},
+    permission      :manage_sprints,
+                    {sprints: [:new, :create, :edit, :update, :destroy, :edit_effort, :update_effort]},
                     require: :member
     permission      :view_sprint_board,
                     {sprints: [:index, :show]}
@@ -45,10 +42,7 @@ Redmine::Plugin.register :scrum do
     permission      :view_product_backlog,
                     {product_backlog: [:index]}
     permission      :edit_product_backlog,
-                    {product_backlog: [:sort]},
-                    require: :member
-    permission      :add_issue,
-                    {product_backlog: [:new_pbi, :create_pbi]},
+                    {product_backlog: [:sort, :new_pbi, :create_pbi]},
                     require: :member
   end
 

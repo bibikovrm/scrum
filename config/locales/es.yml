@@ -34,12 +34,12 @@ es:
   notice_sprint_has_issues: "El Sprint tiene peticiones"
   notice_unable_delete_sprint: "Fallo al borrar Sprint"
   project_module_scrum: "Scrum"
-  permission_delete_sprints: "Borrar Sprints"
   permission_edit_product_backlog: "Editar pila de producto"
-  permission_edit_sprints: "Editar Sprints"
   permission_edit_sprint_board: "Editar tablero del Sprint"
+  permission_manage_sprints: "Administrar Sprints"
+  permission_view_burndown: "Ver gráfico de burndown"
   permission_view_product_backlog: "Ver pila de producto"
-  permission_view_sprints: "Ver Sprints"
+  permission_view_sprint_board: "Ver tablero del Sprint"
   date:
     formats:
       scrum_day: "%a"
