@@ -5,7 +5,7 @@ class ProductBacklogController < ApplicationController
 
   before_filter :find_project_by_project_id, only: [:index, :sort, :new_pbi, :create_pbi]
   before_filter :find_product_backlog, only: [:index, :render_pbi, :sort, :new_pbi, :create_pbi]
-  before_filter :find_user_stories, only: [:index, :sort]
+  before_filter :find_pbis, only: [:index, :sort]
   before_filter :check_issue_positions, only: [:index]
   before_filter :authorize
 
@@ -15,10 +15,10 @@ class ProductBacklogController < ApplicationController
   end
 
   def sort
-    @user_stories.each do |user_story|
-      user_story.init_journal(User.current)
-      user_story.position = params["user_story"].index(user_story.id.to_s) + 1
-      user_story.save!
+    @pbis.each do |pbi|
+      pbi.init_journal(User.current)
+      pbi.position = params["pbi"].index(pbi.id.to_s) + 1
+      pbi.save!
     end
     render :nothing => true
   end
@@ -61,8 +61,8 @@ private
     render_404
   end
 
-  def find_user_stories
-    @user_stories = @product_backlog.user_stories
+  def find_pbis
+    @pbis = @product_backlog.pbis
   rescue
     render_404
   end

@@ -2,9 +2,10 @@
 
 <div id="messages" />
 
-<%= labelled_form_for @pbi, url: create_pbi_project_product_backlog_index_path(@project), remote: true do |f| %>
+<%= labelled_form_for @pbi, url: create_pbi_path(@sprint), remote: true do |f| %>
   <%= back_url_hidden_field_tag %>
   <%= f.hidden_field :tracker_id, :value => @pbi.tracker_id %>
+  <%= f.hidden_field :sprint_id, :value => @pbi.sprint_id %>
   <%= error_messages_for "pbi" %>
 
   <div class="box tabular">

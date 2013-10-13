@@ -5,17 +5,25 @@ module Scrum
     def self.included(base)
       base.class_eval do
 
-        def self.user_story_trackers_ids
-          Setting.plugin_scrum[:user_story_trakers].collect{|tracker| tracker.to_i}
+        def self.pbi_trackers_ids
+          (Setting.plugin_scrum[:pbi_trakers] || []).collect{|tracker| tracker.to_i}
         end
 
-        def self.user_story_trackers
-          Tracker.all(:conditions => {:id => user_story_trackers_ids})
+        def self.pbi_trackers
+          Tracker.all(conditions: {id: pbi_trackers_ids})
         end
 
-        def is_user_story?
-          user_stories_trackers = (Setting.plugin_scrum[:user_story_trakers] || []).collect{|tracker| tracker.to_i}
-          user_stories_trackers.include?(id)
+        def is_pbi?
+          pbi_trackers = (Setting.plugin_scrum[:pbi_trakers] || []).collect{|tracker| tracker.to_i}
+          pbi_trackers.include?(id)
+        end
+
+        def self.task_trackers_ids
+          (Setting.plugin_scrum[:task_trakers] || []).collect{|tracker| tracker.to_i}
+        end
+
+        def self.task_trackers
+          Tracker.all(conditions: {id: task_trackers_ids})
         end
 
         def is_task?

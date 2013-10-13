@@ -33,7 +33,7 @@ Redmine::Plugin.register :scrum do
     permission      :view_sprint_board,
                     {sprints: [:index, :show]}
     permission      :edit_sprint_board,
-                    {sprints: [:change_task_status],
+                    {sprints: [:change_task_status, :new_pbi, :create_pbi],
                      scrum: [:change_story_points, :change_pending_effort, :change_assigned_to,
                              :create_time_entry]},
                     require: :member
@@ -54,7 +54,7 @@ Redmine::Plugin.register :scrum do
                                  "story_points_custom_field" => "",
                                  "task_statuses" => "",
                                  "task_trakers" => "",
-                                 "user_story_trakers" => "",
+                                 "pbi_trakers" => "",
                                  "verification_activities" => ""},
                     :partial => "settings/scrum_settings"
 end

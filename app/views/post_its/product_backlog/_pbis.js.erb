@@ -1,7 +1,7 @@
 <%- if User.current.allowed_to?(:edit_product_backlog, project) -%>
 	<%= javascript_tag do %>
 		$(document).ready(function() {
-			$("#user_stories").sortable({
+			$("#pbis").sortable({
 				update: function() {
 					if ($.isFunction($.fn.setupAjaxIndicator)) {
 						setupAjaxIndicator();
@@ -9,7 +9,7 @@
 					$.ajax({
 						url: "<%= sort_project_product_backlog_index_path(project) %>",
 						type: "POST",
-						data: $("#user_stories").sortable("serialize"),
+						data: $("#pbis").sortable("serialize"),
 						dataType: "script",
 						error: function() {
 							alert("<%= l(:error_changing_task_status) %>");

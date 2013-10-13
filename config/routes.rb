@@ -41,3 +41,10 @@ post "issues/:id/assigned_to",
 post "issues/:id/create_time_entry",
      :controller => :scrum, :action => :create_time_entry,
      :as => :create_time_entry
+get "scrum/:sprint_id/new_pbi/:tracker_id",
+     controller: :scrum, action: :new_pbi,
+     as: :new_pbi
+post "scrum/:sprint_id/create_pbi",
+     controller: :scrum, action: :create_pbi,
+     as: :create_pbi
+
