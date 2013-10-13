@@ -46,15 +46,15 @@ Redmine::Plugin.register :scrum do
                     require: :member
   end
 
-  menu :project_menu, :scrum, {:controller => :sprints, :action => :index},
-       :caption => :label_scrum, :after => :activity, :param => :project_id
+  menu              :project_menu, :scrum, {controller: :sprints, action: :index},
+                    caption: :label_scrum, after: :activity, param: :project_id
 
-  settings          :default => {"doer_color" => "post-it-color-5",
-                                 "reviewer_color" => "post-it-color-3",
-                                 "story_points_custom_field" => "",
-                                 "task_statuses" => "",
-                                 "task_trakers" => "",
-                                 "pbi_trakers" => "",
-                                 "verification_activities" => ""},
-                    :partial => "settings/scrum_settings"
+  settings          default: {doer_color: "post-it-color-5",
+                              reviewer_color: "post-it-color-3",
+                              story_points_custom_field: "",
+                              task_statuses: "",
+                              task_trakers: "",
+                              pbi_trakers: "",
+                              verification_activities: ""},
+                    partial: "settings/scrum_settings"
 end
