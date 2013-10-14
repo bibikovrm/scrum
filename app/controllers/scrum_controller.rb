@@ -59,10 +59,14 @@ class ScrumController < ApplicationController
   def create_pbi
     begin
       @continue = !(params[:create_and_continue].nil?)
-      @pbi = Issue.new(params[:issue])
+      @pbi = Issue.new
       @pbi.project = @project
       @pbi.author = User.current
       @pbi.sprint = @sprint
+      @pbi.tracker_id = params[:issue][:tracker_id]
+      @pbi.subject = params[:issue][:subject]
+      @pbi.category_id = params[:issue][:category_id]
+      @pbi.description = params[:issue][:description]
       @pbi.save!
       @pbi.story_points = params[:issue][:story_points]
     rescue Exception => @exception
