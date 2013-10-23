@@ -67,6 +67,7 @@ class ScrumController < ApplicationController
       @pbi.subject = params[:issue][:subject]
       @pbi.category_id = params[:issue][:category_id]
       @pbi.description = params[:issue][:description]
+      @pbi.custom_field_values = params[:issue][:custom_field_values] unless params[:issue][:custom_field_values].nil?
       @pbi.save!
       @pbi.story_points = params[:issue][:story_points]
     rescue Exception => @exception
