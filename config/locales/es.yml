@@ -18,6 +18,7 @@ es:
   label_product_backlog: "Pila de producto"
   label_product_backlog_new: "Nueva pila de producto"
   label_reviewer: "Revisor"
+  label_setting_create_journal_on_pbi_position_change: "Crear histórico cuando cambie la posición de un elemento de la pila de producto"
   label_setting_story_points_custom_field: "Campo personalizado para puntos de historia"
   label_setting_task_statuses: "Estados de las tareas para el tablero del Sprint"
   label_setting_verification_activities: "Actividades de verificación"

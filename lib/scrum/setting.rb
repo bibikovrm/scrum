@@ -1,6 +1,10 @@
 module Scrum
   class Setting
 
+    def self.create_journal_on_pbi_position_change
+      setting_or_default(:create_journal_on_pbi_position_change) == "1"
+    end
+
     def self.doer_color
       setting_or_default(:doer_color)
     end

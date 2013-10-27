@@ -9,6 +9,7 @@ Issue.send(:include, Scrum::IssuePatch)
 IssueQuery.send(:include, Scrum::IssueQueryPatch)
 IssuesController.send(:include, Scrum::IssuesControllerPatch)
 IssueStatus.send(:include, Scrum::IssueStatusPatch)
+Journal.send(:include, Scrum::JournalPatch)
 Project.send(:include, Scrum::ProjectPatch)
 ProjectsHelper.send(:include, Scrum::ProjectsHelperPatch)
 Tracker.send(:include, Scrum::TrackerPatch)
@@ -49,12 +50,13 @@ Redmine::Plugin.register :scrum do
   menu              :project_menu, :scrum, {controller: :sprints, action: :index},
                     caption: :label_scrum, after: :activity, param: :project_id
 
-  settings          default: {doer_color: "post-it-color-5",
+  settings          default: {create_journal_on_pbi_position_change: false,
+                              doer_color: "post-it-color-5",
+                              pbi_tracker_ids: [],
                               reviewer_color: "post-it-color-3",
                               story_points_custom_field_id: nil,
                               task_status_ids: [],
                               task_tracker_ids: [],
-                              pbi_tracker_ids: [],
                               verification_activity_ids: []},
                     partial: "settings/scrum_settings"
 end

@@ -21,6 +21,13 @@
     <%- options = options_for_select(activities, @settings[:verification_activity_ids]) -%>
     <%= select_tag "settings[verification_activity_ids]", options, multiple: true %>
   </p>
+  <p>
+    <label><%= l(:label_setting_create_journal_on_pbi_position_change) %>:</label>
+    <%= hidden_field_tag("settings[create_journal_on_pbi_position_change]", 0) %>
+    <%= check_box_tag("settings[create_journal_on_pbi_position_change]", 1,
+                      (@settings["create_journal_on_pbi_position_change"] ||
+                       defaults["create_journal_on_pbi_position_change"]).to_i == 1) %>
+  </p>
 </fieldset>
 
 <fieldset>
