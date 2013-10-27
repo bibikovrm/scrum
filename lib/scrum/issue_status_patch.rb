@@ -6,8 +6,7 @@ module Scrum
       base.class_eval do
 
         def self.task_statuses
-          ids = Setting.plugin_scrum[:task_statuses].collect{|status| status.to_i} || []
-          IssueStatus.find(ids, :order => "position ASC")
+          IssueStatus.find(Scrum::Setting.task_status_ids, :order => "position ASC")
         end
 
       end

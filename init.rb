@@ -51,10 +51,10 @@ Redmine::Plugin.register :scrum do
 
   settings          default: {doer_color: "post-it-color-5",
                               reviewer_color: "post-it-color-3",
-                              story_points_custom_field: "",
-                              task_statuses: "",
-                              task_trakers: "",
-                              pbi_trakers: "",
-                              verification_activities: ""},
+                              story_points_custom_field_id: nil,
+                              task_status_ids: [],
+                              task_tracker_ids: [],
+                              pbi_tracker_ids: [],
+                              verification_activity_ids: []},
                     partial: "settings/scrum_settings"
 end

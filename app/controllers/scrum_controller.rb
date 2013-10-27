@@ -79,21 +79,6 @@ class ScrumController < ApplicationController
 
 private
 
-  def change_custom_field(setting, issue, value)
-    status = 503
-    begin
-      if !((custom_field_id = Setting.plugin_scrum[setting]).nil?) and
-         !((custom_field = CustomField.find(custom_field_id)).nil?) and
-         custom_field.validate_field_value(value).empty?
-        issue.custom_field_values = {custom_field_id => value}
-        issue.save_custom_field_values
-        status = 200
-      end
-    rescue Exception => @exception
-    end
-    render nothing: true, status: status
-  end
-
   def render_task(project, task, params)
     render partial: "post_its/sprint_board/task",
            status: 200,
