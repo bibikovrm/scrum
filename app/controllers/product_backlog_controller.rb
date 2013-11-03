@@ -64,12 +64,35 @@ class ProductBacklogController < ApplicationController
   def burndown_graph
     fields = {}
     data = []
+    index = 0
+    @project.sprints.each do |sprint|
+      fields[index] = sprint.name
+      data << sprint.story_points
+      index += 1
+    end
+
+    story_points_per_sprint = data.last || 0
+    pending_story_points = @project.product_backlog.story_points
+    new_sprints = 1
+    while pending_story_points > 0
+      fields[index] = "+#{new_sprints}"
+      data << ((story_points_per_sprint <= pending_story_points) ? story_points_per_sprint : pending_story_points)
+      pending_story_points -= story_points_per_sprint
+      index += 1
+      new_sprints += 1
+    end
+
+    for i in 0..(data.length)
+      others = data[(i + 1)..(data.length - 1)]
+      data[i] += others.sum unless others.blank?
+    end
 
     graph = Gruff::Bar.new("800x500")
     graph.hide_title = true
     graph.theme = Scrum::Utils.graph_theme
     graph.labels = fields
     graph.data l(:label_story_point_plural), data
+    graph.minimum_value = 0
     headers["Content-Type"] = "image/png"
     send_data(graph.to_blob, :type => "image/png", :disposition => "inline")
   end
