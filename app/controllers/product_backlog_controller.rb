@@ -1,10 +1,16 @@
+require "scrum/gruff/themes"
+require "scrum/gruff/bar"
+
 class ProductBacklogController < ApplicationController
 
   menu_item :scrum
   model_object Issue
 
-  before_filter :find_project_by_project_id, only: [:index, :sort, :new_pbi, :create_pbi]
-  before_filter :find_product_backlog, only: [:index, :render_pbi, :sort, :new_pbi, :create_pbi]
+  before_filter :find_project_by_project_id,
+                only: [:index, :sort, :new_pbi, :create_pbi, :burndown, :burndown_graph]
+  before_filter :find_product_backlog,
+                only: [:index, :render_pbi, :sort, :new_pbi, :create_pbi,
+                       :burndown, :burndown_graph]
   before_filter :find_pbis, only: [:index, :sort]
   before_filter :check_issue_positions, only: [:index]
   before_filter :authorize
@@ -50,6 +56,22 @@ class ProductBacklogController < ApplicationController
     respond_to do |format|
       format.js
     end
+  end
+
+  def burndown
+  end
+
+  def burndown_graph
+    fields = {}
+    data = []
+
+    graph = Gruff::Bar.new("800x500")
+    graph.hide_title = true
+    graph.theme = Scrum::Utils.graph_theme
+    graph.labels = fields
+    graph.data l(:label_story_point_plural), data
+    headers["Content-Type"] = "image/png"
+    send_data(graph.to_blob, :type => "image/png", :disposition => "inline")
   end
 
 private
