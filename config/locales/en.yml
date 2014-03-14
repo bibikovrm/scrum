@@ -11,6 +11,7 @@ en:
   field_sprint: "Sprint"
   label_doer: "Doer"
   label_edit_effort: "Edit effort"
+  label_end: "End"
   label_estimated_effort: "Estimated effort"
   label_pbi_plural: "Product backlog items"
   label_post_it: "Post-it"

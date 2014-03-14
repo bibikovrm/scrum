@@ -129,9 +129,9 @@ class SprintsController < ApplicationController
   end
 
   def burndown_graph
-    fields = {};
-    estimated_effort = [];
-    pending_effort = []
+    fields = {}
+    estimated_effort = []
+    pending_effort = [@sprint.issues.collect{|issue| issue.estimated_hours}.compact.sum]
     index = 0
     ((@sprint.start_date)..(@sprint.end_date)).each do |date|
       if @sprint.efforts.count(:conditions => ["date = ?", date]) > 0
@@ -148,6 +148,8 @@ class SprintsController < ApplicationController
         end
       end
     end
+    fields[index] = l(:label_end)
+    estimated_effort << 0.0
 
     graph = Gruff::Line.new("800x500")
     graph.hide_title = true
