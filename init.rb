@@ -46,7 +46,7 @@ Redmine::Plugin.register :scrum do
                     {product_backlog: [:sort, :new_pbi, :create_pbi]},
                     require: :member
     permission      :view_product_backlog_burndown,
-                    {product_backlog: [:burndown, :burndown_graph]}
+                    {product_backlog: [:burndown]}
   end
 
   menu              :project_menu, :scrum, {controller: :sprints, action: :index},
