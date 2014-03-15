@@ -125,12 +125,12 @@ class SprintsController < ApplicationController
 
   def burndown
     @data = []
-    last_pending_effort = @sprint.issues.collect{|issue| issue.estimated_hours}.compact.sum
+    last_pending_effort = @sprint.estimated_hours
     last_day = nil
     ((@sprint.start_date)..(@sprint.end_date)).each do |date|
       if @sprint.efforts.count(:conditions => ["date = ?", date]) > 0
         efforts = @sprint.efforts.all(:conditions => ["date >= ?", date])
-        estimated_effort = efforts.collect{|effort| effort.effort}.sum
+        estimated_effort = efforts.collect{|effort| effort.effort}.compact.sum
         if date <= Date.today
           efforts = []
           @sprint.issues.each do |issue|
