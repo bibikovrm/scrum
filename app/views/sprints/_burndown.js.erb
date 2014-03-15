@@ -19,8 +19,8 @@
 					{
 						"x": <%= i %>,
 						"y": <%= value[:estimated_effort] %>,
-						"label": "<%= value[:label] %>",
-						"tooltip": "<%= "#{l(:label_estimated_effort)}: #{value[:estimated_effort]} h" %>"
+						"axis_label": "<%= value[:axis_label] %>",
+						"tooltip": "<%= value[:estimated_effort_tooltip] %>"
 					},
 				<%- end -%>
 				]
@@ -33,8 +33,8 @@
 					{
 						"x": <%= i %>,
 						"y": <%= value[:pending_effort] %>,
-						"label": "<%= value[:label] %>",
-						"tooltip": "<%= "#{l(:field_pending_effort)}: #{value[:pending_effort]} h" %>"
+						"axis_label": "<%= value[:axis_label] %>",
+						"tooltip": "<%= value[:pending_effort_tooltip] %>"
 					},
 				<%- end -%>
 				]
@@ -44,7 +44,7 @@
 	// Chart options.
 	var options = {
 		// Use data label as horizontal axis labels.
-		"tickFormatX": function (x) { return data["main"][0]["data"][x]["label"]; },
+		"tickFormatX": function (x) { return data["main"][0]["data"][x]["axis_label"]; },
 		// Render a tooltip when mouse goes over the values.
 		"mouseover": function (d, i) {
 			var pos = $(this).offset();
@@ -58,5 +58,5 @@
 		}
 	};
 	// Generate the chart.
-	new xChart("line-dotted", data, "#myChart", options);
+	new xChart("line-dotted", data, "#burndown-chart", options);
 <% end %>

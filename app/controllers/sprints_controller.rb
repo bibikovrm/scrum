@@ -138,18 +138,31 @@ class SprintsController < ApplicationController
           end
           pending_effort = efforts.compact.collect{|effort| effort.effort}.compact.sum
         end
-        @data << {label: "#{I18n.l(date, :format => :scrum_day)} #{date.day}",
-                  day: date,
+        date_label = "#{I18n.l(date, :format => :scrum_day)} #{date.day}"
+        @data << {day: date,
+                  axis_label: date_label,
                   estimated_effort: estimated_effort,
-                  pending_effort: last_pending_effort}
-        last_pending_effort = pending_effort
+                  estimated_effort_tooltip: l(:label_estimated_effort_tooltip,
+                                              date: date_label,
+                                              hours: estimated_effort),
+                  pending_effort: last_pending_effort,
+                  pending_effort_tooltip: l(:label_pending_effort_tooltip,
+                                            date: date_label,
+                                            hours: last_pending_effort)}
+        last_pending_effort = pending_effort || 0
         last_day = date.day
       end
     end
-    @data << {label: l(:label_end),
-              day: last_day,
-              estimated_effort: 0.0,
-              pending_effort: last_pending_effort}
+    @data << {day: last_day,
+              axis_label: l(:label_end),
+              estimated_effort: 0,
+              estimated_effort_tooltip: l(:label_estimated_effort_tooltip,
+                                          date: l(:label_end),
+                                          hours: 0),
+              pending_effort: last_pending_effort,
+              pending_effort_tooltip: l(:label_pending_effort_tooltip,
+                                        date: l(:label_end),
+                                        hours: last_pending_effort)}
   end
 
 end
