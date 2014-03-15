@@ -39,7 +39,7 @@ Redmine::Plugin.register :scrum do
                              :create_time_entry]},
                     require: :member
     permission      :view_sprint_burndown,
-                    {sprints: [:burndown_index, :burndown, :burndown_graph]}
+                    {sprints: [:burndown_index, :burndown]}
     permission      :view_product_backlog,
                     {product_backlog: [:index]}
     permission      :edit_product_backlog,
