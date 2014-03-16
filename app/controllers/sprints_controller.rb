@@ -1,6 +1,3 @@
-require "scrum/gruff/themes"
-require "scrum/gruff/line"
-
 class SprintsController < ApplicationController
 
   menu_item :scrum

@@ -1,6 +1,3 @@
-require "scrum/gruff/themes"
-require "scrum/gruff/bar"
-
 class ProductBacklogController < ApplicationController
 
   menu_item :scrum
