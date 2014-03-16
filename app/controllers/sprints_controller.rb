@@ -102,13 +102,13 @@ class SprintsController < ApplicationController
             sprint_effort = SprintEffort.new(:sprint_id => @sprint.id,
                                              :user_id => user_id,
                                              :date => @sprint.start_date + day,
-                                             :effort => effort.to_i)
+                                             :effort => effort)
           end
         elsif effort.blank?
           sprint_effort.destroy
           sprint_effort = nil
         else
-          sprint_effort.effort = effort.to_i
+          sprint_effort.effort = effort
         end
         sprint_effort.save! unless sprint_effort.nil?
       end
