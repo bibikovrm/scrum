@@ -146,7 +146,7 @@ class SprintsController < ApplicationController
                   pending_effort_tooltip: l(:label_pending_effort_tooltip,
                                             date: date_label,
                                             hours: last_pending_effort)}
-        last_pending_effort = pending_effort || 0
+        last_pending_effort = pending_effort
         last_day = date.day
       end
     end

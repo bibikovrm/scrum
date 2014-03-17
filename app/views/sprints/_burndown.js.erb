@@ -30,12 +30,14 @@
 				"className": ".pending-effort",
 				"data": [
 				<%- data.each_with_index do |value, i| -%>
+					<%- unless value[:pending_effort].nil? -%>
 					{
 						"x": <%= i %>,
 						"y": <%= value[:pending_effort] %>,
 						"axis_label": "<%= value[:axis_label] %>",
 						"tooltip": "<%= value[:pending_effort_tooltip] %>"
 					},
+					<%- end -%>
 				<%- end -%>
 				]
 			}
