@@ -7,19 +7,19 @@
     <%- custom_fields = CustomField.find_all_by_type_and_field_format("IssueCustomField", ["int", "float", "string", "list"])
         custom_fields = custom_fields.collect{|c| [c.name, c.id]}
         options = options_for_select(custom_fields, @settings[:story_points_custom_field_id]) -%>
-    <%= select_tag "settings[story_points_custom_field_id]", options, include_blank: true %>
+    <%= select_tag "settings[story_points_custom_field_id]", options, :include_blank => true %>
   </p>
   <p>
     <label><%= l(:label_setting_task_statuses) %>:</label>
     <%- statuses = IssueStatus.all.collect{|s| [s.name, s.id]} -%>
     <%- options = options_for_select(statuses, @settings[:task_status_ids]) -%>
-    <%= select_tag "settings[task_status_ids]", options, multiple: true %>
+    <%= select_tag "settings[task_status_ids]", options, :multiple => true %>
   </p>
   <p>
     <label><%= l(:label_setting_verification_activities) %>:</label>
     <%- activities = Enumeration.all(conditions: {type: "TimeEntryActivity"}).collect{|s| [s.name, s.id]} -%>
     <%- options = options_for_select(activities, @settings[:verification_activity_ids]) -%>
-    <%= select_tag "settings[verification_activity_ids]", options, multiple: true %>
+    <%= select_tag "settings[verification_activity_ids]", options, :multiple => true %>
   </p>
   <p>
     <label><%= l(:label_setting_create_journal_on_pbi_position_change) %>:</label>
@@ -36,12 +36,12 @@
   <p>
     <label><%= l(:label_pbi_plural) %>:</label>
     <%- options = options_for_select(trackers, @settings[:pbi_tracker_ids]) -%>
-    <%= select_tag "settings[pbi_tracker_ids]", options, multiple: true %>
+    <%= select_tag "settings[pbi_tracker_ids]", options, :multiple => true %>
   </p>
   <p>
     <label><%= l(:label_task_plural) %>:</label>
     <%- options = options_for_select(trackers, @settings[:task_tracker_ids]) -%>
-    <%= select_tag "settings[task_tracker_ids]", options, multiple: true %>
+    <%= select_tag "settings[task_tracker_ids]", options, :multiple => true %>
   </p>
 </fieldset>
 

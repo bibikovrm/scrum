@@ -2,11 +2,11 @@ class ScrumController < ApplicationController
 
   menu_item :scrum
 
-  before_filter :find_issue, only: [:change_story_points, :change_pending_effort,
-                                    :change_assigned_to, :create_time_entry]
-  before_filter :find_sprint, only: [:new_pbi, :create_pbi]
-  before_filter :authorize, except: [:new_pbi, :create_pbi]
-  before_filter :authorize_add_issues, only: [:new_pbi, :create_pbi]
+  before_filter :find_issue, :only => [:change_story_points, :change_pending_effort,
+                                       :change_assigned_to, :create_time_entry]
+  before_filter :find_sprint, :only => [:new_pbi, :create_pbi]
+  before_filter :authorize, :except => [:new_pbi, :create_pbi]
+  before_filter :authorize_add_issues, :only => [:new_pbi, :create_pbi]
 
   helper :scrum
   helper :timelog
@@ -19,12 +19,12 @@ class ScrumController < ApplicationController
     rescue
       status = 503
     end
-    render nothing: true, status: status
+    render :nothing => true, :status => status
   end
 
   def change_pending_effort
     @issue.pending_effort = params[:value]
-    render nothing: true, status: 200
+    render :nothing => true, :status => 200
   end
 
   def change_assigned_to
@@ -39,7 +39,7 @@ class ScrumController < ApplicationController
     time_entry.project_id = @project.id
     time_entry.issue_id = @issue.id
     time_entry.user_id = params[:time_entry][:user_id]
-    call_hook(:controller_timelog_edit_before_save, {params: params, time_entry: time_entry})
+    call_hook(:controller_timelog_edit_before_save, {:params => params, :time_entry => time_entry})
     time_entry.save!
     render_task(@project, @issue, params)
   end
@@ -80,13 +80,13 @@ class ScrumController < ApplicationController
 private
 
   def render_task(project, task, params)
-    render partial: "post_its/sprint_board/task",
-           status: 200,
-           locals: {project: project,
-                    task: task,
-                    pbi_status_id: params[:pbi_status_id],
-                    other_pbi_status_ids: params[:other_pbi_status_ids].split(","),
-                    task_id: params[:task_id]}
+    render :partial => "post_its/sprint_board/task",
+           :status => 200,
+           :locals => {:project => project,
+                       :task => task,
+                       :pbi_status_id => params[:pbi_status_id],
+                       :other_pbi_status_ids => params[:other_pbi_status_ids].split(","),
+                       :task_id => params[:task_id]}
   end
 
   def find_sprint
