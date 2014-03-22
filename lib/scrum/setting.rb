@@ -37,6 +37,10 @@ module Scrum
       setting_or_default("tracker_#{id}_color")
     end
 
+    def self.inherit_pbi_attributes
+      setting_or_default(:inherit_pbi_attributes) == "1"
+    end
+
   private
 
     def self.setting_or_default(setting)

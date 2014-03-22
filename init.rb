@@ -52,13 +52,14 @@ Redmine::Plugin.register :scrum do
   menu              :project_menu, :scrum, {:controller => :sprints, :action => :index},
                     :caption => :label_scrum, :after => :activity, :param => :project_id
 
-  settings          :default => {:create_journal_on_pbi_position_change => false,
+  settings          :default => {:create_journal_on_pbi_position_change => "0",
                                  :doer_color => "post-it-color-5",
                                  :pbi_tracker_ids => [],
                                  :reviewer_color => "post-it-color-3",
                                  :story_points_custom_field_id => nil,
                                  :task_status_ids => [],
                                  :task_tracker_ids => [],
-                                 :verification_activity_ids => []},
+                                 :verification_activity_ids => [],
+                                 :inherit_pbi_attributes => "1"},
                     :partial => "settings/scrum_settings"
 end
