@@ -25,6 +25,10 @@ module Scrum
       collect_ids(:task_tracker_ids)
     end
 
+    def self.task_tracker
+      Tracker.all(task_tracker_ids)
+    end
+
     def self.pbi_tracker_ids
       collect_ids(:pbi_tracker_ids)
     end

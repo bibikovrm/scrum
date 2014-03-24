@@ -60,8 +60,7 @@
     <%- end -%>
   </div>
 
-  <%= render :partial => "post_its/sprint_board/task_context_menu",
-             :formats => [:js],
+  <%= render :partial => "post_its/sprint_board/task_context_menu", :formats => [:js],
              :locals => {:project => project,
                          :pbi_status_id => pbi_status_id,
                          :other_pbi_status_ids => other_pbi_status_ids,

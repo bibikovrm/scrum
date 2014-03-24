@@ -1,6 +1,6 @@
-<tr class="sprint-board">
+<tr class="sprint-board" id="<%= "pbi_#{pbi.id}_row" %>">
   <td class="sprint-board">
-    <%= render :partial => "post_its/sprint_board/pbi",
+    <%= render :partial => "post_its/sprint_board/pbi", :formats => [:html],
                :locals => {:project => project, :pbi => pbi} %>
   </td>
   <%- tasks = pbi.tasks_by_status_id
@@ -11,15 +11,14 @@
         } -%>
     <td id="<%= pbi_status_id %>" class="sprint-board">
       <%- tasks[status.id].each do |task| -%>
-        <%= render :partial => "post_its/sprint_board/task",
+        <%= render :partial => "post_its/sprint_board/task", :formats => [:html],
                    :locals => {:project => project,
                                :task => task,
                                :pbi_status_id => pbi_status_id,
                                :other_pbi_status_ids => other_pbi_status_ids} %>
       <%- end -%>
     </td>
-    <%= render :partial => "post_its/sprint_board/pbi_status",
-               :formats => [:js],
+    <%= render :partial => "post_its/sprint_board/pbi_status", :formats => [:js],
                :locals => {:project => project,
                            :pbi_status_id => pbi_status_id,
                            :status => status} %>

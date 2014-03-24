@@ -30,23 +30,20 @@
       <%- end -%>
     </td>
     <td class="pending">
-      <%- if task.has_pending_effort? -%>
-        <%= render :partial => "common/scrum_pending_effort",
-                   :locals => {:project => project, :task => task} %>
-        <span title="<%= l(:field_pending_effort) %>">h</span>
-      <%- end -%>
+      <%= render :partial => "common/scrum_pending_effort", :formats => [:html],
+                 :locals => {:project => project, :task => task} %>
+      <span title="<%= l(:field_pending_effort) %>">h</span>
     </td>
   </tr>
 </table>
 
-<%= render :partial => "post_its/sprint_board/task",
-           :formats => [:js],
+<%= render :partial => "post_its/sprint_board/task", :formats => [:js],
            :locals => {:project => project,
                        :other_pbi_status_ids => other_pbi_status_ids,
                        :task_id => task_id,
                        :task => task} %>
 
-<%= render :partial => "post_its/sprint_board/task_context_menu",
+<%= render :partial => "post_its/sprint_board/task_context_menu", :formats => [:html],
            :locals => {:project => project,
                        :task => task,
                        :pbi_status_id => pbi_status_id,

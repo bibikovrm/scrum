@@ -5,8 +5,9 @@ class ScrumController < ApplicationController
   before_filter :find_issue, :only => [:change_story_points, :change_pending_effort,
                                        :change_assigned_to, :create_time_entry]
   before_filter :find_sprint, :only => [:new_pbi, :create_pbi]
-  before_filter :authorize, :except => [:new_pbi, :create_pbi]
-  before_filter :authorize_add_issues, :only => [:new_pbi, :create_pbi]
+  before_filter :find_pbi, :only => [:new_task, :create_task]
+  before_filter :authorize, :except => [:new_pbi, :create_pbi, :new_task, :create_task]
+  before_filter :authorize_add_issues, :only => [:new_pbi, :create_pbi, :new_task, :create_task]
 
   helper :scrum
   helper :timelog
@@ -77,6 +78,52 @@ class ScrumController < ApplicationController
     end
   end
 
+  def new_task
+    @task = Issue.new
+    @task.project = @project
+    @task.tracker = Tracker.find(params[:tracker_id])
+    @task.parent = @pbi
+    @task.author = User.current
+    @task.sprint = @sprint
+    if Scrum::Setting.inherit_pbi_attributes
+      @task.category_id = @pbi.category_id if @task.safe_attribute?(:category_id) and @pbi.safe_attribute?(:category_id)
+    end
+    respond_to do |format|
+      format.html
+      format.js
+    end
+  rescue
+    render_404
+  end
+
+  def create_task
+    begin
+      @continue = !(params[:create_and_continue].nil?)
+      @task = Issue.new
+      @task.project = @project
+      @task.parent_issue_id = @pbi.id
+      @task.author = User.current
+      @task.sprint = @sprint
+      @task.tracker_id = params[:issue][:tracker_id]
+      @task.subject = params[:issue][:subject]
+      @task.category_id = params[:issue][:category_id]
+      @task.description = params[:issue][:description]
+      @task.custom_field_values = params[:issue][:custom_field_values] unless params[:issue][:custom_field_values].nil?
+      if Scrum::Setting.inherit_pbi_attributes
+        @task.priority_id = @pbi.priority_id if @task.safe_attribute?(:priority_id) and @pbi.safe_attribute?(:priority_id)
+        @task.fixed_version_id = @pbi.fixed_version_id if @task.safe_attribute?(:fixed_version_id) and @pbi.safe_attribute?(:fixed_version_id)
+        @task.start_date = @pbi.start_date if @task.safe_attribute?(:start_date) and @pbi.safe_attribute?(:start_date)
+        @task.due_date = @pbi.due_date if @task.safe_attribute?(:due_date) and @pbi.safe_attribute?(:due_date)
+      end
+      @task.save!
+      @task.pending_effort = params[:issue][:pending_effort]
+    rescue Exception => @exception
+    end
+    respond_to do |format|
+      format.js
+    end
+  end
+
 private
 
   def render_task(project, task, params)
@@ -91,6 +138,14 @@ private
 
   def find_sprint
     @sprint = Sprint.find(params[:sprint_id])
+    @project = @sprint.project
+  rescue
+    render_404
+  end
+
+  def find_pbi
+    @pbi = Issue.find(params[:pbi_id])
+    @sprint = @pbi.sprint
     @project = @sprint.project
   rescue
     render_404

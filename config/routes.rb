@@ -49,3 +49,9 @@ get "scrum/:sprint_id/new_pbi/:tracker_id",
 post "scrum/:sprint_id/create_pbi",
      :controller => :scrum, :action => :create_pbi,
      :as => :create_pbi
+get "scrum/:pbi_id/new/:tracker_id",
+    :controller => :scrum, :action => :new_task,
+    :as => :new_task
+post "scrum/:pbi_id/create",
+     :controller => :scrum, :action => :create_task,
+     :as => :create_task

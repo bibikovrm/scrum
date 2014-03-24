@@ -15,11 +15,9 @@
       </p>
     <%- end -%>
 
-    <%- if @pbi.has_story_points? -%>
-      <p>
-        <%= f.text_field :story_points, :size => 4, :maxlength => 10, :label => l(:label_story_point_plural) %>
-      </p>
-    <%- end -%>
+    <p>
+      <%= f.text_field :story_points, :size => 4, :maxlength => 10, :label => l(:label_story_point_plural) %>
+    </p>
 
     <%- if @pbi.safe_attribute?(:category_id) and @pbi.project.issue_categories.any? -%>
       <p>
@@ -27,6 +25,15 @@
                      (@pbi.project.issue_categories.collect {|c| [c.name, c.id]}),
                      :include_blank => true,
                      :required => @pbi.required_attribute?(:category_id) %>
+      </p>
+    <% end %>
+
+    <%- if @pbi.safe_attribute?(:fixed_version_id) and @pbi.project.versions.any? -%>
+      <p>
+        <%= f.select :fixed_version_id,
+                     (@pbi.project.versions.collect {|c| [c.name, c.id]}),
+                     :include_blank => true,
+                     :required => @pbi.required_attribute?(:fixed_version_id) %>
       </p>
     <% end %>
 
