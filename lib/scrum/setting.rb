@@ -45,6 +45,14 @@ module Scrum
       setting_or_default(:inherit_pbi_attributes) == "1"
     end
 
+    def self.fields_for_tracker(tracker)
+      collect("tracker_#{tracker}_fields")
+    end
+
+    def self.custom_fields_for_tracker(tracker)
+      collect_ids("tracker_#{tracker}_custom_fields")
+    end
+
   private
 
     def self.setting_or_default(setting)
@@ -54,6 +62,10 @@ module Scrum
 
     def self.collect_ids(setting)
       (::Setting.plugin_scrum[setting] || []).collect{|value| value.to_i}
+    end
+
+    def self.collect(setting)
+      (::Setting.plugin_scrum[setting] || [])
     end
 
   end
