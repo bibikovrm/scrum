@@ -45,12 +45,20 @@ module Scrum
       setting_or_default(:inherit_pbi_attributes) == "1"
     end
 
-    def self.fields_for_tracker(tracker)
+    def self.tracker_fields(tracker)
       collect("tracker_#{tracker}_fields")
     end
 
-    def self.custom_fields_for_tracker(tracker)
+    def self.tracker_field?(tracker, field)
+      tracker_fields(tracker).include?(field.to_s)
+    end
+
+    def self.tracker_custom_fields(tracker)
       collect_ids("tracker_#{tracker}_custom_fields")
+    end
+
+    def self.tracker_custom_field?(tracker, custom_field)
+      tracker_custom_fields(tracker).include?(custom_field.id)
     end
 
   private

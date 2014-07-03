@@ -6,57 +6,6 @@
   <%= back_url_hidden_field_tag %>
   <%= f.hidden_field :tracker_id, :value => @task.tracker_id %>
   <%= error_messages_for "task" %>
-
-  <div class="box tabular">
-    <%- if @task.safe_attribute?(:subject) -%>
-      <p>
-        <%= f.text_field :subject, :size => 10, :maxlength => 255, :required => true %>
-      </p>
-    <%- end -%>
-
-    <%- if @pbi.safe_attribute?(:estimated_hours) -%>
-      <p>
-        <%= f.text_field :estimated_hours, :size => 4, :maxlength => 10 %>
-      </p>
-    <%- end -%>
-
-    <p>
-      <%= f.text_field :pending_effort, :size => 4, :maxlength => 10, :label => l(:field_pending_effort) %>
-    </p>
-
-    <%- if @task.safe_attribute?(:category_id) and @task.project.issue_categories.any? -%>
-      <p>
-        <%= f.select :category_id,
-                     (@task.project.issue_categories.collect {|c| [c.name, c.id]}),
-                     :include_blank => true,
-                     :required => @task.required_attribute?(:category_id) %>
-      </p>
-    <% end %>
-
-    <%- @task.editable_custom_field_values.each do |value| -%>
-      <%- if value.custom_field.is_required -%>
-        <p><%= custom_field_tag_with_label :issue, value, :required => true %></p>
-      <%- end -%>
-    <%- end -%>
-
-    <%- if @task.safe_attribute?(:description) -%>
-      <p>
-        <%= f.label_for_field :description, :required => @task.required_attribute?(:description) %>
-        <%= content_tag :span, :id => "issue_description_and_toolbar" do %>
-          <%= f.text_area :description,
-                          :cols => 20,
-                          :rows => 10,
-                          :accesskey => accesskey(:edit),
-                          :class => "wiki-edit",
-                          :no_label => true %>
-        <% end %>
-      </p>
-    <%- end -%>
-  </div>
-
-  <p class="buttons">
-    <%= submit_tag l(:button_create_and_continue), :name => "create_and_continue" %>
-    <%= submit_tag l(:button_create), :name => "create" %>
-    <%= submit_tag l(:button_cancel), :name => nil, :onclick => "hideModal(this);", :type => "button" %>
-  </p>
+  <%= render :partial => "scrum/new_issue_attributes", :formats => [:html],
+             :locals => {:f => f, :issue => @task} %>
 <% end %>

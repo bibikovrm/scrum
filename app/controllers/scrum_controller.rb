@@ -12,6 +12,7 @@ class ScrumController < ApplicationController
   helper :scrum
   helper :timelog
   helper :custom_fields
+  helper :projects
 
   def change_story_points
     begin
@@ -48,8 +49,8 @@ class ScrumController < ApplicationController
   def new_pbi
     @pbi = Issue.new
     @pbi.project = @project
-    @pbi.author = User.current
     @pbi.tracker = @project.trackers.find(params[:tracker_id])
+    @pbi.author = User.current
     @pbi.sprint = @sprint
     respond_to do |format|
       format.html
@@ -66,12 +67,18 @@ class ScrumController < ApplicationController
       @pbi.sprint = @sprint
       @pbi.tracker_id = params[:issue][:tracker_id]
       @pbi.subject = params[:issue][:subject]
-      @pbi.category_id = params[:issue][:category_id]
+      @pbi.priority_id = params[:issue][:priority_id]
+      @pbi.estimated_hours = params[:issue][:estimated_hours]
       @pbi.description = params[:issue][:description]
+      @pbi.category_id = params[:issue][:category_id] if @pbi.safe_attribute?(:category_id)
+      @pbi.fixed_version_id = params[:issue][:fixed_version_id] if @pbi.safe_attribute?(:fixed_version_id)
+      @pbi.start_date = params[:issue][:start_date] if @pbi.safe_attribute?(:start_date)
+      @pbi.due_date = params[:issue][:due_date] if @pbi.safe_attribute?(:due_date)
       @pbi.custom_field_values = params[:issue][:custom_field_values] unless params[:issue][:custom_field_values].nil?
       @pbi.save!
       @pbi.story_points = params[:issue][:story_points]
     rescue Exception => @exception
+      log.error("Exception: #{@exception.inspect}")
     end
     respond_to do |format|
       format.js
@@ -86,13 +93,14 @@ class ScrumController < ApplicationController
     @task.author = User.current
     @task.sprint = @sprint
     if Scrum::Setting.inherit_pbi_attributes
-      @task.category_id = @pbi.category_id if @task.safe_attribute?(:category_id) and @pbi.safe_attribute?(:category_id)
+      @task.inherit_from_issue(@pbi)
     end
     respond_to do |format|
       format.html
       format.js
     end
-  rescue
+  rescue Exception => e
+    log.error("Exception: #{e.inspect}")
     render_404
   end
 
@@ -106,15 +114,14 @@ class ScrumController < ApplicationController
       @task.sprint = @sprint
       @task.tracker_id = params[:issue][:tracker_id]
       @task.subject = params[:issue][:subject]
-      @task.category_id = params[:issue][:category_id]
+      @task.priority_id = params[:issue][:priority_id]
+      @task.estimated_hours = params[:issue][:estimated_hours]
       @task.description = params[:issue][:description]
+      @task.category_id = params[:issue][:category_id] if @task.safe_attribute?(:category_id)
+      @task.fixed_version_id = params[:issue][:fixed_version_id] if @task.safe_attribute?(:fixed_version_id)
+      @task.start_date = params[:issue][:start_date] if @task.safe_attribute?(:start_date)
+      @task.due_date = params[:issue][:due_date] if @task.safe_attribute?(:due_date)
       @task.custom_field_values = params[:issue][:custom_field_values] unless params[:issue][:custom_field_values].nil?
-      if Scrum::Setting.inherit_pbi_attributes
-        @task.priority_id = @pbi.priority_id if @task.safe_attribute?(:priority_id) and @pbi.safe_attribute?(:priority_id)
-        @task.fixed_version_id = @pbi.fixed_version_id if @task.safe_attribute?(:fixed_version_id) and @pbi.safe_attribute?(:fixed_version_id)
-        @task.start_date = @pbi.start_date if @task.safe_attribute?(:start_date) and @pbi.safe_attribute?(:start_date)
-        @task.due_date = @pbi.due_date if @task.safe_attribute?(:due_date) and @pbi.safe_attribute?(:due_date)
-      end
       @task.save!
       @task.pending_effort = params[:issue][:pending_effort]
     rescue Exception => @exception
@@ -140,6 +147,7 @@ private
     @sprint = Sprint.find(params[:sprint_id])
     @project = @sprint.project
   rescue
+    log.error("Sprint #{params[:sprint_id]} not found")
     render_404
   end
 
@@ -148,6 +156,7 @@ private
     @sprint = @pbi.sprint
     @project = @sprint.project
   rescue
+    log.error("PBI #{params[:pbi_id]} not found")
     render_404
   end
 

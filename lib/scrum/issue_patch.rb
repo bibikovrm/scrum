@@ -126,6 +126,32 @@ module Scrum
           end
         end
 
+        def init_from_params(params)
+        end
+
+        def inherit_from_issue(source_issue)
+          [:priority_id, :category_id, :fixed_version_id, :start_date, :due_date].each do |attribute|
+            self.copy_attribute(source_issue, attribute)
+          end
+          self.custom_field_values = source_issue.custom_field_values.inject({}){|h, v| h[v.custom_field_id] = v.value; h}
+        end
+
+        def field?(field)
+          self.safe_attribute?(field) and (self.tracker.field?(field) or self.required_attribute?(field))
+        end
+
+        def custom_field?(custom_field)
+          self.tracker.custom_field?(custom_field)
+        end
+
+      protected
+
+        def copy_attribute(source_issue, attribute)
+          if self.safe_attribute?(attribute) and source_issue.safe_attribute?(attribute)
+            self.send("#{attribute}=", source_issue.send("#{attribute}"))
+          end
+        end
+
       private
 
         def update_position
