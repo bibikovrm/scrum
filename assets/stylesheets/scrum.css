@@ -44,6 +44,11 @@
 	-webkit-transform: scale(1.02, 1.14);
 }
 
+.post-it .gravatar {
+	border: 0;
+	padding: 0;
+}
+
 .settings-post-it {
 	margin-right: 20px;
 }
