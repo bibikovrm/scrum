@@ -305,6 +305,7 @@ table.sprint-pbi input, table.sprint-task input {
 	right: 0px;
 	bottom: 0px;
 	overflow: visible;
+	max-width: 9em;
 }
 
 .doer-post-it, .reviewer-post-it {
