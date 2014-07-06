@@ -44,11 +44,6 @@
 	-webkit-transform: scale(1.02, 1.14);
 }
 
-.post-it .gravatar {
-	border: 0;
-	padding: 0;
-}
-
 .settings-post-it {
 	margin-right: 20px;
 }
@@ -307,8 +302,6 @@ table.sprint-pbi input, table.sprint-task input {
 
 .doers-reviewers-post-its-container {
 	position: absolute;
-	margin-left: 50px;
-	margin-right: 0px;
 	right: 0px;
 	bottom: 0px;
 	overflow: visible;
@@ -317,15 +310,19 @@ table.sprint-pbi input, table.sprint-task input {
 .doer-post-it, .reviewer-post-it {
 	height: 1.3em;
 	font-size: 0.8em;
-	font-style: italic;
 	margin-top: 2px;
-	text-align: center;
+	text-align: left;
 }
 
 .doer-post-it {
 }
 
 .reviewer-post-it {
+}
+
+.post-it .gravatar {
+	border: 0;
+	padding: 0;
 }
 
 .scrum-custom-menu {
