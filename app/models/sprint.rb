@@ -41,6 +41,31 @@ class Sprint < ActiveRecord::Base
     tasks.collect{|task| task.estimated_hours}.compact.sum
   end
 
+  def time_entries
+    tasks.collect{|task| task.time_entries}.flatten
+  end
+
+  def time_entries_by_activity
+    results = {}
+    total = 0.0
+    time_entries.each do |time_entry|
+      if time_entry.activity and time_entry.hours > 0.0
+        if !results.key?(time_entry.activity_id)
+          results[time_entry.activity_id] = {:activity => time_entry.activity,
+                                             :time_entries => [],
+                                             :total => 0.0}
+        end
+        results[time_entry.activity_id][:time_entries] << time_entry
+        results[time_entry.activity_id][:total] += time_entry.hours
+        total += time_entry.hours
+      end
+    end
+    results.values.each do |result|
+      result[:percentage] = ((result[:total] * 100.0) / total).to_i
+    end
+    return results.values, total
+  end
+
   def self.fields_for_order_statement(table = nil)
     table ||= table_name
     ["(CASE WHEN #{table}.end_date IS NULL THEN 1 ELSE 0 END)",

@@ -20,6 +20,13 @@
       </div>
     </td>
     <td>
+      <div class="tabular">
+        <p>
+          <label><%= l(:label_time_by_activity) %>:</label>
+          <%- time_entries, total = sprint.time_entries_by_activity -%>
+          <%= time_entries.collect{|activity| "#{activity[:activity][:name]} (#{activity[:total]} h - #{activity[:percentage]}%)"}.concat(["#{l(:label_total)} (#{total} h)"]).join(", ") %>
+        </p>
+      </div>
     </td>
   </tr>
   <%- if !(sprint.description.blank?) -%>

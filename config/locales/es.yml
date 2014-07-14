@@ -41,6 +41,7 @@ es:
   label_story_point_plural: "Puntos de historia"
   label_story_point_unit: "ph"
   label_task_plural: "Tareas"
+  label_time_by_activity: "Tiempo por actividad"
   notice_pbi_created: "El elemento de la pila de producto fue creado con éxito"
   notice_sprint_has_issues: "El Sprint tiene peticiones"
   notice_task_created: "La tarea fue creada con éxito"
