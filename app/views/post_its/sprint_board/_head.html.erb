@@ -22,9 +22,14 @@
     <td>
       <div class="tabular">
         <p>
+          <label><%= l(:label_sps_by_pbi) %>:</label>
+          <%- phs, total = sprint.phs_by_pbi -%>
+          <%= phs.collect{|ph| l(:label_sps_by_pbi_stat, :tracker => ph[:tracker][:name], :phs => ph[:total], :percentage => ph[:percentage])}.concat([l(:label_sps_by_pbi_total, :phs => total)]).join(", ") %>
+        </p>
+        <p>
           <label><%= l(:label_time_by_activity) %>:</label>
           <%- time_entries, total = sprint.time_entries_by_activity -%>
-          <%= time_entries.collect{|activity| "#{activity[:activity][:name]} (#{activity[:total]} h - #{activity[:percentage]}%)"}.concat(["#{l(:label_total)} (#{total} h)"]).join(", ") %>
+          <%= time_entries.collect{|activity| l(:label_time_by_activity_stat, :activity => activity[:activity][:name], :time => activity[:total], :percentage => activity[:percentage])}.concat([l(:label_time_by_activity_total, :time => total)]).join(", ") %>
         </p>
       </div>
     </td>

@@ -51,13 +51,32 @@ class Sprint < ActiveRecord::Base
     time_entries.each do |time_entry|
       if time_entry.activity and time_entry.hours > 0.0
         if !results.key?(time_entry.activity_id)
-          results[time_entry.activity_id] = {:activity => time_entry.activity,
-                                             :time_entries => [],
-                                             :total => 0.0}
+          results[time_entry.activity_id] = {:activity => time_entry.activity, :total => 0.0}
         end
-        results[time_entry.activity_id][:time_entries] << time_entry
         results[time_entry.activity_id][:total] += time_entry.hours
         total += time_entry.hours
+      end
+    end
+    results.values.each do |result|
+      result[:percentage] = ((result[:total] * 100.0) / total).to_i
+    end
+    return results.values, total
+  end
+
+  def phs_by_pbi
+    results = {}
+    total = 0.0
+    pbis.each do |pbi|
+      pbi_story_points = pbi.story_points
+      if pbi_story_points
+        pbi_story_points = pbi_story_points.to_f
+        if pbi_story_points > 0.0
+          if !results.key?(pbi.tracker_id)
+            results[pbi.tracker_id] = {:tracker => pbi.tracker, :total => 0.0}
+          end
+          results[pbi.tracker_id][:total] += pbi_story_points
+          total += pbi_story_points
+        end
       end
     end
     results.values.each do |result|
