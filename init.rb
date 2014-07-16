@@ -40,6 +40,8 @@ Redmine::Plugin.register :scrum do
                     :require => :member
     permission      :view_sprint_burndown,
                     {:sprints => [:burndown_index, :burndown]}
+    permission      :view_sprint_stats, {}
+    permission      :view_sprint_stats_by_member, {}
     permission      :view_product_backlog,
                     {:product_backlog => [:index]}
     permission      :edit_product_backlog,
