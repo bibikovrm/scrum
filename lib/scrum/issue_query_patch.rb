@@ -9,8 +9,7 @@ module Scrum
                                                   :sortable => lambda {Sprint.fields_for_order_statement},
                                                   :groupable => true)
         self.available_columns << QueryColumn.new(:position,
-                                                  :sortable => lambda {Sprint.fields_for_order_statement},
-                                                  :groupable => true)
+                                                  :sortable => "#{Issue.table_name}.position")
 
         def initialize_available_filters_with_scrum
           filters = initialize_available_filters_without_scrum
