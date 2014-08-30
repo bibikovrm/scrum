@@ -5,12 +5,10 @@
   <table>
     <tr>
       <td class="header-1">
-        <%= "#{l(:field_position)}: #{pbi.position}" %>
-        <%= ", #{l(:field_category)}: #{h(pbi.category.name)}" unless pbi.category.nil? %>
+        <%= render_pbi_left_header(pbi) %>
       </td>
       <td class="header-2">
-        <%= authoring pbi.created_on, pbi.author %>
-        <%= ". #{l(:label_updated_time, time_tag(pbi.updated_on))}".html_safe if pbi.created_on != pbi.updated_on %>
+        <%= render_pbi_right_header(pbi) %>
       </td>
       <td class="story-points" rowspan="2">
         <%- if pbi.has_story_points? -%>

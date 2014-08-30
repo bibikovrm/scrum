@@ -94,4 +94,38 @@
   </p>
 </fieldset>
 
+<fieldset>
+  <legend><%= l(:label_pbi_post_it) %></legend>
+  <p>
+    <label><%= l(:label_setting_render_position_on_pbi) %>:</label>
+    <%= hidden_field_tag("settings[render_position_on_pbi]", 0) %>
+    <%= check_box_tag("settings[render_position_on_pbi]", 1,
+                      Scrum::Setting.render_position_on_pbi) %>
+  </p>
+  <p>
+    <label><%= l(:label_setting_render_category_on_pbi) %>:</label>
+    <%= hidden_field_tag("settings[render_category_on_pbi]", 0) %>
+    <%= check_box_tag("settings[render_category_on_pbi]", 1,
+                      Scrum::Setting.render_category_on_pbi) %>
+  </p>
+  <p>
+    <label><%= l(:label_setting_render_version_on_pbi) %>:</label>
+    <%= hidden_field_tag("settings[render_version_on_pbi]", 0) %>
+    <%= check_box_tag("settings[render_version_on_pbi]", 1,
+                      Scrum::Setting.render_version_on_pbi) %>
+  </p>
+  <p>
+    <label><%= l(:label_setting_render_author_on_pbi) %>:</label>
+    <%= hidden_field_tag("settings[render_author_on_pbi]", 0) %>
+    <%= check_box_tag("settings[render_author_on_pbi]", 1,
+                      Scrum::Setting.render_author_on_pbi) %>
+  </p>
+  <p>
+    <label><%= l(:label_setting_render_updated_on_pbi) %>:</label>
+    <%= hidden_field_tag("settings[render_updated_on_pbi]", 0) %>
+    <%= check_box_tag("settings[render_updated_on_pbi]", 1,
+                      Scrum::Setting.render_updated_on_pbi) %>
+  </p>
+</fieldset>
+
 <%= render :partial => "common/scrum_footer" %>

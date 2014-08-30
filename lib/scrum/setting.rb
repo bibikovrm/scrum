@@ -45,6 +45,26 @@ module Scrum
       setting_or_default(:inherit_pbi_attributes) == "1"
     end
 
+    def self.render_position_on_pbi
+      setting_or_default(:render_position_on_pbi) == "1"
+    end
+
+    def self.render_category_on_pbi
+      setting_or_default(:render_category_on_pbi) == "1"
+    end
+
+    def self.render_version_on_pbi
+      setting_or_default(:render_version_on_pbi) == "1"
+    end
+
+    def self.render_author_on_pbi
+      setting_or_default(:render_author_on_pbi) == "1"
+    end
+
+    def self.render_updated_on_pbi
+      setting_or_default(:render_updated_on_pbi) == "1"
+    end
+
     def self.tracker_fields(tracker)
       collect("tracker_#{tracker}_fields")
     end
