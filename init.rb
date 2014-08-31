@@ -67,6 +67,7 @@ Redmine::Plugin.register :scrum do
                                  :render_category_on_pbi => "1",
                                  :render_version_on_pbi => "1",
                                  :render_author_on_pbi => "1",
-                                 :render_updated_on_pbi => "0"},
+                                 :render_updated_on_pbi => "0",
+                                 :product_burndown_sprints => "4"},
                     :partial => "settings/scrum_settings"
 end

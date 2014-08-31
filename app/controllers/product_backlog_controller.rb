@@ -63,19 +63,26 @@ class ProductBacklogController < ApplicationController
     end
 
     i = @data.length - 1
-    story_points_per_sprint = 0
-    while (story_points_per_sprint == 0 and i >= 0)
-      story_points_per_sprint = @data[i][:story_points]
+    @sprints_count = 0
+    @story_points_per_sprint = 0.0
+    while (@sprints_count < Scrum::Setting.product_burndown_sprints and i >= 0)
+      if @data[i][:story_points] > 0
+        @story_points_per_sprint += @data[i][:story_points]
+        @sprints_count += 1
+      end
       i -= 1
     end
-    story_points_per_sprint = 1 if story_points_per_sprint == 0
+    @story_points_per_sprint /= @sprints_count if @story_points_per_sprint > 0 and @sprints_count > 0
+    @story_points_per_sprint = 1 if @story_points_per_sprint == 0
+    @story_points_per_sprint = @story_points_per_sprint.round(2)
     pending_story_points = @project.product_backlog.story_points
     new_sprints = 1
     while pending_story_points > 0
       @data << {:axis_label => "#{l(:field_sprint)} +#{new_sprints}",
-                :story_points => ((story_points_per_sprint <= pending_story_points) ? story_points_per_sprint : pending_story_points),
+                :story_points => ((@story_points_per_sprint <= pending_story_points) ? 
+                                  @story_points_per_sprint : pending_story_points).round(2),
                 :pending_story_points => 0}
-      pending_story_points -= story_points_per_sprint
+      pending_story_points -= @story_points_per_sprint
       new_sprints += 1
     end
 
