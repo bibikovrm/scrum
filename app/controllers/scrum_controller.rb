@@ -52,6 +52,7 @@ class ScrumController < ApplicationController
     @pbi.tracker = @project.trackers.find(params[:tracker_id])
     @pbi.author = User.current
     @pbi.sprint = @sprint
+    @top = !(params[:top].nil?)
     respond_to do |format|
       format.html
       format.js
@@ -61,10 +62,10 @@ class ScrumController < ApplicationController
   def create_pbi
     begin
       @continue = !(params[:create_and_continue].nil?)
+      @top = !(params[:top].nil?)
       @pbi = Issue.new
       @pbi.project = @project
       @pbi.author = User.current
-      @pbi.sprint = @sprint
       @pbi.tracker_id = params[:issue][:tracker_id]
       @pbi.assigned_to_id = params[:issue][:assigned_to_id]
       @pbi.subject = params[:issue][:subject]
@@ -76,6 +77,11 @@ class ScrumController < ApplicationController
       @pbi.start_date = params[:issue][:start_date] if @pbi.safe_attribute?(:start_date)
       @pbi.due_date = params[:issue][:due_date] if @pbi.safe_attribute?(:due_date)
       @pbi.custom_field_values = params[:issue][:custom_field_values] unless params[:issue][:custom_field_values].nil?
+      if @top
+        @pbi.set_on_top
+        @pbi.save!
+      end
+      @pbi.sprint = @sprint
       @pbi.save!
     rescue Exception => @exception
       log.error("Exception: #{@exception.inspect}")

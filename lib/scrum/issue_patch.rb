@@ -145,6 +145,10 @@ module Scrum
           self.tracker.custom_field?(custom_field)
         end
 
+        def set_on_top
+          @set_on_top = true
+        end
+
       protected
 
         def copy_attribute(source_issue, attribute)
@@ -157,8 +161,12 @@ module Scrum
 
         def update_position
           if sprint_id_was.blank?
-            # From nothing to PB or Sprint
-            move_issue_to_the_end_of_the_sprint
+            # New PBI into PB or Sprint
+            if @set_on_top
+              move_issue_to_the_begin_of_the_sprint
+            else
+              move_issue_to_the_end_of_the_sprint
+            end
           elsif sprint and (old_sprint = Sprint.find(sprint_id_was))
             if old_sprint.is_product_backlog
               # From PB to Sprint
