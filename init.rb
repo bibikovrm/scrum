@@ -56,6 +56,7 @@ Redmine::Plugin.register :scrum do
 
   settings          :default => {:create_journal_on_pbi_position_change => "0",
                                  :doer_color => "post-it-color-5",
+                                 :pbi_status_ids => [],
                                  :pbi_tracker_ids => [],
                                  :reviewer_color => "post-it-color-3",
                                  :story_points_custom_field_id => nil,

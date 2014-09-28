@@ -21,7 +21,7 @@ module Scrum
       class_eval src, __FILE__, __LINE__
     end
 
-    ["task_status_ids", "task_tracker_ids", "pbi_tracker_ids",
+    ["task_status_ids", "task_tracker_ids", "pbi_status_ids", "pbi_tracker_ids",
       "verification_activity_ids"].each do |setting|
       src = <<-END_SRC
       def self.#{setting}
