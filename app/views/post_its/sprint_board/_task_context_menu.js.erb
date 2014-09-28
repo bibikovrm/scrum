@@ -40,7 +40,7 @@
 				}
 			});
 		});
-		<%= sending_time_entry = "sending_time_entry_#{time_entry_form_id}" %>
+		<%- sending_time_entry = "sending_time_entry_#{time_entry_form_id}" -%>
 		var <%= sending_time_entry %> = false;
 		$("#<%= time_entry_form_id %>").submit(function() {
 			if (!<%= sending_time_entry %>) {
