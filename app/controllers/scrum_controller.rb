@@ -6,6 +6,7 @@ class ScrumController < ApplicationController
                                        :change_assigned_to, :create_time_entry]
   before_filter :find_sprint, :only => [:new_pbi, :create_pbi]
   before_filter :find_pbi, :only => [:new_task, :create_task]
+  before_filter :find_project_by_project_id, :only => [:release_plan]
   before_filter :authorize, :except => [:new_pbi, :create_pbi, :new_task, :create_task]
   before_filter :authorize_add_issues, :only => [:new_pbi, :create_pbi, :new_task, :create_task]
 
@@ -135,6 +136,53 @@ class ScrumController < ApplicationController
     end
     respond_to do |format|
       format.js
+    end
+  end
+
+  def release_plan
+    @sprints = []
+    @story_points_per_sprint, @sprints_count = @project.story_points_per_sprint
+    @total_story_points = 0.0
+    @pbis_with_estimation = 0
+    @pbis_without_estimation = 0
+    last_sprint = nil
+    versions = {}
+    if @project.product_backlog
+      @project.product_backlog.pbis.each do |pbi|
+        if pbi.story_points
+          @pbis_with_estimation += 1
+          story_points = pbi.story_points.to_f
+          @total_story_points += story_points
+          accumulated_story_points = 0.0
+          begin
+            if last_sprint && last_sprint[:story_points] + story_points > @story_points_per_sprint
+              @sprints << last_sprint
+              last_sprint = nil
+            end
+            if last_sprint.nil?
+              last_sprint = {:pbis => [], :story_points => 0.0, :versions => []}
+            end
+            if story_points <= @story_points_per_sprint
+              last_sprint[:pbis] << pbi
+              last_sprint[:story_points] += accumulated_story_points + story_points
+              if pbi.fixed_version
+                versions[pbi.fixed_version.id] = {:version => pbi.fixed_version, :sprint => @sprints.count}
+              end
+            else
+              accumulated_story_points += @story_points_per_sprint
+            end
+            story_points -= @story_points_per_sprint
+          end while story_points > 0.0
+        else
+          @pbis_without_estimation += 1
+        end
+      end
+      if last_sprint
+        @sprints << last_sprint
+      end
+      versions.each_pair do |id, info|
+        @sprints[info[:sprint]][:versions] << info[:version]
+      end
     end
   end
 

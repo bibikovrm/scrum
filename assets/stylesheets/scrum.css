@@ -10,6 +10,10 @@
 	background-image: url(../images/icon-product-backlog-16.png);
 }
 
+.icon-release-plan {
+	background-image: url(../images/icon-release-plan-16.png);
+}
+
 .post-it, .post-it input {
 }
 

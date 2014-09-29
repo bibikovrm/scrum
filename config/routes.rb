@@ -29,6 +29,10 @@ resources :projects do
       :controller => :product_backlog, :action => :new_pbi,
       :as => :product_backlog_new_pbi
 
+  get "release_plan",
+      :controller => :scrum, :action => :release_plan,
+      :as => :release_plan
+
 end
 
 post "issues/:id/story_points",
