@@ -1,0 +1,13 @@
+<%- if defined?(@exception) -%>
+  <%- message = l(:error_updating_pbi, :message => @exception.message)
+      message_class = "error" -%>
+  $("#messages").html("<div class=\"flash <%= message_class %>\"><%= message %></div>");
+<%- else -%>
+  $("#ajax-modal").dialog("close");
+<%- end -%>
+<%- if !defined?(@exception) -%>
+  $("#<%= "pbi_#{@pbi.id}" %>").replaceWith("<%=
+    escape_javascript(render :partial => "post_its/product_backlog/pbi", :formats => [:html],
+                      :locals => {:project => @project, :pbi => @pbi, :read_only => false}).html_safe
+  %>");
+<%- end -%>

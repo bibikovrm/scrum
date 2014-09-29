@@ -45,7 +45,8 @@ Redmine::Plugin.register :scrum do
     permission      :view_product_backlog,
                     {:product_backlog => [:index]}
     permission      :edit_product_backlog,
-                    {:product_backlog => [:sort, :new_pbi, :create_pbi]},
+                    {:product_backlog => [:sort, :new_pbi, :create_pbi],
+                     :scrum => [:edit_pbi, :update_pbi]},
                     :require => :member
     permission      :view_product_backlog_burndown,
                     {:product_backlog => [:burndown]}

@@ -21,6 +21,14 @@
           <span title="<%= l(:label_story_point_plural) %>"><%= l(:label_story_point_unit) %></span>
         <%- end -%>
       </td>
+      <%- if User.current.allowed_to?(:edit_product_backlog, project) and 
+             User.current.allowed_to?(:edit_issues, project) and
+             pbi.editable? and !read_only -%>
+        <td class="story-points-legend" rowspan="2">
+          <%= link_to "", edit_pbi_path(pbi),
+                      :remote => true, :method => "GET", :class => "icon icon-edit" %>
+        </td>
+      <%- end -%>
     </tr>
     <tr>
       <td class="content" colspan="2">

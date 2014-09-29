@@ -18,12 +18,12 @@
 		<%- if @top -%>
 			$("#pbis").prepend("<%=
 				escape_javascript(render :partial => "post_its/product_backlog/pbi", :formats => [:html],
-																 :locals => {:project => @project, :pbi => @pbi}).html_safe
+																 :locals => {:project => @project, :pbi => @pbi, :read_only => false}).html_safe
 			%>");
 		<%- else -%>
 			$("#pbis").append("<%=
 				escape_javascript(render :partial => "post_its/product_backlog/pbi", :formats => [:html],
-																 :locals => {:project => @project, :pbi => @pbi}).html_safe
+																 :locals => {:project => @project, :pbi => @pbi, :read_only => false}).html_safe
 			%>");
 		<%- end -%>
 	} else if ($("#sprint_board").length > 0) {
