@@ -1,7 +1,7 @@
 <tr class="sprint-board" id="<%= "pbi_#{pbi.id}_row" %>">
   <td class="sprint-board">
     <%= render :partial => "post_its/sprint_board/pbi", :formats => [:html],
-               :locals => {:project => project, :pbi => pbi} %>
+               :locals => {:project => project, :pbi => pbi, :read_only => false} %>
   </td>
   <%- tasks = pbi.tasks_by_status_id
       task_statuses.each do |status| -%>

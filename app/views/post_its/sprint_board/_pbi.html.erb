@@ -9,7 +9,7 @@
     <td class="estimation">
       <%- if pbi.has_story_points? -%>
         <%= render :partial => "common/scrum_story_points", :formats => [:html],
-                   :locals => {:project => project, :pbi => pbi} %>
+                   :locals => {:project => project, :pbi => pbi, :read_only => read_only} %>
         <span title="<%= l(:label_story_point_plural) %>"><%= l(:label_story_point_unit) %></span>
       <%- end -%>
     </td>
