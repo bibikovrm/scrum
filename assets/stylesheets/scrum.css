@@ -14,6 +14,11 @@
 	background-image: url(../images/icon-release-plan-16.png);
 }
 
+.float-icon {
+	float: right;
+	min-height: 16px;
+}
+
 .post-it, .post-it input {
 }
 

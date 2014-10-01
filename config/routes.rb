@@ -65,3 +65,9 @@ get "scrum/:pbi_id/edit_pbi",
 post "scrum/:pbi_id/update_pbi",
      :controller => :scrum, :action => :update_pbi,
      :as => :update_pbi
+get "scrum/:id/edit_task",
+    :controller => :scrum, :action => :edit_task,
+    :as => :edit_task
+post "scrum/:id/update_task",
+     :controller => :scrum, :action => :update_task,
+     :as => :update_task

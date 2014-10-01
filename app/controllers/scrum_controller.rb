@@ -3,7 +3,8 @@ class ScrumController < ApplicationController
   menu_item :scrum
 
   before_filter :find_issue, :only => [:change_story_points, :change_pending_effort,
-                                       :change_assigned_to, :create_time_entry]
+                                       :change_assigned_to, :create_time_entry,
+                                       :edit_task, :update_task]
   before_filter :find_sprint, :only => [:new_pbi, :create_pbi]
   before_filter :find_pbi, :only => [:new_task, :create_task, :edit_pbi, :update_pbi]
   before_filter :find_project_by_project_id, :only => [:release_plan]
@@ -134,6 +135,26 @@ class ScrumController < ApplicationController
       @task.save!
       @task.pending_effort = params[:issue][:pending_effort]
     rescue Exception => @exception
+    end
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def edit_task
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def update_task
+    begin
+      @issue.init_journal(User.current, params[:issue][:notes])
+      update_attributes(@issue, params)
+      @issue.save!
+      @issue.pending_effort = params[:issue][:pending_effort]
+    rescue Exception => @exception
+      log.error("Exception: #{@exception.inspect}")
     end
     respond_to do |format|
       format.js

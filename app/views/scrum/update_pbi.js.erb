@@ -7,7 +7,7 @@
 <%- end -%>
 <%- if !defined?(@exception) -%>
   $("#<%= "pbi_#{@pbi.id}" %>").replaceWith("<%=
-    escape_javascript(render :partial => "post_its/product_backlog/pbi", :formats => [:html],
-                      :locals => {:project => @project, :pbi => @pbi, :read_only => false}).html_safe
+    escape_javascript(render :partial => @pbi.sprint.is_product_backlog? ? "post_its/product_backlog/pbi": "post_its/sprint_board/pbi",
+                      :formats => [:html], :locals => {:project => @project, :pbi => @pbi, :read_only => false}).html_safe
   %>");
 <%- end -%>

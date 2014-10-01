@@ -3,6 +3,12 @@
   <tr>
     <td class="content" colspan="3">
       <div class="content">
+        <%- if User.current.allowed_to?(:edit_sprint_board, project) and 
+               User.current.allowed_to?(:edit_issues, project) and
+               task.editable? and !read_only -%>
+          <%= link_to "", edit_task_path(task),
+                      :remote => true, :method => "GET", :class => "icon icon-edit float-icon" %>
+        <%- end -%>
         <%= link_to_issue(task, :tracker => false, :truncate => 100) %>
         <div class="doers-reviewers-post-its-container">
           <%- task.doers.each do |doer| -%>

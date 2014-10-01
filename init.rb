@@ -36,7 +36,8 @@ Redmine::Plugin.register :scrum do
     permission      :edit_sprint_board,
                     {:sprints => [:change_task_status],
                      :scrum => [:change_story_points, :change_pending_effort, :change_assigned_to,
-                               :create_time_entry, :new_pbi, :create_pbi, :new_task, :create_task]},
+                               :create_time_entry, :new_pbi, :create_pbi, :edit_pbi, :update_pbi,
+                               :new_task, :create_task, :edit_task, :update_task]},
                     :require => :member
     permission      :view_sprint_burndown,
                     {:sprints => [:burndown_index, :burndown]}

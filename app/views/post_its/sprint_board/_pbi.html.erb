@@ -2,6 +2,12 @@
 <table id="<%= pbi_id %>" class="<%= pbi.post_it_css_class(:rotate => true, :scale => true) %>">
   <tr>
     <td class="content">
+      <%- if User.current.allowed_to?(:edit_sprint_board, project) and 
+             User.current.allowed_to?(:edit_issues, project) and
+             pbi.editable? and !read_only -%>
+        <%= link_to "", edit_pbi_path(pbi),
+                    :remote => true, :method => "GET", :class => "icon icon-edit float-icon" %>
+      <%- end -%>
       <%= link_to_issue(pbi, :tracker => false, :truncate => 150) %>
     </td>
   </tr>
