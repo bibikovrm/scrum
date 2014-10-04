@@ -6,7 +6,8 @@ class ScrumController < ApplicationController
                                        :change_assigned_to, :create_time_entry,
                                        :edit_task, :update_task]
   before_filter :find_sprint, :only => [:new_pbi, :create_pbi]
-  before_filter :find_pbi, :only => [:new_task, :create_task, :edit_pbi, :update_pbi]
+  before_filter :find_pbi, :only => [:new_task, :create_task, :edit_pbi, :update_pbi,
+                                     :move_to_last_sprint, :move_to_product_backlog]
   before_filter :find_project_by_project_id, :only => [:release_plan]
   before_filter :authorize, :except => [:new_pbi, :create_pbi, :new_task, :create_task]
   before_filter :authorize_add_issues, :only => [:new_pbi, :create_pbi, :new_task, :create_task]
@@ -94,6 +95,35 @@ class ScrumController < ApplicationController
     begin
       @pbi.init_journal(User.current, params[:issue][:notes])
       update_attributes(@pbi, params)
+      @pbi.save!
+    rescue Exception => @exception
+      log.error("Exception: #{@exception.inspect}")
+    end
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def move_to_last_sprint
+    begin
+      raise "The project hasn't defined any Sprint yet" unless @project.last_sprint
+      @previous_sprint = @pbi.sprint
+      @pbi.init_journal(User.current)
+      @pbi.sprint = @project.last_sprint
+      @pbi.save!
+    rescue Exception => @exception
+      log.error("Exception: #{@exception.inspect}")
+    end
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def move_to_product_backlog
+    begin
+      raise "The project hasn't defined the Product Backlog yet" unless @project.product_backlog
+      @pbi.init_journal(User.current)
+      @pbi.sprint = @project.product_backlog
       @pbi.save!
     rescue Exception => @exception
       log.error("Exception: #{@exception.inspect}")

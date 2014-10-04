@@ -71,3 +71,9 @@ get "scrum/:id/edit_task",
 post "scrum/:id/update_task",
      :controller => :scrum, :action => :update_task,
      :as => :update_task
+post "scrum/:pbi_id/move_to_last_sprint",
+     :controller => :scrum, :action => :move_to_last_sprint,
+     :as => :move_to_last_sprint
+post "scrum/:pbi_id/move_to_product_backlog",
+     :controller => :scrum, :action => :move_to_product_backlog,
+     :as => :move_to_product_backlog

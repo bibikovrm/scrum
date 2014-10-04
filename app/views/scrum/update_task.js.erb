@@ -4,8 +4,6 @@
   $("#messages").html("<div class=\"flash <%= message_class %>\"><%= message %></div>");
 <%- else -%>
   $("#ajax-modal").dialog("close");
-<%- end -%>
-<%- if !defined?(@exception)
       pbi_status_id = "pbi_#{@issue.parent_id}_status_#{@issue.status.id}"
       other_pbi_status_ids = IssueStatus.task_statuses.select{|other| other != @issue.status}.collect{
         |other| "pbi_#{@issue.parent_id}_status_#{other.id}"

@@ -405,3 +405,9 @@ table.sprint-pbi input, table.sprint-task input {
 	border-collapse: separate;
 	display: none
 }
+
+.modal-issue-menu {
+  text-align: right;
+  margin-bottom: 0.5em;
+  font-size: 0.9em;
+}
