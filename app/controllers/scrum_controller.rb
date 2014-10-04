@@ -247,7 +247,8 @@ private
                        :task => task,
                        :pbi_status_id => params[:pbi_status_id],
                        :other_pbi_status_ids => params[:other_pbi_status_ids].split(","),
-                       :task_id => params[:task_id]}
+                       :task_id => params[:task_id],
+                       :read_only => false}
   end
 
   def find_sprint
