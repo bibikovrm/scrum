@@ -278,6 +278,7 @@ private
   end
 
   def update_attributes(issue, params)
+    issue.status_id = params[:issue][:status_id]
     issue.assigned_to_id = params[:issue][:assigned_to_id]
     issue.subject = params[:issue][:subject]
     issue.priority_id = params[:issue][:priority_id]

@@ -5,6 +5,13 @@
     </p>
   <%- end -%>
 
+  <%- allowed_statuses = issue.new_statuses_allowed_to(User.current, true) -%>
+  <%- if issue.safe_attribute?(:status_id) && allowed_statuses.present? -%>
+    <p>
+      <%= f.select :status_id, (allowed_statuses.collect {|status| [status.name, status.id]}), {:required => true} %>
+    </p>
+  <%- end -%>
+
   <%- if issue.safe_attribute?(:priority_id) -%>
     <p>
       <%= f.select :priority_id, (IssuePriority.active.collect {|p| [p.name, p.id]}), {:required => true, :disabled => !issue.leaf?} %>
