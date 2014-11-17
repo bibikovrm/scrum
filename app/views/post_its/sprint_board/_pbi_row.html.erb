@@ -21,6 +21,7 @@
     </td>
     <%= render :partial => "post_its/sprint_board/pbi_status", :formats => [:js],
                :locals => {:project => project,
+                           :pbi_id => pbi.id,
                            :pbi_status_id => pbi_status_id,
                            :status => status} %>
   <%- end -%>

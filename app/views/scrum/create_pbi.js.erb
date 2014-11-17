@@ -33,4 +33,7 @@
 																					 :task_statuses => IssueStatus.task_statuses}).html_safe
 		%>");
 	}
+  <%- if (!(IssueStatus.pbi_statuses.include?(@pbi.status))) -%>
+    $("#<%= @pbi.sprint.is_product_backlog? ? "pbi_#{@pbi.id}" : "pbi_#{@pbi.id}_row" %>").remove();
+  <%- end -%>
 <%- end -%>

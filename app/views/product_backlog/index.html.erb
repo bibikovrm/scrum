@@ -2,10 +2,6 @@
 
 <h2><%= l(:label_product_backlog) %></h2>
 
-<%- if @pbis.empty? -%>
-  <p class="nodata"><%= l(:label_no_data) %></p>
-<%- end -%>
-
 <%- if User.current.allowed_to?(:add_issues, @project) -%>
   <div>
     <%- Tracker.pbi_trackers.each do |tracker| -%>

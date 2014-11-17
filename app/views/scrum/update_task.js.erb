@@ -14,4 +14,9 @@
                              :locals => {:project => @project, :task => @issue, :pbi_status_id => pbi_status_id,
                                          :other_pbi_status_ids => other_pbi_status_ids, :read_only => false}).html_safe
   %>");
+  <%- if @old_status != @issue.status -%>
+    var task = $("#<%= "task_#{@issue.id}" %>");
+    task.detach();
+    task.appendTo($("#<%= "pbi_#{@issue.parent_id}_status_#{@issue.status.id}" %>"));
+  <%- end -%>
 <%- end -%>

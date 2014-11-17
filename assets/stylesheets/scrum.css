@@ -236,6 +236,10 @@ table.sprint-board tr.sprint-board {
 }
 
 table.sprint-board tr.sprint-board th.sprint-board {
+	border-bottom: 0.5em solid darkgrey;
+	min-width: 13em;
+	padding-left: 0.8em;
+	padding-top: 0.8em;
 }
 
 table.sprint-board tr.sprint-board td.sprint-board {

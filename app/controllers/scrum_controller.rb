@@ -180,6 +180,7 @@ class ScrumController < ApplicationController
   def update_task
     begin
       @issue.init_journal(User.current, params[:issue][:notes])
+      @old_status = @issue.status
       update_attributes(@issue, params)
       @issue.save!
       @issue.pending_effort = params[:issue][:pending_effort]
@@ -279,6 +280,7 @@ private
 
   def update_attributes(issue, params)
     issue.status_id = params[:issue][:status_id]
+    raise "New status is not allowed" unless issue.new_statuses_allowed_to.include?(issue.status)
     issue.assigned_to_id = params[:issue][:assigned_to_id]
     issue.subject = params[:issue][:subject]
     issue.priority_id = params[:issue][:priority_id]
