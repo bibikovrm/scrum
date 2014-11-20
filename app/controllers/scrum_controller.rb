@@ -78,7 +78,7 @@ class ScrumController < ApplicationController
       @pbi.sprint = @sprint
       @pbi.save!
     rescue Exception => @exception
-      log.error("Exception: #{@exception.inspect}")
+      logger.error("Exception: #{@exception.inspect}")
     end
     respond_to do |format|
       format.js
@@ -97,7 +97,7 @@ class ScrumController < ApplicationController
       update_attributes(@pbi, params)
       @pbi.save!
     rescue Exception => @exception
-      log.error("Exception: #{@exception.inspect}")
+      logger.error("Exception: #{@exception.inspect}")
     end
     respond_to do |format|
       format.js
@@ -112,7 +112,7 @@ class ScrumController < ApplicationController
       @pbi.sprint = @project.last_sprint
       @pbi.save!
     rescue Exception => @exception
-      log.error("Exception: #{@exception.inspect}")
+      logger.error("Exception: #{@exception.inspect}")
     end
     respond_to do |format|
       format.js
@@ -126,7 +126,7 @@ class ScrumController < ApplicationController
       @pbi.sprint = @project.product_backlog
       @pbi.save!
     rescue Exception => @exception
-      log.error("Exception: #{@exception.inspect}")
+      logger.error("Exception: #{@exception.inspect}")
     end
     respond_to do |format|
       format.js
@@ -148,7 +148,7 @@ class ScrumController < ApplicationController
       format.js
     end
   rescue Exception => e
-    log.error("Exception: #{e.inspect}")
+    logger.error("Exception: #{e.inspect}")
     render_404
   end
 
@@ -185,7 +185,7 @@ class ScrumController < ApplicationController
       @issue.save!
       @issue.pending_effort = params[:issue][:pending_effort]
     rescue Exception => @exception
-      log.error("Exception: #{@exception.inspect}")
+      logger.error("Exception: #{@exception.inspect}")
     end
     respond_to do |format|
       format.js
@@ -256,7 +256,7 @@ private
     @sprint = Sprint.find(params[:sprint_id])
     @project = @sprint.project
   rescue
-    log.error("Sprint #{params[:sprint_id]} not found")
+    logger.error("Sprint #{params[:sprint_id]} not found")
     render_404
   end
 
@@ -265,7 +265,7 @@ private
     @sprint = @pbi.sprint
     @project = @sprint.project
   rescue
-    log.error("PBI #{params[:pbi_id]} not found")
+    logger.error("PBI #{params[:pbi_id]} not found")
     render_404
   end
 
