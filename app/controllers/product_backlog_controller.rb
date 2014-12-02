@@ -25,9 +25,18 @@ class ProductBacklogController < ApplicationController
 
   def sort
     @pbis.each do |pbi|
-      pbi.init_journal(User.current)
-      pbi.position = params["pbi"].index(pbi.id.to_s) + 1
-      pbi.save!
+      new_position = params["pbi"].index(pbi.id.to_s) + 1
+      dependencies = []
+      @product_backlog.pbis(:position_bellow => new_position).each do |other_pbi|
+        dependencies << other_pbi if pbi.all_dependent_issues.include?(other_pbi)
+      end
+      if dependencies.count > 0
+        raise "PBI ##{pbi.id} depends on other PBIs (#{dependencies.collect{|p| "##{p.id}"}.join(", ")}), it cannot be sorted"
+      else
+        pbi.init_journal(User.current)
+        pbi.position = new_position
+        pbi.save!
+      end
     end
     render :nothing => true
   end

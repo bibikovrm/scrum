@@ -1,5 +1,6 @@
 # encoding: UTF-8
 es:
+  error_changing_pbi_order: "No se pudo reordenar el EPP, compruebe las dependencias. La página se recargará."
   error_changing_task_status: "No se pudo cambiar el estado de la tarea."
   error_changing_task_assigned_to: "No se pudo cambiar el asignado a de la tarea."
   error_changing_value: "No se pudo cambiar el valor."

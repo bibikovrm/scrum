@@ -31,9 +31,15 @@ class Sprint < ActiveRecord::Base
     self.is_product_backlog
   end
 
-  def pbis
-    issues.all(:conditions => {:tracker_id => Scrum::Setting.pbi_tracker_ids,
-                               :status_id => Scrum::Setting.pbi_status_ids},
+  def pbis(options = {})
+    conditions = {:tracker_id => Scrum::Setting.pbi_tracker_ids,
+                  :status_id => Scrum::Setting.pbi_status_ids}
+    if options[:position_bellow]
+      first_issue = issues.first(:conditions => conditions)
+      first_position = first_issue ? first_issue.position : (options[:position_bellow] - 1)
+      conditions[:position] = first_position..(options[:position_bellow] - 1)
+    end
+    issues.all(:conditions => conditions,
                :order => "position ASC").select{|issue| issue.visible?}
   end
 
