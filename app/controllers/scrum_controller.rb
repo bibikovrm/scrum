@@ -115,9 +115,7 @@ class ScrumController < ApplicationController
     begin
       raise "The project hasn't defined any Sprint yet" unless @project.last_sprint
       @previous_sprint = @pbi.sprint
-      @pbi.init_journal(User.current)
-      @pbi.sprint = @project.last_sprint
-      @pbi.save!
+      move_issue_to_sprint(@pbi, @project.last_sprint)
     rescue Exception => @exception
       logger.error("Exception: #{@exception.inspect}")
     end
@@ -129,9 +127,7 @@ class ScrumController < ApplicationController
   def move_to_product_backlog
     begin
       raise "The project hasn't defined the Product Backlog yet" unless @project.product_backlog
-      @pbi.init_journal(User.current)
-      @pbi.sprint = @project.product_backlog
-      @pbi.save!
+      move_issue_to_sprint(@pbi, @project.product_backlog)
     rescue Exception => @exception
       logger.error("Exception: #{@exception.inspect}")
     end
@@ -298,6 +294,17 @@ private
     issue.start_date = params[:issue][:start_date] if issue.safe_attribute?(:start_date) and (!(params[:issue][:start_date].nil?))
     issue.due_date = params[:issue][:due_date] if issue.safe_attribute?(:due_date) and (!(params[:issue][:due_date].nil?))
     issue.custom_field_values = params[:issue][:custom_field_values] unless params[:issue][:custom_field_values].nil?
+  end
+
+  def move_issue_to_sprint(issue, sprint)
+    issue.init_journal(User.current)
+    issue.sprint = sprint
+    issue.save!
+    issue.children.each do |child|
+      unless child.closed?
+        move_issue_to_sprint(child, sprint)
+      end
+    end
   end
 
 end
