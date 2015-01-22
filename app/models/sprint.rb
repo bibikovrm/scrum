@@ -34,13 +34,19 @@ class Sprint < ActiveRecord::Base
   def pbis(options = {})
     conditions = {:tracker_id => Scrum::Setting.pbi_tracker_ids,
                   :status_id => Scrum::Setting.pbi_status_ids}
+    order = "position ASC"
     if options[:position_bellow]
-      first_issue = issues.first(:conditions => conditions)
+      first_issue = issues.first(:conditions => conditions, :order => order)
       first_position = first_issue ? first_issue.position : (options[:position_bellow] - 1)
-      conditions[:position] = first_position..(options[:position_bellow] - 1)
+      last_position = options[:position_bellow] - 1
+      if last_position < first_position
+        temp = last_position
+        last_position = first_position
+        first_position = temp
+      end
+      conditions[:position] = first_position..last_position
     end
-    issues.all(:conditions => conditions,
-               :order => "position ASC").select{|issue| issue.visible?}
+    issues.all(:conditions => conditions, :order => order).select{|issue| issue.visible?}
   end
 
   def story_points
