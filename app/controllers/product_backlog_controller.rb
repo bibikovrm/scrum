@@ -24,16 +24,16 @@ class ProductBacklogController < ApplicationController
   end
 
   def sort
-    puts("PBIs: #{@pbis.collect{|pbi| pbi.id}.join(", ")}")
     @pbis.each do |pbi|
       pbi.init_journal(User.current)
       pbi.position = params["pbi"].index(pbi.id.to_s) + 1
-      dependencies = get_dependencies(pbi)
-      if dependencies.count > 0
-        raise "PBI ##{pbi.id} depends on other PBIs (#{dependencies.collect{|p| "##{p.id}"}.join(", ")}), it cannot be sorted"
-      else
-        pbi.save!
+      if Scrum::Setting.check_dependencies_on_pbi_sorting
+        dependencies = get_dependencies(pbi)
+        if dependencies.count > 0
+          raise "PBI ##{pbi.id} depends on other PBIs (#{dependencies.collect{|p| "##{p.id}"}.join(", ")}), it cannot be sorted"
+        end
       end
+      pbi.save!
     end
     render :nothing => true
   end
