@@ -149,9 +149,9 @@ private
         dependencies << other_pbi if pbi.all_dependent_issues.include?(other_pbi)
       end
     else
-      @product_backlog.pbis.each do |pbi|
-        pbi_dependencies = get_dependencies(pbi)
-        dependencies << {:pbi => pbi, :dependencies => pbi_dependencies} if pbi_dependencies.count > 0
+      @product_backlog.pbis.each do |a_pbi|
+        pbi_dependencies = get_dependencies(a_pbi)
+        dependencies << {:pbi => a_pbi, :dependencies => pbi_dependencies} if pbi_dependencies.count > 0
       end
     end
     return dependencies
