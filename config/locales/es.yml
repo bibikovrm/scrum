@@ -24,7 +24,7 @@ es:
   label_estimated_effort: "Esfuerzo estimado"
   label_estimated_effort_tooltip: "Esfuerzo estimado (%{date}): %{hours} h"
   label_invalid_dependencies: "Hay dependencias inválidas para los siguientes EPPs:"
-  label_invalid_dependencies_for_pbi: "%{pbi} depende de:"
+  label_invalid_dependencies_for_pbi: "%{pbi} bloquea pero es posterior a:"
   label_move_pbi_to_last_sprint: "Mover al último Sprint"
   label_move_pbi_to_product_backlog: "Mover a la pila de producto"
   label_no_invalid_dependencies: "No hay dependencias inválidas."

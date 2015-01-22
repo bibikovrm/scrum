@@ -24,7 +24,7 @@ en:
   label_estimated_effort: "Estimated effort"
   label_estimated_effort_tooltip: "Estimated effort (%{date}): %{hours} h"
   label_invalid_dependencies: "There are invalid dependencies for the following PBIs:"
-  label_invalid_dependencies_for_pbi: "%{pbi} depends on:"
+  label_invalid_dependencies_for_pbi: "%{pbi} blocks but it comes after:"
   label_move_pbi_to_last_sprint: "Move to last Sprint"
   label_move_pbi_to_product_backlog: "Move to product backlog"
   label_no_invalid_dependencies: "There're not invalid dependencies."
