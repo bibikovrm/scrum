@@ -10,7 +10,6 @@ module Scrum
                                                   :groupable => true)
         self.available_columns << QueryColumn.new(:position,
                                                   :sortable => "#{Issue.table_name}.position")
-        self.available_columns << QueryColumn.new(:pending_effort)
 
         def initialize_available_filters_with_scrum
           filters = initialize_available_filters_without_scrum
@@ -21,8 +20,6 @@ module Scrum
                                    :type => :list_optional,
                                    :values => sprints.sort.collect{|s| [s.name, s.id.to_s]}
               add_available_filter "position",
-                                   :type => :integer
-              add_available_filter "pending_effort",
                                    :type => :integer
               add_associations_custom_fields_filters :sprint
             end
@@ -44,6 +41,22 @@ module Scrum
           issue_ids_without_scrum(options)
         end
         alias_method_chain :issue_ids, :scrum
+
+        def available_columns_with_scrum()
+          if !@available_columns
+            @available_columns = available_columns_without_scrum
+            index = nil
+            @available_columns.each_with_index {|column, i| index = i if column.name == :estimated_hours}
+            index = (index ? index + 1 : -1)
+            # insert the column after estimated_hours or at the end
+            @available_columns.insert index, QueryColumn.new(:pending_effort,
+              :sortable => "COALESCE((SELECT effort FROM #{PendingEffort.table_name} WHERE #{PendingEffort.table_name}.issue_id = #{Issue.table_name}.id ORDER BY #{PendingEffort.table_name}.date DESC LIMIT 1), 0)",
+              :default_order => 'desc'
+            )
+          end
+          return @available_columns
+        end
+        alias_method_chain :available_columns, :scrum
 
       end
     end
