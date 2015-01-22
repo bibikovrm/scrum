@@ -10,6 +10,7 @@ module Scrum
                                                   :groupable => true)
         self.available_columns << QueryColumn.new(:position,
                                                   :sortable => "#{Issue.table_name}.position")
+        self.available_columns << QueryColumn.new(:pending_effort)
 
         def initialize_available_filters_with_scrum
           filters = initialize_available_filters_without_scrum
@@ -20,6 +21,8 @@ module Scrum
                                    :type => :list_optional,
                                    :values => sprints.sort.collect{|s| [s.name, s.id.to_s]}
               add_available_filter "position",
+                                   :type => :integer
+              add_available_filter "pending_effort",
                                    :type => :integer
               add_associations_custom_fields_filters :sprint
             end
