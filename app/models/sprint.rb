@@ -60,8 +60,8 @@ class Sprint < ActiveRecord::Base
   def estimated_hours
     sum = 0.0
     tasks.each do |task|
-      pending_effort = task.pending_efforts.first(:conditions => ["date < ?", self.sprint_start_date],
-                                                  :order => "date DESC")
+      pending_efforts = task.pending_efforts.find(:all, :conditions => ["date < ?", self.sprint_start_date])
+      pending_effort = pending_efforts.sort!{|a, b| b.date <=> a.date}.first
       pending_effort = pending_effort.effort unless pending_effort.nil?
       if (!(pending_effort.nil?))
         sum += pending_effort
