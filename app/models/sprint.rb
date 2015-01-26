@@ -81,7 +81,8 @@ class Sprint < ActiveRecord::Base
     total = 0.0
     if User.current.allowed_to?(:view_sprint_stats, project)
       time_entries.each do |time_entry|
-        if time_entry.activity and time_entry.hours > 0.0
+        if time_entry.activity and time_entry.hours > 0.0 and
+           time_entry.spent_on >= sprint_start_date and time_entry.spent_on <= sprint_end_date
           if !results.key?(time_entry.activity_id)
             results[time_entry.activity_id] = {:activity => time_entry.activity, :total => 0.0}
           end
@@ -101,7 +102,8 @@ class Sprint < ActiveRecord::Base
     total = 0.0
     if User.current.allowed_to?(:view_sprint_stats_by_member, project)
       time_entries.each do |time_entry|
-        if time_entry.activity and time_entry.hours > 0.0
+        if time_entry.activity and time_entry.hours > 0.0 and
+           time_entry.spent_on >= sprint_start_date and time_entry.spent_on <= sprint_end_date
           if !results.key?(time_entry.user_id)
             results[time_entry.user_id] = {:member => time_entry.user, :total => 0.0}
           end
@@ -113,7 +115,8 @@ class Sprint < ActiveRecord::Base
         result[:percentage] = ((result[:total] * 100.0) / total).to_i
       end
     end
-    return results.values, total
+    results = results.values.sort{|a, b| a[:member] <=> b[:member]}
+    return results, total
   end
 
   def efforts_by_member
@@ -133,7 +136,8 @@ class Sprint < ActiveRecord::Base
         result[:percentage] = ((result[:total] * 100.0) / total).to_i
       end
     end
-    return results.values, total
+    results = results.values.sort{|a, b| a[:member] <=> b[:member]}
+    return results, total
   end
 
   def phs_by_pbi
