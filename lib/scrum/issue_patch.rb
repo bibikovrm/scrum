@@ -24,7 +24,8 @@ module Scrum
              !((custom_field_id = Scrum::Setting.story_points_custom_field_id).nil?) and
              !((custom_value = self.custom_value_for(custom_field_id)).nil?) and
              !((value = custom_value.value).blank?)
-            value
+            # Replace invalid float number separatos (i.e. 0,5) with valid separator (i.e. 0.5)
+            value.gsub(",", ".")
           end
         end
 
