@@ -23,6 +23,7 @@ en:
   label_end: "End"
   label_estimated_effort: "Estimated effort"
   label_estimated_effort_tooltip: "Estimated effort (%{date}): %{hours} h"
+  label_estimated_vs_done_effort: "Estimated effort vs done effort"
   label_invalid_dependencies: "There are invalid dependencies for the following PBIs:"
   label_invalid_dependencies_for_pbi: "%{pbi} blocks but it comes after:"
   label_move_pbi_to_last_sprint: "Move to last Sprint"
@@ -61,6 +62,7 @@ en:
   label_sprint_burndown_chart: "Sprint burndown"
   label_sprint_new: "New Sprint"
   label_sprint_plural: "Sprints"
+  label_sprint_stats: "Sprint stats"
   label_sps_by_pbi: "SPs by PBI type"
   label_sps_per_sprint_stat:
     one: "Using last Sprint to calculate the %{sps} SPs per Sprint progress"

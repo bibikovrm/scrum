@@ -420,3 +420,28 @@ table.sprint-pbi input, table.sprint-task input {
   width: 820px;
   height: 580px;
 }
+
+table.scrum-stats {
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  border-collapse: collapse;
+}
+
+table.scrum-stats tbody tr:nth-child(4n+0), table.scrum-stats tbody tr:nth-child(4n+3), table.scrum-stats thead tr {
+  background: #B8D1F3;
+}
+
+table.scrum-stats tbody tr:nth-child(4n+1), table.scrum-stats tbody tr:nth-child(4n+2) {
+  background: #DAE5F4;
+}
+
+table.scrum-stats tbody tr td.total {
+  font-weight: bold;
+}
+
+table.scrum-stats tbody tr td.comment {
+  font-style: italic;
+  font-color: grey;
+  font-size: 80%;
+}

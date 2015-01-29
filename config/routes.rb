@@ -15,9 +15,11 @@ resources :projects do
       put :update_effort
       get :burndown
       get :burndown_graph
+      get :stats
     end
     collection do
       get :burndown_index
+      get :stats_index
     end
   end
   post "sprints/change_task_status",

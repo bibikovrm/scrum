@@ -1,0 +1,93 @@
+<%= render :partial => "common/scrum_menu" %>
+
+<h2>
+  <%= l(:label_sprint_stats) %>
+</h2>
+
+<%= render :partial => "post_its/sprint_board/head",
+           :locals => {:project => @project, :sprint => @sprint, :path => method(:stats_sprint_path)} %>
+
+<h3><%= l(:label_estimated_vs_done_effort) %></h3>
+
+<%- if @members_efforts.count < 1 -%>
+  <p class="nodata"><%= l(:label_no_data) %></p>
+<%- else -%>
+  <table class="scrum-stats">
+    <thead>
+      <tr>
+        <th align="left"><%= l(:label_member) %></th>
+        <th></th>
+        <%- @days.each do |day| -%>
+          <th align="center"><%= day[:label] %></th>
+        <%- end -%>
+        <th align="center"><%= l(:label_total) %></th>
+       </tr>
+    </thead>
+    <tbody>
+      <%- @members_efforts.each do |member| -%>
+        <tr>
+          <td align="left" rowspan="2"><%= link_to_user(member[:member]) %></td>
+          <td align="right" class="comment"><%= l(:label_estimated_effort) %></td>
+          <%- @days.each do |day| -%>
+            <td align="center">
+              <%- day_info = member[:estimated_efforts][:days][day[:date]] -%>
+              <%- if day_info -%>
+                <%= day_info %> h
+              <%- end -%>
+            </td>
+          <%- end -%>
+          <td align="center" class="total">
+            <%= member[:estimated_efforts][:total] %> h
+          </td>
+        </tr>
+        <tr>
+          <td align="right" class="comment"><%= l(:label_done_effort) %></td>
+          <%- @days.each do |day| -%>
+            <td align="center">
+              <%- day_info = member[:done_efforts][:days][day[:date]] -%>
+              <%- if day_info -%>
+                <%= day_info %> h
+              <%- end -%>
+            </td>
+          <%- end -%>
+          <td align="center" class="total">
+            <%= member[:done_efforts][:total] %> h
+          </td>
+        </tr>
+      <%- end -%>
+      <%- if @members_efforts.count > 1 -%>
+        <tr>
+          <td align="left" rowspan="2" class="total"><%= l(:label_total) %></td>
+          <td align="right" class="comment"><%= l(:label_estimated_effort) %></td>
+          <%- @days.each do |day| -%>
+            <td align="center" class="total">
+              <%- day_info = @estimated_efforts_totals[:days][day[:date]] -%>
+              <%- if day_info -%>
+                <%= day_info %> h
+              <%- end -%>
+            </td>
+          <%- end -%>
+          <td align="center" class="total">
+            <%= @estimated_efforts_totals[:total] %> h
+           </td>
+        </tr>
+        <tr>
+          <td align="right" class="comment"><%= l(:label_done_effort) %></td>
+          <%- @days.each do |day| -%>
+            <td align="center" class="total">
+              <%- day_info = @done_efforts_totals[:days][day[:date]] -%>
+              <%- if day_info -%>
+                <%= day_info %> h
+              <%- end -%>
+            </td>
+          <%- end -%>
+          <td align="center" class="total">
+            <%= @done_efforts_totals[:total] %> h
+           </td>
+        </tr>
+      <%- end -%>
+    </tbody>
+  </table>
+<%- end -%>
+
+<%= render :partial => "common/scrum_footer" %>
