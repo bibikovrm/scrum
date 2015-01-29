@@ -62,7 +62,7 @@ class ScrumController < ApplicationController
     @pbi.tracker = @project.trackers.find(params[:tracker_id])
     @pbi.author = User.current
     @pbi.sprint = @sprint
-    @top = !(params[:top].nil?)
+    @top = true unless params[:top].nil? or (params[:top] == "false") 
     respond_to do |format|
       format.html
       format.js
