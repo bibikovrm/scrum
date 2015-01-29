@@ -23,11 +23,6 @@
       <%- if User.current.allowed_to?(:view_sprint_stats, project) -%>
       <div class="tabular">
         <p>
-          <label><%= l(:label_sps_by_pbi) %>:</label>
-          <%- phs, total = sprint.phs_by_pbi -%>
-          <%= phs.collect{|ph| "#{ph[:tracker].name} #{l(:label_sps_stat, :phs => ph[:total], :percentage => ph[:percentage])}"}.concat([l(:label_sps_total, :phs => total)]).join(", ") %>
-        </p>
-        <p>
           <label><%= l(:label_time_by_activity) %>:</label>
           <%- time_entries, total = sprint.time_entries_by_activity -%>
           <%= time_entries.collect{|activity| "#{activity[:activity].name} #{l(:label_time_stat, :time => activity[:total], :percentage => activity[:percentage])}"}.concat([l(:label_time_total, :time => total)]).join(", ") %>

@@ -140,7 +140,7 @@ class Sprint < ActiveRecord::Base
     return results, total
   end
 
-  def phs_by_pbi
+  def sps_by_pbi_type
     results = {}
     total = 0.0
     if User.current.allowed_to?(:view_sprint_stats, project)
@@ -158,7 +158,7 @@ class Sprint < ActiveRecord::Base
         end
       end
       results.values.each do |result|
-        result[:percentage] = ((result[:total] * 100.0) / total).to_i
+        result[:percentage] = ((result[:total] * 100.0) / total).round
       end
     end
     return results.values, total

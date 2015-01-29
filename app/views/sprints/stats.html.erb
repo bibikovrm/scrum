@@ -7,14 +7,21 @@
 <%= render :partial => "post_its/sprint_board/head",
            :locals => {:project => @project, :sprint => @sprint, :path => method(:stats_sprint_path)} %>
 
-<h3><%= l(:label_estimated_vs_done_effort) %></h3>
+<% content_for :header_tags do %>
+  <%= javascript_include_tag "d3.min.js", :plugin => "scrum" %>
+  <%= javascript_include_tag "xcharts.min.js", :plugin => "scrum" %>
+  <%= javascript_include_tag "nv.d3.min.js", :plugin => "scrum" %>
+  <%= stylesheet_link_tag "xcharts.min.css", :plugin => "scrum" %>
+  <%= stylesheet_link_tag "nv.d3.min.css", :plugin => "scrum" %>
+<% end %>
 
+<h3 align="center"><%= l(:label_estimated_vs_done_effort) %></h3>
 <%- if @members_efforts.count < 1 -%>
   <p class="nodata"><%= l(:label_no_data) %></p>
 <%- else -%>
-  <table class="scrum-stats">
+  <table class="scrum-stats-table">
     <thead>
-      <tr>
+      <tr class="double-row">
         <th align="left"><%= l(:label_member) %></th>
         <th></th>
         <%- @days.each do |day| -%>
@@ -25,7 +32,7 @@
     </thead>
     <tbody>
       <%- @members_efforts.each do |member| -%>
-        <tr>
+        <tr class="double-row">
           <td align="left" rowspan="2"><%= link_to_user(member[:member]) %></td>
           <td align="right" class="comment"><%= l(:label_estimated_effort) %></td>
           <%- @days.each do |day| -%>
@@ -40,7 +47,7 @@
             <%= member[:estimated_efforts][:total] %> h
           </td>
         </tr>
-        <tr>
+        <tr class="double-row">
           <td align="right" class="comment"><%= l(:label_done_effort) %></td>
           <%- @days.each do |day| -%>
             <td align="center">
@@ -56,7 +63,7 @@
         </tr>
       <%- end -%>
       <%- if @members_efforts.count > 1 -%>
-        <tr>
+        <tr class="double-row">
           <td align="left" rowspan="2" class="total"><%= l(:label_total) %></td>
           <td align="right" class="comment"><%= l(:label_estimated_effort) %></td>
           <%- @days.each do |day| -%>
@@ -71,7 +78,7 @@
             <%= @estimated_efforts_totals[:total] %> h
            </td>
         </tr>
-        <tr>
+        <tr class="double-row">
           <td align="right" class="comment"><%= l(:label_done_effort) %></td>
           <%- @days.each do |day| -%>
             <td align="center" class="total">
@@ -88,6 +95,50 @@
       <%- end -%>
     </tbody>
   </table>
+<%- end -%>
+<br />
+<br />
+
+<h3 align="center"><%= l(:label_sps_by_pbi) %></h3>
+<%- if @sps_by_pbi_type.count < 1 -%>
+  <p class="nodata"><%= l(:label_no_data) %></p>
+<%- else -%>
+  <table class="scrum-stats-chart-table">
+    <tr>
+      <td align="right">
+        <svg id="stats_sps_per_pbi_type" style="width: <%= @sps_by_pbi_type_chart[:width] %>px; height: <%= @sps_by_pbi_type_chart[:height] %>px;"></svg>
+      </td>
+      <td align="left">
+        <table class="scrum-stats-table">
+          <thead>
+            <tr>
+              <th align="left"><%= l(:label_tracker_plural) %></th>
+              <th align="center"><%= l(:label_story_point_plural) %></th>
+              <th align="center">%</th>
+            </tr>
+          </thead>
+          <tbody>
+            <%- @sps_by_pbi_type.each do |row| -%>
+              <tr>
+                <td align="left"><%= row[:tracker].name %></td>
+                <td align="center"><%= row[:total] %></td>
+                <td align="center"><%= row[:percentage] %>%</td>
+              </tr>
+            <%- end -%>
+            <tr>
+              <td align="left" class="total"><%= l(:label_total) %></td>
+              <td align="center" class="total"><%= @sps_total %></td>
+              <td align="center" class="total">100%</td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <%= render :partial => "sprints/stats_sps_per_pbi_type",
+             :formats => [:js],
+             :locals => {:sps_by_pbi_type => @sps_by_pbi_type,
+                         :chart_options => @sps_by_pbi_type_chart} %>
 <%- end -%>
 
 <%= render :partial => "common/scrum_footer" %>

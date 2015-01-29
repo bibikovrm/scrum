@@ -421,27 +421,47 @@ table.sprint-pbi input, table.sprint-task input {
   height: 580px;
 }
 
-table.scrum-stats {
+table.scrum-stats-table {
   width: 90%;
   margin-left: 5%;
   margin-right: 5%;
   border-collapse: collapse;
 }
 
-table.scrum-stats tbody tr:nth-child(4n+0), table.scrum-stats tbody tr:nth-child(4n+3), table.scrum-stats thead tr {
+table.scrum-stats-table tbody tr.double-row:nth-child(4n+0),
+table.scrum-stats-table tbody tr.double-row:nth-child(4n+3),
+table.scrum-stats-table thead tr.double-row {
   background: #B8D1F3;
 }
 
-table.scrum-stats tbody tr:nth-child(4n+1), table.scrum-stats tbody tr:nth-child(4n+2) {
+table.scrum-stats-table tbody tr.double-row:nth-child(4n+1),
+table.scrum-stats-table tbody tr.double-row:nth-child(4n+2) {
   background: #DAE5F4;
 }
 
-table.scrum-stats tbody tr td.total {
+table.scrum-stats-table tbody tr:nth-child(2n+0),
+table.scrum-stats-table thead tr {
+  background: #B8D1F3;
+}
+
+table.scrum-stats-table tbody tr:nth-child(2n+1) {
+  background: #DAE5F4;
+}
+
+table.scrum-stats-table tbody tr td.total {
   font-weight: bold;
 }
 
-table.scrum-stats tbody tr td.comment {
+table.scrum-stats-table tbody tr td.comment {
   font-style: italic;
   font-color: grey;
   font-size: 80%;
 }
+
+table.scrum-stats-chart-table {
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  border-collapse: collapse;
+}
+

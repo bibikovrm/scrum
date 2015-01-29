@@ -67,8 +67,8 @@ en:
   label_sps_per_sprint_stat:
     one: "Using last Sprint to calculate the %{sps} SPs per Sprint progress"
     other: "Using last %{count} Sprints to calculate the %{sps} SPs per Sprint progress"
-  label_sps_stat: "(%{phs} sp - %{percentage}%)"
-  label_sps_total: "Total (%{phs} sp)"
+  label_sps_stat: "(%{sps} sp - %{percentage}%)"
+  label_sps_total: "Total (%{sps} sp)"
   label_story_point_plural: "Story points"
   label_story_point_unit: "sp"
   label_task_plural: "Tasks"

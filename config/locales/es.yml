@@ -67,8 +67,8 @@ es:
   label_sps_per_sprint_stat:
     one: "Usando el último Sprint para calcular el progreso de %{sps} PHs por Sprint"
     other: "Usando los últimos %{count} Sprints para calcular el progreso de %{sps} PHs por Sprint"
-  label_sps_stat: "(%{phs} ph - %{percentage}%)"
-  label_sps_total: "Total (%{phs} ph)"
+  label_sps_stat: "(%{sps} ph - %{percentage}%)"
+  label_sps_total: "Total (%{sps} ph)"
   label_story_point_plural: "Puntos de historia"
   label_story_point_unit: "ph"
   label_task_plural: "Tareas"
