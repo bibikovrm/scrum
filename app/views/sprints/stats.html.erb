@@ -39,7 +39,7 @@
             <td align="center">
               <%- day_info = member[:estimated_efforts][:days][day[:date]] -%>
               <%- if day_info -%>
-                <%= day_info %> h
+                <%= "#{day_info} h" %>
               <%- end -%>
             </td>
           <%- end -%>
@@ -53,7 +53,7 @@
             <td align="center">
               <%- day_info = member[:done_efforts][:days][day[:date]] -%>
               <%- if day_info -%>
-                <%= day_info %> h
+                <%= "#{day_info} h" %>
               <%- end -%>
             </td>
           <%- end -%>
@@ -70,7 +70,7 @@
             <td align="center" class="total">
               <%- day_info = @estimated_efforts_totals[:days][day[:date]] -%>
               <%- if day_info -%>
-                <%= day_info %> h
+                <%= "#{day_info} h" %>
               <%- end -%>
             </td>
           <%- end -%>
@@ -84,7 +84,7 @@
             <td align="center" class="total">
               <%- day_info = @done_efforts_totals[:days][day[:date]] -%>
               <%- if day_info -%>
-                <%= day_info %> h
+                <%= "#{day_info} h" %>
               <%- end -%>
             </td>
           <%- end -%>
@@ -106,7 +106,9 @@
   <table class="scrum-stats-chart-table">
     <tr>
       <td align="right">
-        <svg id="stats_sps_per_pbi_type" style="width: <%= @sps_by_pbi_type_chart[:width] %>px; height: <%= @sps_by_pbi_type_chart[:height] %>px;"></svg>
+        <svg id="stats_sps_per_pbi_type"
+             style="width: <%= @sps_by_pbi_type_chart[:width] %>px; height: <%= @sps_by_pbi_type_chart[:height] %>px;">
+        </svg>
       </td>
       <td align="left">
         <table class="scrum-stats-table">
@@ -121,13 +123,13 @@
             <%- @sps_by_pbi_type.each do |row| -%>
               <tr>
                 <td align="left"><%= row[:tracker].name %></td>
-                <td align="center"><%= row[:total] %></td>
-                <td align="center"><%= row[:percentage] %>%</td>
+                <td align="center"><%= "#{row[:total]} #{l(:label_story_point_unit)}" %></td>
+                <td align="center"><%= "#{row[:percentage]}%" %></td>
               </tr>
             <%- end -%>
             <tr>
               <td align="left" class="total"><%= l(:label_total) %></td>
-              <td align="center" class="total"><%= @sps_total %></td>
+              <td align="center" class="total"><%= "#{@sps_total} #{l(:label_story_point_unit)}" %></td>
               <td align="center" class="total">100%</td>
             </tr>
           </tbody>
