@@ -96,6 +96,7 @@
     </tbody>
   </table>
 <%- end -%>
+
 <br />
 <br />
 
@@ -141,6 +142,53 @@
              :formats => [:js],
              :locals => {:sps_by_pbi_type => @sps_by_pbi_type,
                          :chart_options => @sps_by_pbi_type_chart} %>
+<%- end -%>
+
+<br />
+<br />
+
+<h3 align="center"><%= l(:label_time_by_activity) %></h3>
+<%- if @effort_by_activity.count < 1 -%>
+  <p class="nodata"><%= l(:label_no_data) %></p>
+<%- else -%>
+  <table class="scrum-stats-chart-table">
+    <tr>
+      <td align="right">
+        <table class="scrum-stats-table">
+          <thead>
+            <tr>
+              <th align="left"><%= l(:enumeration_activities) %></th>
+              <th align="center"><%= l(:label_time_entry_plural) %></th>
+              <th align="center">%</th>
+            </tr>
+          </thead>
+          <tbody>
+            <%- @effort_by_activity.each do |row| -%>
+              <tr>
+                <td align="left"><%= row[:activity].name %></td>
+                <td align="center"><%= "#{row[:total]} h" %></td>
+                <td align="center"><%= "#{row[:percentage]}%" %></td>
+              </tr>
+            <%- end -%>
+            <tr>
+              <td align="left" class="total"><%= l(:label_total) %></td>
+              <td align="center" class="total"><%= "#{@effort_by_activity_total} h" %></td>
+              <td align="center" class="total">100%</td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+      <td align="left">
+        <svg id="stats_effort_by_activity"
+             style="width: <%= @effort_by_activity_chart[:width] %>px; height: <%= @effort_by_activity_chart[:height] %>px;">
+        </svg>
+      </td>
+    </tr>
+  </table>
+  <%= render :partial => "sprints/stats_effort_by_activity",
+             :formats => [:js],
+             :locals => {:effort_by_activity => @effort_by_activity,
+                         :chart_options => @effort_by_activity_chart} %>
 <%- end -%>
 
 <%= render :partial => "common/scrum_footer" %>

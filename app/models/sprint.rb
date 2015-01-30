@@ -91,7 +91,7 @@ class Sprint < ActiveRecord::Base
         end
       end
       results.values.each do |result|
-        result[:percentage] = ((result[:total] * 100.0) / total).to_i
+        result[:percentage] = ((result[:total] * 100.0) / total).round
       end
     end
     return results.values, total
@@ -112,7 +112,7 @@ class Sprint < ActiveRecord::Base
         end
       end
       results.values.each do |result|
-        result[:percentage] = ((result[:total] * 100.0) / total).to_i
+        result[:percentage] = ((result[:total] * 100.0) / total).round
       end
     end
     results = results.values.sort{|a, b| a[:member] <=> b[:member]}
@@ -133,7 +133,7 @@ class Sprint < ActiveRecord::Base
         end
       end
       results.values.each do |result|
-        result[:percentage] = ((result[:total] * 100.0) / total).to_i
+        result[:percentage] = ((result[:total] * 100.0) / total).round
       end
     end
     results = results.values.sort{|a, b| a[:member] <=> b[:member]}

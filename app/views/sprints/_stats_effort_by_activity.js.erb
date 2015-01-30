@@ -1,9 +1,9 @@
 <%= javascript_tag do %>
-  var sps_by_pbi_type_data = [
-    <%- sps_by_pbi_type.each do |pbi_type| -%>
+  var effort_by_activity_data = [
+    <%- effort_by_activity.each do |activity| -%>
       {
-        key: "<%= pbi_type[:tracker].name %>",
-        y: <%= pbi_type[:total] %>
+        key: "<%= activity[:activity].name %>",
+        y: <%= activity[:total] %>
       },
     <%- end -%>
   ];
@@ -17,8 +17,8 @@
       .color(d3.scale.category10().range())
       .width(width)
       .height(height);
-    d3.select("#stats_sps_per_pbi_type")
-      .datum(sps_by_pbi_type_data)
+    d3.select("#stats_effort_by_activity")
+      .datum(effort_by_activity_data)
       .transition().duration(1200)
       .attr('width', width)
       .attr('height', height)

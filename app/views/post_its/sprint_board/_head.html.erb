@@ -19,24 +19,10 @@
         </p>
       </div>
     </td>
-    <td>
-      <%- if User.current.allowed_to?(:view_sprint_stats, project) -%>
-      <div class="tabular">
-        <p>
-          <label><%= l(:label_time_by_activity) %>:</label>
-          <%- time_entries, total = sprint.time_entries_by_activity -%>
-          <%= time_entries.collect{|activity| "#{activity[:activity].name} #{l(:label_time_stat, :time => activity[:total], :percentage => activity[:percentage])}"}.concat([l(:label_time_total, :time => total)]).join(", ") %>
-        </p>
-      </div>
-      <%- end -%>
-    </td>
+    <%- if !(sprint.description.blank?) -%>
+      <td width="100%">
+        <%= raw(Redmine::WikiFormatting::Textile::Formatter.new(sprint.description).to_html(true)) %>
+      </td>
+    <%- end -%>
   </tr>
-  <%- if !(sprint.description.blank?) -%>
-  <tr>
-    <td colspan="2">
-      <hr/>
-      <%= raw(Redmine::WikiFormatting::Textile::Formatter.new(sprint.description).to_html(true)) %>
-    </td>
-  </tr>
-  <%- end -%>
 </table>

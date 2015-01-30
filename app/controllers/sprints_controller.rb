@@ -247,6 +247,9 @@ class SprintsController < ApplicationController
 
     @sps_by_pbi_type, @sps_total = @sprint.sps_by_pbi_type
     @sps_by_pbi_type_chart = {:width => 400, :height => 400}
+
+    @effort_by_activity, @effort_by_activity_total = @sprint.time_entries_by_activity
+    @effort_by_activity_chart = {:width => 400, :height => 400}
   end
 
 private
