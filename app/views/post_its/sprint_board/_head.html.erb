@@ -1,6 +1,6 @@
 <table class="box attributes">
   <tr>
-    <td>
+    <td width="300px">
       <div class="tabular">
         <p>
           <label><%= l(:label_sprint) %>:</label>
@@ -20,7 +20,7 @@
       </div>
     </td>
     <%- if !(sprint.description.blank?) -%>
-      <td width="100%">
+      <td>
         <%= raw(Redmine::WikiFormatting::Textile::Formatter.new(sprint.description).to_html(true)) %>
       </td>
     <%- end -%>
