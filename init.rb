@@ -12,6 +12,7 @@ if (Rails.env == "development")
   ActiveSupport::Dependencies.autoload_once_paths.reject!{|x| x =~ /^#{Regexp.escape(File.dirname(__FILE__))}/}
 end
 
+ApplicationHelper.send(:include, Scrum::ApplicationHelperPatch)
 Issue.send(:include, Scrum::IssuePatch)
 IssueQuery.send(:include, Scrum::IssueQueryPatch)
 IssuesController.send(:include, Scrum::IssuesControllerPatch)
