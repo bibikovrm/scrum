@@ -287,7 +287,7 @@ private
     issue.assigned_to_id = params[:issue][:assigned_to_id] unless params[:issue][:assigned_to_id].nil?
     issue.subject = params[:issue][:subject] unless params[:issue][:subject].nil?
     issue.priority_id = params[:issue][:priority_id] unless params[:issue][:priority_id].nil?
-    issue.estimated_hours = params[:issue][:estimated_hours] unless params[:issue][:estimated_hours].nil?
+    issue.estimated_hours = params[:issue][:estimated_hours].gsub(",", ".") unless params[:issue][:estimated_hours].nil?
     issue.description = params[:issue][:description] unless params[:issue][:description].nil?
     issue.category_id = params[:issue][:category_id] if issue.safe_attribute?(:category_id) and (!(params[:issue][:category_id].nil?))
     issue.fixed_version_id = params[:issue][:fixed_version_id] if issue.safe_attribute?(:fixed_version_id) and (!(params[:issue][:fixed_version_id].nil?))

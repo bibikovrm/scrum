@@ -118,6 +118,8 @@ module Scrum
         def pending_effort=(new_effort)
           if is_task? and id and new_effort
             effort = PendingEffort.first(:conditions => {:issue_id => id, :date => Date.today})
+            # Replace invalid float number separatos (i.e. 0,5) with valid separator (i.e. 0.5)
+            new_effort.gsub!(",", ".")
             if effort.nil?
               date = (pending_efforts.empty? and sprint and sprint.sprint_start_date) ? sprint.sprint_start_date : Date.today
               effort = PendingEffort.new(:issue_id => id, :date => date, :effort => new_effort)
