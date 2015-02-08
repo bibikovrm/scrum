@@ -21,7 +21,7 @@ module Scrum
           story_points_per_sprint = 0.0
           while (sprints_count < Scrum::Setting.product_burndown_sprints and i >= 0)
             story_points = self.sprints[i].story_points
-            if story_points > 0.0
+            unless story_points.nil?
               story_points_per_sprint += story_points
               sprints_count += 1
             end

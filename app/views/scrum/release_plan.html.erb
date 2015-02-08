@@ -4,7 +4,7 @@
   <%= l(:label_release_plan) %>
 </h2>
 
-<%= render :partial => "release_plan_head",
+<%= render :partial => "common/product_backlog_head",
            :locals => {:sprints_count => @sprints_count,
                        :sps_per_sprint => @story_points_per_sprint,
                        :total_story_points => @total_story_points,
