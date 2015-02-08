@@ -1,4 +1,12 @@
 # encoding: UTF-8
+
+# Copyright © Emilio González Montaña
+# Licence: Attribution & no derivates
+#   * Attribution to the plugin web page URL should be done if you want to use it.
+#     https://redmine.ociotec.com/projects/redmine-plugin-scrum
+#   * No derivates of this plugin (or partial) are allowed.
+# Take a look to licence.txt file at plugin root folder for further details.
+
 en:
   error_changing_pbi_order: "Fail to sort the PBI, check its dependencies. The page will be reloaded."
   error_changing_task_status: "Fail to change the task status."
@@ -60,6 +68,7 @@ en:
   label_sprint: "Sprint"
   label_sprint_board: "Sprint board"
   label_sprint_burndown_chart: "Sprint burndown"
+  label_sprint_burndown_chart_name: "%{name} burndown"
   label_sprint_new: "New Sprint"
   label_sprint_plural: "Sprints"
   label_sprint_stats: "Sprint stats"
