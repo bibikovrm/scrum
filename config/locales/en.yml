@@ -72,6 +72,7 @@ en:
   label_sprint_new: "New Sprint"
   label_sprint_plural: "Sprints"
   label_sprint_stats: "Sprint stats"
+  label_sprint_stats_name: "%{name} stats"
   label_sps_by_pbi: "SPs by PBI type"
   label_sps_per_sprint_stat:
     one: "Using last Sprint to calculate the %{sps} SPs per Sprint progress"
