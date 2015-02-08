@@ -39,12 +39,12 @@
             <td align="center">
               <%- day_info = member[:estimated_efforts][:days][day[:date]] -%>
               <%- if day_info -%>
-                <%= "#{day_info} h" %>
+                <%= "#{day_info.round(2)} h" %>
               <%- end -%>
             </td>
           <%- end -%>
           <td align="center" class="total">
-            <%= member[:estimated_efforts][:total] %> h
+            <%= member[:estimated_efforts][:total].round(2) %> h
           </td>
         </tr>
         <tr class="double-row">
@@ -53,12 +53,12 @@
             <td align="center">
               <%- day_info = member[:done_efforts][:days][day[:date]] -%>
               <%- if day_info -%>
-                <%= "#{day_info} h" %>
+                <%= "#{day_info.round(2)} h" %>
               <%- end -%>
             </td>
           <%- end -%>
           <td align="center" class="total">
-            <%= member[:done_efforts][:total] %> h
+            <%= member[:done_efforts][:total].round(2) %> h
           </td>
         </tr>
       <%- end -%>
@@ -70,12 +70,12 @@
             <td align="center" class="total">
               <%- day_info = @estimated_efforts_totals[:days][day[:date]] -%>
               <%- if day_info -%>
-                <%= "#{day_info} h" %>
+                <%= "#{day_info.round(2)} h" %>
               <%- end -%>
             </td>
           <%- end -%>
           <td align="center" class="total">
-            <%= @estimated_efforts_totals[:total] %> h
+            <%= @estimated_efforts_totals[:total].round(2) %> h
            </td>
         </tr>
         <tr class="double-row">
@@ -84,12 +84,12 @@
             <td align="center" class="total">
               <%- day_info = @done_efforts_totals[:days][day[:date]] -%>
               <%- if day_info -%>
-                <%= "#{day_info} h" %>
+                <%= "#{day_info.round(2)} h" %>
               <%- end -%>
             </td>
           <%- end -%>
           <td align="center" class="total">
-            <%= @done_efforts_totals[:total] %> h
+            <%= @done_efforts_totals[:total].round(2) %> h
            </td>
         </tr>
       <%- end -%>
@@ -124,13 +124,13 @@
             <%- @sps_by_pbi_type.each do |row| -%>
               <tr>
                 <td align="left"><%= row[:tracker].name %></td>
-                <td align="center"><%= "#{row[:total]} #{l(:label_story_point_unit)}" %></td>
-                <td align="center"><%= "#{row[:percentage]}%" %></td>
+                <td align="center"><%= "#{row[:total].round(2)} #{l(:label_story_point_unit)}" %></td>
+                <td align="center"><%= "#{row[:percentage].round}%" %></td>
               </tr>
             <%- end -%>
             <tr>
               <td align="left" class="total"><%= l(:label_total) %></td>
-              <td align="center" class="total"><%= "#{@sps_total} #{l(:label_story_point_unit)}" %></td>
+              <td align="center" class="total"><%= "#{@sps_total.round(2)} #{l(:label_story_point_unit)}" %></td>
               <td align="center" class="total">100%</td>
             </tr>
           </tbody>
@@ -166,13 +166,13 @@
             <%- @effort_by_activity.each do |row| -%>
               <tr>
                 <td align="left"><%= row[:activity].name %></td>
-                <td align="center"><%= "#{row[:total]} h" %></td>
-                <td align="center"><%= "#{row[:percentage]}%" %></td>
+                <td align="center"><%= "#{row[:total].round(2)} h" %></td>
+                <td align="center"><%= "#{row[:percentage].round}%" %></td>
               </tr>
             <%- end -%>
             <tr>
               <td align="left" class="total"><%= l(:label_total) %></td>
-              <td align="center" class="total"><%= "#{@effort_by_activity_total} h" %></td>
+              <td align="center" class="total"><%= "#{@effort_by_activity_total.round(2)} h" %></td>
               <td align="center" class="total">100%</td>
             </tr>
           </tbody>
