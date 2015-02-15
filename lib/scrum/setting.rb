@@ -3,7 +3,8 @@ module Scrum
 
     ["create_journal_on_pbi_position_change", "inherit_pbi_attributes", "render_position_on_pbi",
       "render_category_on_pbi", "render_version_on_pbi", "render_author_on_pbi",
-      "render_updated_on_pbi", "check_dependencies_on_pbi_sorting"].each do |setting|
+      "render_updated_on_pbi", "check_dependencies_on_pbi_sorting",
+      "render_pbis_deviations", "render_tasks_deviations"].each do |setting|
       src = <<-END_SRC
       def self.#{setting}
         setting_or_default_boolean(:#{setting})
@@ -45,6 +46,14 @@ module Scrum
 
     def self.product_burndown_sprints
       setting_or_default_integer(:product_burndown_sprints, :min => 1)
+    end
+
+    def self.major_deviation_ratio
+      setting_or_default_integer(:major_deviation_ratio, :min => 101, :max => 1000)
+    end
+
+    def self.minor_deviation_ratio
+      setting_or_default_integer(:minor_deviation_ratio, :min => 101, :max => 1000)
     end
 
     def self.tracker_fields(tracker)
