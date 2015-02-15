@@ -60,10 +60,12 @@ module ScrumHelper
     if ((issue.is_pbi? and Scrum::Setting.render_pbis_deviations) or
         (issue.is_task? and Scrum::Setting.render_tasks_deviations))
       deviation_ratio = issue.deviation_ratio
-      if deviation_ratio >= Scrum::Setting.major_deviation_ratio
-        icons << render_issue_icon("exclamation.png", deviation_ratio)
-      elsif deviation_ratio >= Scrum::Setting.minor_deviation_ratio
-        icons << render_issue_icon("warning.png", deviation_ratio)
+      unless deviation_ratio.nil?
+        if deviation_ratio >= Scrum::Setting.major_deviation_ratio
+          icons << render_issue_icon("exclamation.png", deviation_ratio)
+        elsif deviation_ratio >= Scrum::Setting.minor_deviation_ratio
+          icons << render_issue_icon("warning.png", deviation_ratio)
+        end
       end
     end
     render :inline => icons.join("\n")
