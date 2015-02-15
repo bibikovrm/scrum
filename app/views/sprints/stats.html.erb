@@ -100,6 +100,53 @@
 <br />
 <br />
 
+<h3 align="center"><%= l(:label_sps_by_category) %></h3>
+<%- if @sps_by_category.count < 1 -%>
+    <p class="nodata"><%= l(:label_no_data) %></p>
+<%- else -%>
+    <table class="scrum-stats-chart-table">
+      <tr>
+        <td align="right">
+          <table class="scrum-stats-table">
+            <thead>
+            <tr>
+              <th align="left"><%= l(:label_issue_category_plural) %></th>
+              <th align="center"><%= l(:label_story_point_plural) %></th>
+              <th align="center">%</th>
+            </tr>
+            </thead>
+            <tbody>
+            <%- @sps_by_category.each do |row| -%>
+                <tr>
+                  <td align="left"><%= row[:category].nil? ? "---" : row[:category].name %></td>
+                  <td align="center"><%= "#{row[:total].round(2)} #{l(:label_story_point_unit)}" %></td>
+                  <td align="center"><%= "#{row[:percentage].round}%" %></td>
+                </tr>
+            <%- end -%>
+            <tr>
+              <td align="left" class="total"><%= l(:label_total) %></td>
+              <td align="center" class="total"><%= "#{@sps_by_category_total.round(2)} #{l(:label_story_point_unit)}" %></td>
+              <td align="center" class="total">100%</td>
+            </tr>
+            </tbody>
+          </table>
+        </td>
+        <td align="left">
+          <svg id="stats_sps_per_category"
+               style="width: <%= @sps_by_category_chart[:width] %>px; height: <%= @sps_by_category_chart[:height] %>px;">
+          </svg>
+        </td>
+      </tr>
+    </table>
+    <%= render :partial => "sprints/stats_sps_per_category",
+               :formats => [:js],
+               :locals => {:sps_by_category => @sps_by_category,
+                           :chart_options => @sps_by_category_chart} %>
+<%- end -%>
+
+<br />
+<br />
+
 <h3 align="center"><%= l(:label_sps_by_pbi) %></h3>
 <%- if @sps_by_pbi_type.count < 1 -%>
   <p class="nodata"><%= l(:label_no_data) %></p>
@@ -130,7 +177,7 @@
             <%- end -%>
             <tr>
               <td align="left" class="total"><%= l(:label_total) %></td>
-              <td align="center" class="total"><%= "#{@sps_total.round(2)} #{l(:label_story_point_unit)}" %></td>
+              <td align="center" class="total"><%= "#{@sps_by_pbi_type_total.round(2)} #{l(:label_story_point_unit)}" %></td>
               <td align="center" class="total">100%</td>
             </tr>
           </tbody>

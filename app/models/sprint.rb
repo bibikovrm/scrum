@@ -164,6 +164,30 @@ class Sprint < ActiveRecord::Base
     return results.values, total
   end
 
+  def sps_by_category
+    results = {}
+    total = 0.0
+    if User.current.allowed_to?(:view_sprint_stats, project)
+      pbis.each do |pbi|
+        pbi_story_points = pbi.story_points
+        if pbi_story_points
+          pbi_story_points = pbi_story_points.to_f
+          if pbi_story_points > 0.0
+            if !results.key?(pbi.category_id)
+              results[pbi.category_id] = {:category => pbi.category, :total => 0.0}
+            end
+            results[pbi.category_id][:total] += pbi_story_points
+            total += pbi_story_points
+          end
+        end
+      end
+      results.values.each do |result|
+        result[:percentage] = ((result[:total] * 100.0) / total).round
+      end
+    end
+    return results.values, total
+  end
+
   def self.fields_for_order_statement(table = nil)
     table ||= table_name
     ["(CASE WHEN #{table}.sprint_end_date IS NULL THEN 1 ELSE 0 END)",

@@ -78,6 +78,7 @@ es:
   label_sprint_plural: "Sprints"
   label_sprint_stats: "Estadísticas del Sprint"
   label_sprint_stats_name: "Estadísticas del %{name}"
+  label_sps_by_category: "PHs por categoría"
   label_sps_by_pbi: "PHs por tipo de EPP"
   label_sps_per_sprint_stat:
     one: "Usando el último Sprint para calcular el progreso de %{sps} PHs por Sprint"

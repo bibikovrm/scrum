@@ -245,7 +245,10 @@ class SprintsController < ApplicationController
     end
     @members_efforts = @members_efforts.values.sort{|a, b| a[:member] <=> b[:member]}
 
-    @sps_by_pbi_type, @sps_total = @sprint.sps_by_pbi_type
+    @sps_by_category, @sps_by_category_total = @sprint.sps_by_category
+    @sps_by_category_chart = {:width => 400, :height => 400}
+
+    @sps_by_pbi_type, @sps_by_pbi_type_total = @sprint.sps_by_pbi_type
     @sps_by_pbi_type_chart = {:width => 400, :height => 400}
 
     @effort_by_activity, @effort_by_activity_total = @sprint.time_entries_by_activity
