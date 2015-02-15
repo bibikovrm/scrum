@@ -55,4 +55,28 @@ module ScrumHelper
     render :inline => parts.join(", ")
   end
 
+  def render_issue_icons(issue)
+    icons = []
+    if ((issue.is_pbi? and Scrum::Setting.render_pbis_deviations) or
+        (issue.is_task? and Scrum::Setting.render_tasks_deviations))
+      deviation_ratio = issue.deviation_ratio
+      if deviation_ratio >= Scrum::Setting.major_deviation_ratio
+        icons << render_issue_icon("exclamation.png", deviation_ratio)
+      elsif deviation_ratio >= Scrum::Setting.minor_deviation_ratio
+        icons << render_issue_icon("warning.png", deviation_ratio)
+      end
+    end
+    render :inline => icons.join("\n")
+  end
+
+private
+
+  def render_issue_icon(image_path, deviation_ratio)
+    content_tag("div", :style => "float: left;") do
+      image_tag(image_path,
+                :class => "float",
+                :title => l(:label_deviation, :deviation => deviation_ratio))
+    end
+  end
+
 end

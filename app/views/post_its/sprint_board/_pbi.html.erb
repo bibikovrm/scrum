@@ -8,7 +8,8 @@
         <%= link_to "", edit_pbi_path(pbi),
                     :remote => true, :method => "GET", :class => "icon icon-edit float-icon" %>
       <%- end -%>
-      <%= link_to_issue(pbi, :tracker => false, :truncate => 150) %>
+      <%= render_issue_icons(pbi) %>
+      <%= link_to_issue(pbi, :tracker => false, :truncate => 150, :class => "warning") %>
     </td>
   </tr>
   <tr>

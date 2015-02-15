@@ -110,8 +110,10 @@ module Scrum
         end
 
         def pending_effort
-          if has_pending_effort?
-            pending_efforts.last.effort
+          if self.is_task? and self.has_pending_effort?
+            return pending_efforts.last.effort
+          elsif self.is_pbi?
+            return self.children.collect{|task| task.pending_effort}.compact.sum
           end
         end
 
@@ -150,6 +152,17 @@ module Scrum
 
         def set_on_top
           @set_on_top = true
+        end
+
+        def deviation_ratio
+          if self.is_pbi?
+            the_spent_hours = self.children.collect{|task| task.spent_hours}.compact.sum
+          elsif self.is_task?
+            the_spent_hours = self.spent_hours
+          end
+          if self.is_pbi? or self.is_task?
+            return (((self.pending_effort + the_spent_hours) * 100.0) / self.estimated_hours).round
+          end
         end
 
       protected

@@ -10,6 +10,7 @@
           <%= link_to "", edit_task_path(task),
                       :remote => true, :method => "GET", :class => "icon icon-edit float-icon" %>
         <%- end -%>
+        <%= render_issue_icons(task) %>
         <%= link_to_issue(task, :tracker => false, :truncate => 100) %>
         <div class="doers-reviewers-post-its-container">
           <%- task.doers.each do |doer| -%>
