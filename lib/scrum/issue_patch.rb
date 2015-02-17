@@ -160,9 +160,11 @@ module Scrum
           elsif self.is_task?
             the_spent_hours = self.spent_hours
           end
-          if (self.is_pbi? or self.is_task?) and
-             ((!(self.estimated_hours.nil?)) and (self.estimated_hours > 0.0))
-            return (((self.pending_effort + the_spent_hours) * 100.0) / self.estimated_hours).round
+          the_pending_effort = self.pending_effort.nil? ? 0.0 : self.pending_effort
+          the_spent_hours = the_spent_hours.nil? ? 0.0 : the_spent_hours
+          the_estimated_hours = self.estimated_hours.nil? ? 0.0 : self.estimated_hours
+          if ((self.is_pbi? or self.is_task?) and (the_estimated_hours > 0.0))
+            return (((the_pending_effort + the_spent_hours) * 100.0) / the_estimated_hours).round
           end
         end
 
