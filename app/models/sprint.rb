@@ -140,52 +140,17 @@ class Sprint < ActiveRecord::Base
     return results, total
   end
 
-  def sps_by_pbi_type
-    results = {}
-    total = 0.0
-    if User.current.allowed_to?(:view_sprint_stats, project)
-      pbis.each do |pbi|
-        pbi_story_points = pbi.story_points
-        if pbi_story_points
-          pbi_story_points = pbi_story_points.to_f
-          if pbi_story_points > 0.0
-            if !results.key?(pbi.tracker_id)
-              results[pbi.tracker_id] = {:tracker => pbi.tracker, :total => 0.0}
-            end
-            results[pbi.tracker_id][:total] += pbi_story_points
-            total += pbi_story_points
-          end
-        end
-      end
-      results.values.each do |result|
-        result[:percentage] = ((result[:total] * 100.0) / total).round
-      end
-    end
-    return results.values, total
+  def sps_by_pbi_category
+    return sps_by_pbi_field(:category_id, nil, :category, :name, nil, nil)
   end
 
-  def sps_by_category
-    results = {}
-    total = 0.0
-    if User.current.allowed_to?(:view_sprint_stats, project)
-      pbis.each do |pbi|
-        pbi_story_points = pbi.story_points
-        if pbi_story_points
-          pbi_story_points = pbi_story_points.to_f
-          if pbi_story_points > 0.0
-            if !results.key?(pbi.category_id)
-              results[pbi.category_id] = {:category => pbi.category, :total => 0.0}
-            end
-            results[pbi.category_id][:total] += pbi_story_points
-            total += pbi_story_points
-          end
-        end
-      end
-      results.values.each do |result|
-        result[:percentage] = ((result[:total] * 100.0) / total).round
-      end
-    end
-    return results.values, total
+  def sps_by_pbi_type
+    return sps_by_pbi_field(:tracker_id, nil, :tracker, :name, nil, nil)
+  end
+
+  def sps_by_pbi_creation_date
+    return sps_by_pbi_field(:created_on, :to_date, :created_on, :to_date, self.sprint_start_date,
+                            l(:label_date_previous_to, :date => self.sprint_start_date))
   end
 
   def self.fields_for_order_statement(table = nil)
@@ -205,6 +170,36 @@ private
       project.product_backlog = nil
       project.save!
     end
+  end
+
+  def sps_by_pbi_field(field_id, subfield_id, field, subfield, field_min, label_min)
+    results = {}
+    total = 0.0
+    if User.current.allowed_to?(:view_sprint_stats, project)
+      pbis.each do |pbi|
+        pbi_story_points = pbi.story_points
+        if pbi_story_points
+          pbi_story_points = pbi_story_points.to_f
+          if pbi_story_points > 0.0
+            field_id_value = pbi.public_send(field_id)
+            field_id_value = field_id_value.public_send(subfield_id) unless field_id_value.nil? or subfield_id.nil? or !(field_id_value.respond_to?(subfield_id))
+            field_id_value = field_min unless field_min.nil? or (field_id_value > field_min)
+            if !results.key?(field_id_value)
+              field_value = pbi.public_send(field) unless !(pbi.respond_to?(field))
+              field_value = field_value.public_send(subfield) unless field_value.nil? or subfield.nil? or !(field_value.respond_to?(subfield))
+              field_value = label_min unless field_min.nil? or label_min.nil? or (field_value >= field_min)
+              results[field_id_value] = {field => field_value, :total => 0.0}
+            end
+            results[field_id_value][:total] += pbi_story_points
+            total += pbi_story_points
+          end
+        end
+      end
+      results.values.each do |result|
+        result[:percentage] = ((result[:total] * 100.0) / total).round
+      end
+    end
+    return results.values, total
   end
 
 end

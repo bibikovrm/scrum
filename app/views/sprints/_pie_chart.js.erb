@@ -1,27 +1,26 @@
 <%= javascript_tag do %>
-  var effort_by_activity_data = [
-    <%- effort_by_activity.each do |activity| -%>
+  var <%= graph[:id] %>_data = [
+    <%- rows.each do |row| -%>
       {
-        key: "<%= activity[:activity].name %>",
-        y: <%= activity[:total] %>
+        key: "<%= row[element[:name]].nil? ? "---" : row[element[:name]] %>",
+        y: <%= row[:total] %>
       },
     <%- end -%>
   ];
   nv.addGraph(function() {
-    var width = <%= chart_options[:width] %>, height = <%= chart_options[:height] %>;
     var chart = nv.models.pieChart()
       .x(function(d) { return d.key })
       .y(function(d) { return d.y })
       .showLabels(true)
       .labelType("percent")
       .color(d3.scale.category10().range())
-      .width(width)
-      .height(height);
-    d3.select("#stats_effort_by_activity")
-      .datum(effort_by_activity_data)
+      .width(<%= graph[:width] %>)
+      .height(<%= graph[:height] %>);
+    d3.select("#<%= graph[:id] %>")
+      .datum(<%= graph[:id] %>_data)
       .transition().duration(1200)
-      .attr('width', width)
-      .attr('height', height)
+      .attr('width', <%= graph[:width] %>)
+      .attr('height', <%= graph[:height] %>)
       .call(chart);
     chart.dispatch.on('stateChange', function(e) { nv.log('New State:', JSON.stringify(e)); });
     return chart;
