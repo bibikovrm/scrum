@@ -178,7 +178,7 @@ module Scrum
               !((custom_field_id = Scrum::Setting.blocked_custom_field_id).nil?) and
               !((custom_value = self.custom_value_for(custom_field_id)).nil?) and
               !((value = custom_value.value).blank?)
-            return value
+            return (value == "1")
           end
         end
 
