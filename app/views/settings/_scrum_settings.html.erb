@@ -10,6 +10,13 @@
         options = options_for_select(custom_fields, Scrum::Setting.story_points_custom_field_id) -%>
     <%= select_tag "settings[story_points_custom_field_id]", options, :include_blank => true %>
   </p>
+  <p>
+    <label><%= l(:label_setting_blocked_custom_field) %>:</label>
+    <%- custom_fields = CustomField.find_all_by_type_and_field_format("IssueCustomField", ["bool"])
+        custom_fields = custom_fields.collect{|c| [c.name, c.id]}
+        options = options_for_select(custom_fields, Scrum::Setting.blocked_custom_field_id) -%>
+    <%= select_tag "settings[blocked_custom_field_id]", options, :include_blank => true %>
+  </p>
   <%- trackers = Tracker.all.collect{|t| [t.name, t.id]} -%>
   <p>
     <label><%= l(:label_pbi_plural) %>:</label>
@@ -62,6 +69,14 @@
     <%- colors.each_pair do |color_id, color_css_class| -%>
       <%- selected = (color_css_class == Scrum::Setting.reviewer_color) -%>
       <%= radio_button_tag("settings[reviewer_color]", color_css_class, selected) %>
+      <span class="post-it settings-post-it <%= color_css_class %>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    <%- end -%>
+  </p>
+  <p>
+    <label><%= l(:label_blocked) %>:</label>
+    <%- colors.each_pair do |color_id, color_css_class| -%>
+      <%- selected = (color_css_class == Scrum::Setting.blocked_color) -%>
+      <%= radio_button_tag("settings[blocked_color]", color_css_class, selected) %>
       <span class="post-it settings-post-it <%= color_css_class %>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
     <%- end -%>
   </p>

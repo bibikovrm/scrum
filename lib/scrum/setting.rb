@@ -13,7 +13,7 @@ module Scrum
       class_eval src, __FILE__, __LINE__
     end
 
-    ["doer_color", "reviewer_color"].each do |setting|
+    ["doer_color", "reviewer_color", "blocked_color"].each do |setting|
       src = <<-END_SRC
       def self.#{setting}
         setting_or_default(:#{setting})
@@ -32,8 +32,13 @@ module Scrum
       class_eval src, __FILE__, __LINE__
     end
 
-    def self.story_points_custom_field_id
-      ::Setting.plugin_scrum[:story_points_custom_field_id]
+    ["story_points_custom_field_id", "blocked_custom_field_id"].each do |setting|
+      src = <<-END_SRC
+      def self.#{setting}
+        ::Setting.plugin_scrum[:#{setting}]
+      end
+      END_SRC
+      class_eval src, __FILE__, __LINE__
     end
 
     def self.task_tracker

@@ -320,7 +320,7 @@ table.sprint-pbi input, table.sprint-task input {
 	max-width: 9em;
 }
 
-.doer-post-it, .reviewer-post-it {
+.doer-post-it, .reviewer-post-it, .blocked-post-it {
 	height: 1.3em;
 	font-size: 0.8em;
 	margin-top: 2px;
@@ -331,6 +331,9 @@ table.sprint-pbi input, table.sprint-task input {
 }
 
 .reviewer-post-it {
+}
+
+.blocked-post-it {
 }
 
 .post-it .gravatar {

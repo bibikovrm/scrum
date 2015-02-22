@@ -23,6 +23,11 @@
               <%= avatar(reviewer, :size => "14") %> <%= link_to_user reviewer %>
             </div>
           <%- end -%>
+          <%- if task.blocked? -%>
+            <div class="<%= Issue.blocked_post_it_css_class %>">
+              <%= l :label_blocked %>
+            </div>
+          <%- end -%>
         </div>
       </div>
     </td>

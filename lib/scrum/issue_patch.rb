@@ -98,11 +98,11 @@ module Scrum
         end
 
         def self.doer_post_it_css_class
-          doer_or_reviewer_post_it_css_class(true)
+          doer_or_reviewer_post_it_css_class(:doer)
         end
 
         def self.reviewer_post_it_css_class
-          doer_or_reviewer_post_it_css_class(false)
+          doer_or_reviewer_post_it_css_class(:reviewer)
         end
 
         def has_pending_effort?
@@ -168,6 +168,24 @@ module Scrum
           end
         end
 
+        def has_blocked_field?
+          return ((!((custom_field_id = Scrum::Setting.blocked_custom_field_id).nil?)) and
+                  visible_custom_field_values.collect{|value| value.custom_field.id.to_s}.include?(custom_field_id))
+        end
+
+        def blocked?
+          if has_blocked_field? and
+              !((custom_field_id = Scrum::Setting.blocked_custom_field_id).nil?) and
+              !((custom_value = self.custom_value_for(custom_field_id)).nil?) and
+              !((value = custom_value.value).blank?)
+            return value
+          end
+        end
+
+        def self.blocked_post_it_css_class
+          return doer_or_reviewer_post_it_css_class(:blocked)
+        end
+
       protected
 
         def copy_attribute(source_issue, attribute)
@@ -216,9 +234,19 @@ module Scrum
           self.position = max_position.nil? ? 1 : (max_position + 1)
         end
 
-        def self.doer_or_reviewer_post_it_css_class(doer)
-          classes = ["post-it", doer ? "doer-post-it" : "reviewer-post-it"]
-          classes << (doer ? Scrum::Setting.doer_color : Scrum::Setting.reviewer_color)
+        def self.doer_or_reviewer_post_it_css_class(type)
+          classes = ["post-it"]
+          case type
+            when :doer
+              classes << "doer-post-it"
+              classes << Scrum::Setting.doer_color
+            when :reviewer
+              classes << "reviewer-post-it"
+              classes << Scrum::Setting.reviewer_color
+            when :blocked
+              classes << "blocked-post-it"
+              classes << Scrum::Setting.blocked_color
+          end
           classes << "post-it-rotation-#{rand(5)}"
           classes.join(" ")
         end

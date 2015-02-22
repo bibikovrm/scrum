@@ -10,6 +10,13 @@
       <%- end -%>
       <%= render_issue_icons(pbi) %>
       <%= link_to_issue(pbi, :tracker => false, :truncate => 150, :class => "warning") %>
+      <div class="doers-reviewers-post-its-container">
+        <%- if pbi.blocked? -%>
+          <div class="<%= Issue.blocked_post_it_css_class %>">
+            <%= l :label_blocked %>
+          </div>
+        <%- end -%>
+      </div>
     </td>
   </tr>
   <tr>
