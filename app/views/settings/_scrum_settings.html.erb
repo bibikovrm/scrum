@@ -109,14 +109,28 @@
                       Scrum::Setting.inherit_pbi_attributes) %>
   </p>
   <p>
-    <label><%= l(:label_setting_major_deviation_ratio) %>:</label>
+    <label>
+      <%= image_tag(ScrumHelper::MAJOR_DEVIATION_ICON) %>
+      <%= l(:label_setting_major_deviation_ratio) %>:
+    </label>
     <%= text_field_tag("settings[major_deviation_ratio]",
                        Scrum::Setting.major_deviation_ratio) %>
   </p>
   <p>
-    <label><%= l(:label_setting_minor_deviation_ratio) %>:</label>
+    <label>
+      <%= image_tag(ScrumHelper::MINOR_DEVIATION_ICON) %>
+      <%= l(:label_setting_minor_deviation_ratio) %>:
+    </label>
     <%= text_field_tag("settings[minor_deviation_ratio]",
                        Scrum::Setting.minor_deviation_ratio) %>
+  </p>
+  <p>
+    <label>
+      <%= image_tag(ScrumHelper::BELOW_DEVIATION_ICON) %>
+      <%= l(:label_setting_below_deviation_ratio) %>:
+    </label>
+    <%= text_field_tag("settings[below_deviation_ratio]",
+                       Scrum::Setting.below_deviation_ratio) %>
   </p>
   <p>
     <label><%= l(:label_setting_render_pbis_deviations) %>:</label>

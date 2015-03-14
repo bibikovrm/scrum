@@ -53,6 +53,7 @@ en:
   label_release_plan: "Release plan"
   label_release_plan_stats: "A total of %{sps} SPs and %{pbis} PBIs (there are other %{pbis_without_sps} PBIs without estimation)"
   label_reviewer: "Reviewer"
+  label_setting_below_deviation_ratio: "Below expected deviation ratio"
   label_setting_blocked_custom_field: "Blocked custom field"
   label_setting_check_dependencies_on_pbi_sorting: "Check PBIs dependencies on sorting"
   label_setting_create_journal_on_pbi_position_change: "Create journal on a product backlog item position change"

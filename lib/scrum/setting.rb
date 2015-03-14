@@ -61,6 +61,10 @@ module Scrum
       setting_or_default_integer(:minor_deviation_ratio, :min => 101, :max => 1000)
     end
 
+    def self.below_deviation_ratio
+      setting_or_default_integer(:below_deviation_ratio, :min => 0, :max => 99)
+    end
+
     def self.tracker_fields(tracker)
       collect("tracker_#{tracker}_fields")
     end

@@ -53,6 +53,7 @@ es:
   label_release_plan: "Plan de liberaciones"
   label_release_plan_stats: "Un total de %{sps} PHs y %{pbis} EPPs (hay otros %{pbis_without_sps} EPPs sin estimación)"
   label_reviewer: "Revisor"
+  label_setting_below_deviation_ratio: "Porcentaje de desviación por debajo de lo esperado"
   label_setting_blocked_custom_field: "Campo personalizado para bloqueo"
   label_setting_check_dependencies_on_pbi_sorting: "Comprobar las dependencias de los EPPs al ordenar"
   label_setting_create_journal_on_pbi_position_change: "Crear histórico cuando cambie la posición de un elemento de la pila de producto"

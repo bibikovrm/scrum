@@ -62,22 +62,28 @@ module ScrumHelper
       deviation_ratio = issue.deviation_ratio
       unless deviation_ratio.nil?
         if deviation_ratio >= Scrum::Setting.major_deviation_ratio
-          icons << render_issue_icon("exclamation.png", deviation_ratio)
+          icons << render_issue_icon(MAJOR_DEVIATION_ICON, deviation_ratio)
         elsif deviation_ratio >= Scrum::Setting.minor_deviation_ratio
-          icons << render_issue_icon("warning.png", deviation_ratio)
+          icons << render_issue_icon(MINOR_DEVIATION_ICON, deviation_ratio)
+        elsif deviation_ratio <= Scrum::Setting.below_deviation_ratio
+          icons << render_issue_icon(BELOW_DEVIATION_ICON, deviation_ratio)
         end
       end
     end
     render :inline => icons.join("\n")
   end
 
+  DEVIATION_ICONS = [MAJOR_DEVIATION_ICON = "exclamation.png",
+                     MINOR_DEVIATION_ICON = "warning.png",
+                     BELOW_DEVIATION_ICON = "lightning.png"]
+
 private
 
-  def render_issue_icon(image_path, deviation_ratio)
+  def render_issue_icon(image_path, deviation_ratio = nil)
     content_tag("div", :style => "float: left;") do
-      image_tag(image_path,
-                :class => "float",
-                :title => l(:label_deviation, :deviation => deviation_ratio))
+      options = {:class => "float"}
+      options[:title] = l(:label_deviation, :deviation => deviation_ratio) unless deviation_ratio.nil?
+      image_tag(image_path, options)
     end
   end
 

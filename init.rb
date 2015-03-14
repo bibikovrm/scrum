@@ -88,6 +88,7 @@ Redmine::Plugin.register :scrum do
                                  :render_pbis_deviations => "1",
                                  :render_tasks_deviations => "1",
                                  :major_deviation_ratio => 150,
-                                 :minor_deviation_ratio => 120},
+                                 :minor_deviation_ratio => 120,
+                                 :below_deviation_ratio => 70},
                     :partial => "settings/scrum_settings"
 end
