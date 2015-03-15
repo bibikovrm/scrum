@@ -13,7 +13,7 @@ class ScrumController < ApplicationController
                                        :change_assigned_to, :create_time_entry,
                                        :edit_task, :update_task]
   before_filter :find_sprint, :only => [:new_pbi, :create_pbi]
-  before_filter :find_pbi, :only => [:new_task, :create_task, :edit_pbi, :update_pbi,
+  before_filter :find_pbi, :only => [:new_task, :create_task, :edit_pbi, :update_pbi, :move_pbi,
                                      :move_to_last_sprint, :move_to_product_backlog]
   before_filter :find_project_by_project_id, :only => [:release_plan]
   before_filter :authorize, :except => [:new_pbi, :create_pbi, :new_task, :create_task]
@@ -108,6 +108,20 @@ class ScrumController < ApplicationController
     end
     respond_to do |format|
       format.js
+    end
+  end
+
+  def move_pbi
+    begin
+      @position = params[:position]
+      case params[:position]
+        when "top", "bottom"
+          @pbi.move_pbi_to(@position)
+        else
+          raise "Invalid position: #{@position.inspect}"
+      end
+    rescue Exception => @exception
+      logger.error("Exception: #{@exception.inspect}")
     end
   end
 

@@ -14,6 +14,14 @@
 	background-image: url(../images/icon-release-plan-16.png);
 }
 
+.icon-move-top {
+    background-image: url(../images/icon-move-top-16.png);
+}
+
+.icon-move-bottom {
+    background-image: url(../images/icon-move-bottom-16.png);
+}
+
 .float-icon {
 	float: right;
 	min-height: 16px;

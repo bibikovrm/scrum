@@ -190,6 +190,31 @@ module Scrum
           return doer_or_reviewer_post_it_css_class(:blocked)
         end
 
+        def move_pbi_to(position)
+          if !(sprint.nil?) and is_pbi?
+            pbi_has_changed = true
+            case position
+              when "top"
+                move_issue_to_the_begin_of_the_sprint
+              when "bottom"
+                move_issue_to_the_end_of_the_sprint
+              else
+                pbi_has_changed = false
+            end
+            save! if pbi_has_changed
+          end
+        end
+
+        def is_first_pbi?
+          min = min_position
+          return ((!(position.nil?)) and (!(min.nil?)) and (position <= min))
+        end
+
+        def is_last_pbi?
+          max = max_position
+          return ((!(position.nil?)) and (!(max.nil?)) and (position >= max))
+        end
+
       protected
 
         def copy_attribute(source_issue, attribute)
@@ -222,20 +247,30 @@ module Scrum
           end
         end
 
-        def move_issue_to_the_begin_of_the_sprint
-          min_position = nil
+        def min_position
+          min = nil
           sprint.pbis.each do |pbi|
-            min_position = pbi.position if min_position.nil? or (pbi.position < min_position)
+            min = pbi.position if min.nil? or (pbi.position < min)
           end
-          self.position = min_position.nil? ? 1 : (min_position - 1)
+          return min
+        end
+
+        def max_position
+          max = nil
+          sprint.pbis.each do |pbi|
+            max = pbi.position if max.nil? or (pbi.position > max)
+          end
+          return max
+        end
+
+        def move_issue_to_the_begin_of_the_sprint
+          min = min_position
+          self.position = min.nil? ? 1 : (min - 1)
         end
 
         def move_issue_to_the_end_of_the_sprint
-          max_position = nil
-          sprint.pbis.each do |pbi|
-            max_position = pbi.position if max_position.nil? or (pbi.position > max_position)
-          end
-          self.position = max_position.nil? ? 1 : (max_position + 1)
+          max = max_position
+          self.position = max.nil? ? 1 : (max + 1)
         end
 
         def self.doer_or_reviewer_post_it_css_class(type)
