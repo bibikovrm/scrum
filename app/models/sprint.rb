@@ -39,6 +39,12 @@ class Sprint < ActiveRecord::Base
       first_issue = issues.first(:conditions => conditions, :order => order)
       first_position = first_issue ? first_issue.position : (options[:position_bellow] - 1)
       last_position = options[:position_bellow] - 1
+    elsif options[:position_above]
+      last_issue = issues.last(:conditions => conditions, :order => order)
+      first_position = options[:position_above] + 1
+      last_position = last_issue ? last_issue.position : (options[:position_above] + 1)
+    end
+    if options[:position_bellow] or options[:position_above]
       if last_position < first_position
         temp = last_position
         last_position = first_position

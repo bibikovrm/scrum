@@ -190,18 +190,26 @@ module Scrum
           return doer_or_reviewer_post_it_css_class(:blocked)
         end
 
-        def move_pbi_to(position)
+        def move_pbi_to(position, other_pbi_id = nil)
           if !(sprint.nil?) and is_pbi?
-            pbi_has_changed = true
             case position
               when "top"
                 move_issue_to_the_begin_of_the_sprint
+                save!
               when "bottom"
                 move_issue_to_the_end_of_the_sprint
-              else
-                pbi_has_changed = false
+                save!
+              when "before", "after"
+                if other_pbi_id.nil? or (other_pbi = Issue.find(other_pbi_id)).nil?
+                  raise "Other PBI ID ##{other_pbi_id} is invalid"
+                elsif !(other_pbi.is_pbi?)
+                  raise "Issue ##{other_pbi_id} is not a PBI"
+                elsif (other_pbi.sprint_id != sprint_id)
+                  raise "Other PBI ID ##{other_pbi_id} is not in this product backlog"
+                else
+                  move_issue_respecting_to_pbi(other_pbi, position == "after")
+                end
             end
-            save! if pbi_has_changed
           end
         end
 
@@ -271,6 +279,18 @@ module Scrum
         def move_issue_to_the_end_of_the_sprint
           max = max_position
           self.position = max.nil? ? 1 : (max + 1)
+        end
+
+        def move_issue_respecting_to_pbi(other_pbi, after)
+          self.position = other_pbi.position
+          self.position += 1 if after
+          self.save!
+          sprint.pbis(:position_above => after ? self.position : self.position - 1).each do |next_pbi|
+            if next_pbi.id != self.id
+              next_pbi.position += 1
+              next_pbi.save!
+            end
+          end
         end
 
         def self.doer_or_reviewer_post_it_css_class(type)

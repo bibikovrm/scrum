@@ -117,6 +117,12 @@ class ScrumController < ApplicationController
       case params[:position]
         when "top", "bottom"
           @pbi.move_pbi_to(@position)
+        when "before"
+          @other_pbi = params[:before_other_pbi]
+          @pbi.move_pbi_to(@position, @other_pbi)
+        when "after"
+          @other_pbi = params[:after_other_pbi]
+          @pbi.move_pbi_to(@position, @other_pbi)
         else
           raise "Invalid position: #{@position.inspect}"
       end

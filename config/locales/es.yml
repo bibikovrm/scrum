@@ -37,6 +37,8 @@ es:
   label_estimated_vs_done_effort: "Esfuerzo estimado vs esfuerzo hecho"
   label_invalid_dependencies: "Hay dependencias inválidas para los siguientes EPPs:"
   label_invalid_dependencies_for_pbi: "%{pbi} bloquea pero es posterior a:"
+  label_move_pbi_after: "Mover después de"
+  label_move_pbi_before: "Mover antes de"
   label_move_pbi_to_last_sprint: "Mover al último Sprint"
   label_move_pbi_to_product_backlog: "Mover a la pila de producto"
   label_no_invalid_dependencies: "No hay dependencias inválidas."

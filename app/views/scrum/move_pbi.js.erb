@@ -6,6 +6,12 @@
     $("#<%= "pbi_#{@pbi.id}" %>").parent().prepend($("#<%= "pbi_#{@pbi.id}" %>"));
 <%- elsif @position == "bottom" -%>
     $("#<%= "pbi_#{@pbi.id}" %>").parent().append($("#<%= "pbi_#{@pbi.id}" %>"));
+<%- elsif @position == "before" -%>
+    $("#ajax-modal").dialog("close");
+    $("#<%= "pbi_#{@other_pbi}" %>").before($("#<%= "pbi_#{@pbi.id}" %>"));
+<%- elsif @position == "after" -%>
+    $("#ajax-modal").dialog("close");
+    $("#<%= "pbi_#{@other_pbi}" %>").after($("#<%= "pbi_#{@pbi.id}" %>"));
 <%- else -%>
     console.log("Invalid position: <%= @position.inspect %>");
 <%- end -%>
