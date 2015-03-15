@@ -1,7 +1,8 @@
 <%- pbi_id = "pbi_#{pbi.id}" -%>
 
 <li id="<%= pbi_id %>"
-    class="<%= pbi.post_it_css_class(:small_rotate => true, :small_scale => true, :draggable => !read_only) %>">
+    class="<%= pbi.post_it_css_class(:small_rotate => true, :small_scale => true,
+                                     :draggable => User.current.allowed_to?(:sort_product_backlog, project)) %>">
   <table>
     <tr>
       <td class="header-1">
