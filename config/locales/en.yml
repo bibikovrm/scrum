@@ -107,6 +107,7 @@ en:
   permission_edit_product_backlog: "Edit product backlog"
   permission_edit_sprint_board: "Edit Sprint board"
   permission_manage_sprints: "Manage Sprints"
+  permission_sort_product_backlog: "Sort product backlog"
   permission_view_product_backlog: "View product backlog"
   permission_view_product_backlog_burndown: "View product backlog burndown"
   permission_view_release_plan: "View release plan"

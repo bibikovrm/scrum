@@ -5,7 +5,8 @@
     render_move_to_last_sprint = (there_is_last_sprint and
                                   ((@pbi.sprint.is_product_backlog?) or (@pbi.sprint.id != @project.last_sprint.id)))
     render_move_to_product_backlog = (there_is_product_backlog and (@pbi.sprint.id != @project.product_backlog.id))
-    render_move_pbi = (there_is_product_backlog and (@pbi.sprint.id == @project.product_backlog.id))
+    render_move_pbi = (there_is_product_backlog and (@pbi.sprint.id == @project.product_backlog.id) and
+                       User.current.allowed_to?(:sort_product_backlog, @project))
     menu_needed = (render_move_to_last_sprint or render_move_to_product_backlog or render_move_pbi) -%>
 <%- if menu_needed -%>
   <div class="modal-issue-menu">
