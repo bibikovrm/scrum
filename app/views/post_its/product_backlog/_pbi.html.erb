@@ -16,12 +16,7 @@
                      :locals => {:project => project, :pbi => pbi, :read_only => read_only} %>
         <%- end -%>
       </td>
-      <td class="story-points-legend" rowspan="2">
-        <%- if pbi.has_story_points? -%>
-          <span title="<%= l(:label_story_point_plural) %>"><%= l(:label_story_point_unit) %></span>
-        <%- end -%>
-      </td>
-      <%- if User.current.allowed_to?(:edit_product_backlog, project) and 
+      <%- if User.current.allowed_to?(:edit_product_backlog, project) and
              User.current.allowed_to?(:edit_issues, project) and
              pbi.editable? and !read_only -%>
         <td class="story-points-legend" rowspan="2">

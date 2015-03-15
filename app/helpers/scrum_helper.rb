@@ -21,7 +21,7 @@ module ScrumHelper
         text = hours unless options[:ignore_zero] and (hours.blank? or (hours == "0"))
       end
       unless text.blank?
-        text = "#{text} h"
+        text = "#{text}h"
         unless options[:link].nil?
           text = link_to(text, options[:link])
         end

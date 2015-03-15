@@ -207,11 +207,18 @@ ul.pbis li table tr td.header-2 {
 	text-align: right;
 }
 
+ul.pbis li table tr td.story-points {
+    width: 8em;
+    min-width: 8em;
+    font-style: italic;
+    color: darkgrey;
+}
+
 ul.pbis li table tr td.story-points input {
-	font-size: 2em;
-	font-style: bold;
-	text-align: right;
-	min-width: 3em;
+    font-size: 2em;
+    font-style: bold;
+    text-align: right;
+    min-width: 3em;
 }
 
 ul.pbis li table tr td.story-points-legend {
@@ -235,18 +242,19 @@ table.sprint-board tr.sprint-board {
 	vertical-align: top;
 }
 
+table.sprint-board tr.sprint-board th.sprint-board,
+table.sprint-board tr.sprint-board td.sprint-board {
+    min-width: 13em;
+    padding-left: 0.8em;
+    padding-top: 0.8em;
+}
+
 table.sprint-board tr.sprint-board th.sprint-board {
 	border-bottom: 0.5em solid darkgrey;
-	min-width: 13em;
-	padding-left: 0.8em;
-	padding-top: 0.8em;
 }
 
 table.sprint-board tr.sprint-board td.sprint-board {
 	border: 0.5em solid darkgrey;
-	min-width: 13em;
-	padding-left: 0.8em;
-	padding-top: 0.8em;
 }
 
 table.sprint-pbi, table.sprint-task {
@@ -302,7 +310,7 @@ table.sprint-pbi tr td.pending, table.sprint-task tr td.pending {
 
 table.sprint-pbi input, table.sprint-task input {
 	text-align: right;
-	width: 3em;
+	width: 2em;
 }
 
 .editable-time {

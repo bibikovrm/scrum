@@ -154,17 +154,21 @@ module Scrum
           @set_on_top = true
         end
 
-        def deviation_ratio
+        def total_time
+          the_pending_effort = self.pending_effort.nil? ? 0.0 : self.pending_effort
           if self.is_pbi?
             the_spent_hours = self.children.collect{|task| task.spent_hours}.compact.sum
           elsif self.is_task?
             the_spent_hours = self.spent_hours
           end
-          the_pending_effort = self.pending_effort.nil? ? 0.0 : self.pending_effort
           the_spent_hours = the_spent_hours.nil? ? 0.0 : the_spent_hours
+          return (the_pending_effort + the_spent_hours)
+        end
+
+        def deviation_ratio
           the_estimated_hours = self.estimated_hours.nil? ? 0.0 : self.estimated_hours
           if ((self.is_pbi? or self.is_task?) and (the_estimated_hours > 0.0))
-            return (((the_pending_effort + the_spent_hours) * 100.0) / the_estimated_hours).round
+            return ((self.total_time * 100.0) / the_estimated_hours).round
           end
         end
 

@@ -96,6 +96,7 @@ en:
   label_time_by_activity: "Time by activity"
   label_time_stat: "(%{time} h - %{percentage}%)"
   label_time_total: "Total (%{time} h)"
+  label_total_effort: "Total effort (spent + pending)"
   notice_pbi_created: "The product backlog item was successfully created"
   notice_sprint_has_issues: "The Sprint has issues"
   notice_task_created: "The task was successfully created"
