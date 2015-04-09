@@ -68,8 +68,10 @@ Redmine::Plugin.register :scrum do
                     {:scrum => [:release_plan]}
   end
 
-  menu              :project_menu, :scrum, {:controller => :sprints, :action => :index},
-                    :caption => :label_scrum, :after => :activity, :param => :project_id
+  menu              :project_menu, :product_backlog, {:controller => :product_backlog, :action => :index},
+                    :caption => :label_menu_product_backlog, :after => :activity, :param => :project_id
+  menu              :project_menu, :sprint, {:controller => :sprints, :action => :index},
+                    :caption => :label_menu_sprint, :after => :activity, :param => :project_id
 
   settings          :default => {:create_journal_on_pbi_position_change => "0",
                                  :doer_color => "post-it-color-5",

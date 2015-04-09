@@ -7,7 +7,7 @@
 
 class ProductBacklogController < ApplicationController
 
-  menu_item :scrum
+  menu_item :product_backlog
   model_object Issue
 
   before_filter :find_project_by_project_id,

@@ -7,7 +7,7 @@
 
 class SprintsController < ApplicationController
 
-  menu_item :scrum
+  menu_item :sprint
   model_object Sprint
 
   before_filter :find_model_object,

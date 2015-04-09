@@ -7,7 +7,7 @@
 
 class ScrumController < ApplicationController
 
-  menu_item :scrum
+  menu_item :product_backlog
 
   before_filter :find_issue, :only => [:change_story_points, :change_pending_effort,
                                        :change_assigned_to, :create_time_entry,
