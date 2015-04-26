@@ -74,6 +74,7 @@ es:
   label_setting_render_tasks_deviations: "Mostrar desviaciones de las tareas"
   label_setting_render_updated_on_pbi: "Mostrar fecha de actualización"
   label_setting_render_version_on_pbi: "Mostrar versión"
+  label_setting_sprint_board_fields_on_tracker: "Campos a mostrar con %{tracker}"
   label_setting_story_points_custom_field: "Campo personalizado para puntos de historia"
   label_setting_task_statuses: "Estados de las tareas para el tablero del Sprint"
   label_setting_verification_activities: "Actividades de verificación"

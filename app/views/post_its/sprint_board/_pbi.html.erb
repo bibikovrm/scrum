@@ -9,7 +9,13 @@
                     :remote => true, :method => "GET", :class => "icon icon-edit float-icon" %>
       <%- end -%>
       <%= render_issue_icons(pbi) %>
-      <%= link_to_issue(pbi, :tracker => false, :truncate => 150, :class => "warning") %>
+      <%= render :partial => "post_its/sprint_board/fields", :formats => [:html],
+                 :locals => {:project => project, :issue => pbi} %>
+      <div>
+        <%= link_to_issue(pbi, :tracker => false, :truncate => 150, :class => "warning") %>
+      </div>
+      <%= render :partial => "post_its/sprint_board/custom_fields", :formats => [:html],
+                 :locals => {:project => project, :issue => pbi} %>
       <div class="doers-reviewers-post-its-container">
         <%- if pbi.blocked? -%>
           <div class="<%= Issue.blocked_post_it_css_class %>">

@@ -41,6 +41,29 @@ module Scrum
       class_eval src, __FILE__, __LINE__
     end
 
+    module TrackerFields
+      FIELDS = "fields"
+      CUSTOM_FIELDS = "custom_fields"
+      SPRINT_BOARD_FIELDS = "sprint_board_fields"
+      SPRINT_BOARD_CUSTOM_FIELDS = "sprint_board_custom_fields"
+    end
+
+    def self.tracker_fields(tracker, type = TrackerFields::FIELDS)
+      collect("tracker_#{tracker}_#{type}")
+    end
+
+    def self.tracker_field?(tracker, field, type = TrackerFields::FIELDS)
+      tracker_fields(tracker, type).include?(field.to_s)
+    end
+
+    def self.sprint_board_fields_for_tracker(tracker)
+      tracker_fields = tracker_fields(tracker.id, TrackerFields::FIELDS)
+      fields = [:status_id]
+      fields << :category_id if tracker_fields.include?("category_id")
+      fields << :fixed_version_id if tracker_fields.include?("fixed_version_id")
+      return fields
+    end
+
     def self.task_tracker
       Tracker.all(task_tracker_ids)
     end
@@ -65,23 +88,7 @@ module Scrum
       setting_or_default_integer(:below_deviation_ratio, :min => 0, :max => 99)
     end
 
-    def self.tracker_fields(tracker)
-      collect("tracker_#{tracker}_fields")
-    end
-
-    def self.tracker_field?(tracker, field)
-      tracker_fields(tracker).include?(field.to_s)
-    end
-
-    def self.tracker_custom_fields(tracker)
-      collect_ids("tracker_#{tracker}_custom_fields")
-    end
-
-    def self.tracker_custom_field?(tracker, custom_field)
-      tracker_custom_fields(tracker).include?(custom_field.id)
-    end
-
-  private
+    private
 
     def self.setting_or_default(setting)
       ::Setting.plugin_scrum[setting] ||

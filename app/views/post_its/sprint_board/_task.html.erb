@@ -11,7 +11,13 @@
                       :remote => true, :method => "GET", :class => "icon icon-edit float-icon" %>
         <%- end -%>
         <%= render_issue_icons(task) %>
-        <%= link_to_issue(task, :tracker => false, :truncate => 100) %>
+        <%= render :partial => "post_its/sprint_board/fields", :formats => [:html],
+                   :locals => {:project => project, :issue => task} %>
+        <div>
+          <%= link_to_issue(task, :tracker => false, :truncate => 100) %>
+        </div>
+        <%= render :partial => "post_its/sprint_board/custom_fields", :formats => [:html],
+                   :locals => {:project => project, :issue => task} %>
         <div class="doers-reviewers-post-its-container">
           <%- task.doers.each do |doer| -%>
             <div class="<%= Issue.doer_post_it_css_class %>">

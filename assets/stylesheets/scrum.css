@@ -180,6 +180,11 @@
 	cursor: ns-resize;
 }
 
+.post-it-legend {
+    font-style: italic;
+    font-size: 80%;
+}
+
 ul.pbis {
 	padding: 0px;
 	width: 95%;

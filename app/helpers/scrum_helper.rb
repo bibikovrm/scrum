@@ -80,8 +80,8 @@ module ScrumHelper
 private
 
   def render_issue_icon(image_path, deviation_ratio = nil)
-    content_tag("div", :style => "float: left;") do
-      options = {:class => "float"}
+    content_tag("div") do
+      options = {:class => "float float-icon"}
       options[:title] = l(:label_deviation, :deviation => deviation_ratio) unless deviation_ratio.nil?
       image_tag(image_path, options)
     end
