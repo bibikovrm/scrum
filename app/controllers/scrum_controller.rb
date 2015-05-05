@@ -217,7 +217,7 @@ class ScrumController < ApplicationController
 
   def release_plan
     @sprints = []
-    @story_points_per_sprint, @sprints_count = @project.story_points_per_sprint
+    @story_points_per_sprint, @scheduled_story_points_per_sprint, @sprints_count = @project.story_points_per_sprint
     @total_story_points = 0.0
     @pbis_with_estimation = 0
     @pbis_without_estimation = 0
@@ -231,23 +231,23 @@ class ScrumController < ApplicationController
           @total_story_points += story_points
           accumulated_story_points = 0.0
           begin
-            if last_sprint && last_sprint[:story_points] + story_points > @story_points_per_sprint
+            if last_sprint && last_sprint[:story_points] + story_points > @scheduled_story_points_per_sprint
               @sprints << last_sprint
               last_sprint = nil
             end
             if last_sprint.nil?
               last_sprint = {:pbis => [], :story_points => 0.0, :versions => []}
             end
-            if story_points <= @story_points_per_sprint
+            if story_points <= @scheduled_story_points_per_sprint
               last_sprint[:pbis] << pbi
               last_sprint[:story_points] += accumulated_story_points + story_points
               if pbi.fixed_version
                 versions[pbi.fixed_version.id] = {:version => pbi.fixed_version, :sprint => @sprints.count}
               end
             else
-              accumulated_story_points += @story_points_per_sprint
+              accumulated_story_points += @scheduled_story_points_per_sprint
             end
-            story_points -= @story_points_per_sprint
+            story_points -= @scheduled_story_points_per_sprint
           end while story_points > 0.0
         else
           @pbis_without_estimation += 1

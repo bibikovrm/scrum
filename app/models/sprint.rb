@@ -59,6 +59,10 @@ class Sprint < ActiveRecord::Base
     pbis.collect{|pbi| pbi.story_points.to_f}.compact.sum
   end
 
+  def scheduled_story_points
+    pbis.select{|pbi| pbi.scheduled?}.collect{|pbi| pbi.story_points.to_f}.compact.sum
+  end
+
   def tasks
     issues.all(:conditions => {:tracker_id => Scrum::Setting.task_tracker_ids}).select{|issue| issue.visible?}
   end

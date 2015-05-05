@@ -91,8 +91,8 @@ en:
   label_sps_by_pbi_creation_date: "SPs by PBI creation date"
   label_sps_by_pbi_type: "SPs by PBI type"
   label_sps_per_sprint_stat:
-    one: "Using last Sprint to calculate the %{sps} SPs per Sprint progress"
-    other: "Using last %{count} Sprints to calculate the %{sps} SPs per Sprint progress"
+    one: "Using last Sprint (only PBIs created before Sprint start) to calculate the %{sps} SPs per Sprint progress"
+    other: "Using last %{count} Sprints (only PBIs created before Sprint start) to calculate the %{sps} SPs per Sprint progress"
   label_sps_stat: "(%{sps} sp - %{percentage}%)"
   label_sps_total: "Total (%{sps} sp)"
   label_story_point_plural: "Story points"

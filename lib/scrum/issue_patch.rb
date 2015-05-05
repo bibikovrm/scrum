@@ -41,6 +41,18 @@ module Scrum
           end
         end
 
+        def scheduled?
+          is_scheduled = false
+          if created_on and sprint and sprint.sprint_start_date
+            if is_pbi?
+              is_scheduled = created_on < sprint.sprint_start_date
+            elsif is_task?
+              is_scheduled = created_on <= sprint.sprint_start_date
+            end
+          end
+          return is_scheduled
+        end
+
         def is_pbi?
           tracker.is_pbi?
         end

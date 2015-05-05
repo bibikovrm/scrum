@@ -78,26 +78,26 @@ class ProductBacklogController < ApplicationController
     @data = []
     @project.sprints.each do |sprint|
       @data << {:axis_label => sprint.name,
-                :story_points => sprint.story_points,
+                :story_points => sprint.story_points.round(2),
                 :pending_story_points => 0}
     end
 
-    @story_points_per_sprint, @sprints_count = @project.story_points_per_sprint
+    @story_points_per_sprint, @scheduled_story_points_per_sprint, @sprints_count = @project.story_points_per_sprint
     pending_story_points = @project.product_backlog.story_points
     new_sprints = 1
     while pending_story_points > 0
       @data << {:axis_label => "#{l(:field_sprint)} +#{new_sprints}",
-                :story_points => ((@story_points_per_sprint <= pending_story_points) ? 
-                                  @story_points_per_sprint : pending_story_points).round(2),
+                :story_points => ((@scheduled_story_points_per_sprint <= pending_story_points) ?
+                                  @scheduled_story_points_per_sprint : pending_story_points).round(2),
                 :pending_story_points => 0}
-      pending_story_points -= @story_points_per_sprint
+      pending_story_points -= @scheduled_story_points_per_sprint
       new_sprints += 1
     end
 
     for i in 0..(@data.length - 1)
       others = @data[(i + 1)..(@data.length - 1)]
-      @data[i][:pending_story_points] = @data[i][:story_points] +
-        (others.blank? ? 0 : others.collect{|other| other[:story_points]}.sum)
+      @data[i][:pending_story_points] = (@data[i][:story_points] +
+        (others.blank? ? 0 : others.collect{|other| other[:story_points]}.sum)).round(2)
       @data[i][:story_points_tooltip] = l(:label_pending_story_points,
                                           :pending_story_points => @data[i][:pending_story_points],
                                           :sprint => @data[i][:axis_label],
