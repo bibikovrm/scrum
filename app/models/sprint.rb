@@ -70,13 +70,15 @@ class Sprint < ActiveRecord::Base
   def estimated_hours
     sum = 0.0
     tasks.each do |task|
-      pending_efforts = task.pending_efforts.find(:all, :conditions => ["date < ?", self.sprint_start_date])
-      pending_effort = pending_efforts.sort!{|a, b| b.date <=> a.date}.first
-      pending_effort = pending_effort.effort unless pending_effort.nil?
-      if (!(pending_effort.nil?))
-        sum += pending_effort
-      elsif (!((estimated_hours = task.estimated_hours).nil?))
-        sum += estimated_hours
+      if task.use_in_burndown?
+        pending_efforts = task.pending_efforts.find(:all, :conditions => ["date < ?", self.sprint_start_date])
+        pending_effort = pending_efforts.sort!{|a, b| b.date <=> a.date}.first
+        pending_effort = pending_effort.effort unless pending_effort.nil?
+        if (!(pending_effort.nil?))
+          sum += pending_effort
+        elsif (!((estimated_hours = task.estimated_hours).nil?))
+          sum += estimated_hours
+        end
       end
     end
     return sum

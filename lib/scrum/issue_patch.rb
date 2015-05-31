@@ -53,6 +53,11 @@ module Scrum
           return is_scheduled
         end
 
+        def use_in_burndown?
+          is_task? and IssueStatus.task_statuses.include?(status) and
+              parent and parent.is_pbi? and IssueStatus.pbi_statuses.include?(parent.status)
+        end
+
         def is_pbi?
           tracker.is_pbi?
         end
