@@ -75,6 +75,8 @@ class ProductBacklogController < ApplicationController
   end
 
   def burndown
+    @use_not_scheduled_pbis_for_velocity = (params[:use_not_scheduled_pbis_for_velocity] == "1")
+
     @data = []
     @project.sprints.each do |sprint|
       @data << {:axis_label => sprint.name,
@@ -82,15 +84,16 @@ class ProductBacklogController < ApplicationController
                 :pending_story_points => 0}
     end
 
-    @story_points_per_sprint, @scheduled_story_points_per_sprint, @sprints_count = @project.story_points_per_sprint
+    story_points_per_sprint, scheduled_story_points_per_sprint, @sprints_count = @project.story_points_per_sprint
+    @velocity = @use_not_scheduled_pbis_for_velocity ? story_points_per_sprint : scheduled_story_points_per_sprint
     pending_story_points = @project.product_backlog.story_points
     new_sprints = 1
     while pending_story_points > 0
       @data << {:axis_label => "#{l(:field_sprint)} +#{new_sprints}",
-                :story_points => ((@scheduled_story_points_per_sprint <= pending_story_points) ?
-                                  @scheduled_story_points_per_sprint : pending_story_points).round(2),
+                :story_points => ((@velocity <= pending_story_points) ?
+                    @velocity : pending_story_points).round(2),
                 :pending_story_points => 0}
-      pending_story_points -= @scheduled_story_points_per_sprint
+      pending_story_points -= @velocity
       new_sprints += 1
     end
 

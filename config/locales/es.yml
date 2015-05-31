@@ -91,8 +91,8 @@ es:
   label_sps_by_pbi_creation_date: "PHs por fecha de creación de EPP"
   label_sps_by_pbi_type: "PHs por tipo de EPP"
   label_sps_per_sprint_stat:
-    one: "Usando el último Sprint (sólo EPPs creados antes del inicio del Sprint) para calcular el progreso de %{sps} PHs por Sprint"
-    other: "Usando los últimos %{count} Sprints (sólo EPPs creados antes del inicio del Sprint) para calcular el progreso de %{sps} PHs por Sprint"
+    one: "Usando el último Sprint para calcular el progreso de %{sps} PHs por Sprint"
+    other: "Usando los últimos %{count} Sprints para calcular el progreso de %{sps} PHs por Sprint"
   label_sps_stat: "(%{sps} ph - %{percentage}%)"
   label_sps_total: "Total (%{sps} ph)"
   label_story_point_plural: "Puntos de historia"
@@ -102,6 +102,7 @@ es:
   label_time_stat: "(%{time} h - %{percentage}%)"
   label_time_total: "Total (%{time} h)"
   label_total_effort: "Esfuerzo total (gastado + pendiente)"
+  label_use_not_scheduled_pbis_for_velocity: "Usar EPPs no planificados para calcular la velocidad"
   notice_pbi_created: "El elemento de la pila de producto fue creado con éxito"
   notice_sprint_has_issues: "El Sprint tiene peticiones"
   notice_task_created: "La tarea fue creada con éxito"

@@ -1,7 +1,21 @@
+<%= form_tag(burndown_project_product_backlog_index_path(@project), :method => :get) do %>
 <table class="box attributes">
+  <tr>
+    <td>
+      <%= hidden_field_tag("use_not_scheduled_pbis_for_velocity", 0) %>
+      <%= check_box_tag("use_not_scheduled_pbis_for_velocity", 1, use_not_scheduled_pbis_for_velocity) %>
+      <%= l(:label_use_not_scheduled_pbis_for_velocity) %>
+    </td>
+  </tr>
   <tr>
     <td>
       <%= l(:label_sps_per_sprint_stat, :count => count, :sps => sps) %>
     </td>
   </tr>
+  <tr>
+    <td>
+      <input type="submit" value="<%= l(:button_update) %>" />
+    </td>
+  </tr>
 </table>
+<% end %>
