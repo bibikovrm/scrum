@@ -217,50 +217,49 @@ class ScrumController < ApplicationController
 
   def release_plan
     @sprints = []
-    @use_not_scheduled_pbis_for_velocity = (params[:use_not_scheduled_pbis_for_velocity] == "1")
-    story_points_per_sprint, scheduled_story_points_per_sprint, @sprints_count = @project.story_points_per_sprint
-    @default_velocity = @use_not_scheduled_pbis_for_velocity ? story_points_per_sprint : scheduled_story_points_per_sprint
-    @velocity = params[:velocity].nil? ? @default_velocity : params[:velocity].to_f
-    @velocity = 1.0 if @velocity < 1.0
+    velocity_all_pbis, velocity_scheduled_pbis, @sprints_count = @project.story_points_per_sprint
+    @velocity_type = params[:velocity_type] || "only_scheduled"
+    case @velocity_type
+      when "all"
+        @velocity = velocity_all_pbis
+      when "only_scheduled"
+        @velocity = velocity_scheduled_pbis
+      else
+        @velocity = params[:custom_velocity].to_f unless params[:custom_velocity].blank?
+    end
+    @velocity = 1.0 if @velocity.blank? or @velocity < 1.0
     @total_story_points = 0.0
     @pbis_with_estimation = 0
     @pbis_without_estimation = 0
-    last_sprint = nil
     versions = {}
+    accumulated_story_points = @velocity
+    current_sprint = {:pbis => [], :story_points => 0.0, :versions => []}
     if @project.product_backlog
       @project.product_backlog.pbis.each do |pbi|
         if pbi.story_points
           @pbis_with_estimation += 1
           story_points = pbi.story_points.to_f
           @total_story_points += story_points
-          accumulated_story_points = 0.0
-          begin
-            if last_sprint && last_sprint[:story_points] + story_points > @velocity
-              @sprints << last_sprint
-              last_sprint = nil
-            end
-            if last_sprint.nil?
-              last_sprint = {:pbis => [], :story_points => 0.0, :versions => []}
-            end
-            if story_points <= @velocity
-              last_sprint[:pbis] << pbi
-              last_sprint[:story_points] += accumulated_story_points + story_points
-              if pbi.fixed_version
-                versions[pbi.fixed_version.id] = {:version => pbi.fixed_version, :sprint => @sprints.count}
-              end
-            else
-              accumulated_story_points += @velocity
-            end
-            story_points -= @velocity
-          end while story_points > 0.0
+          while accumulated_story_points < story_points
+            @sprints << current_sprint
+            accumulated_story_points += @velocity
+            current_sprint = {:pbis => [], :story_points => 0.0, :versions => []}
+          end
+          accumulated_story_points -= story_points
+          current_sprint[:pbis] << pbi
+          current_sprint[:story_points] += story_points
+          if pbi.fixed_version
+            versions[pbi.fixed_version.id] = {:version => pbi.fixed_version,
+                                              :sprint => @sprints.count}
+          end
         else
           @pbis_without_estimation += 1
         end
       end
-      if last_sprint
-        @sprints << last_sprint
+      if current_sprint and (current_sprint[:pbis].count > 0)
+        @sprints << current_sprint
       end
-      versions.each_pair do |id, info|
+      versions.values.each do |info|
         @sprints[info[:sprint]][:versions] << info[:version]
       end
     end

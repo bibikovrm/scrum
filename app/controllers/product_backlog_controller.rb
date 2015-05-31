@@ -75,19 +75,23 @@ class ProductBacklogController < ApplicationController
   end
 
   def burndown
-    @use_not_scheduled_pbis_for_velocity = (params[:use_not_scheduled_pbis_for_velocity] == "1")
-
     @data = []
     @project.sprints.each do |sprint|
       @data << {:axis_label => sprint.name,
                 :story_points => sprint.story_points.round(2),
                 :pending_story_points => 0}
     end
-
-    story_points_per_sprint, scheduled_story_points_per_sprint, @sprints_count = @project.story_points_per_sprint
-    @default_velocity = @use_not_scheduled_pbis_for_velocity ? story_points_per_sprint : scheduled_story_points_per_sprint
-    @velocity = params[:velocity].nil? ? @default_velocity : params[:velocity].to_f
-    @velocity = 1.0 if @velocity < 1.0
+    velocity_all_pbis, velocity_scheduled_pbis, @sprints_count = @project.story_points_per_sprint
+    @velocity_type = params[:velocity_type] || "only_scheduled"
+    case @velocity_type
+      when "all"
+        @velocity = velocity_all_pbis
+      when "only_scheduled"
+        @velocity = velocity_scheduled_pbis
+      else
+        @velocity = params[:custom_velocity].to_f unless params[:custom_velocity].blank?
+    end
+    @velocity = 1.0 if @velocity.blank? or @velocity < 1.0
     pending_story_points = @project.product_backlog.story_points
     new_sprints = 1
     while pending_story_points > 0
@@ -98,7 +102,6 @@ class ProductBacklogController < ApplicationController
       pending_story_points -= @velocity
       new_sprints += 1
     end
-
     for i in 0..(@data.length - 1)
       others = @data[(i + 1)..(@data.length - 1)]
       @data[i][:pending_story_points] = (@data[i][:story_points] +

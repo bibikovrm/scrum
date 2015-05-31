@@ -90,9 +90,6 @@ en:
   label_sps_by_pbi_category: "SPs by PBI category"
   label_sps_by_pbi_creation_date: "SPs by PBI creation date"
   label_sps_by_pbi_type: "SPs by PBI type"
-  label_sps_per_sprint_stat:
-    one: "Using last Sprint to calculate the %{sps} SPs per Sprint progress"
-    other: "Using last %{count} Sprints to calculate the %{sps} SPs per Sprint progress"
   label_sps_stat: "(%{sps} sp - %{percentage}%)"
   label_sps_total: "Total (%{sps} sp)"
   label_story_point_plural: "Story points"
@@ -102,7 +99,11 @@ en:
   label_time_stat: "(%{time} h - %{percentage}%)"
   label_time_total: "Total (%{time} h)"
   label_total_effort: "Total effort (spent + pending)"
-  label_use_not_scheduled_pbis_for_velocity: "Use not scheduled PBIs to calculate velocity"
+  label_velocity_all_pbis:
+    one: "Use all PBIs from last Sprint to calculate the velocity"
+    other: "Use all PBIs from last %{count} Sprints to calculate the velocity"
+  label_velocity_custom: "Custom value:"
+  label_velocity_only_scheduled_pbis: "Only scheduled ones"
   notice_pbi_created: "The product backlog item was successfully created"
   notice_sprint_has_issues: "The Sprint has issues"
   notice_task_created: "The task was successfully created"

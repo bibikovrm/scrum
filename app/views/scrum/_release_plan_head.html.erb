@@ -1,34 +1,15 @@
-<%= form_tag(project_release_plan_path(@project), :method => :get) do %>
 <table class="box attributes">
-  <tr>
-    <td>
-      <%= hidden_field_tag("use_not_scheduled_pbis_for_velocity", 0) %>
-      <%= check_box_tag("use_not_scheduled_pbis_for_velocity", 1, use_not_scheduled_pbis_for_velocity) %>
-      <%= l(:label_use_not_scheduled_pbis_for_velocity) %>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <%= raw(l(:label_sps_per_sprint_stat,
-                :count => sprints_count,
-                :sps => text_field_tag("velocity", sps_per_sprint, :size => 5, :style => "margin-top: -5px;") +
-                        image_tag("reload.png",
-                                  :title => l(:button_reset),
-                                  :onclick => "$('input[name=velocity]').val('#{default_sps_per_sprint}');"))) %>
-    </td>
-  </tr>
+  <%= render :partial => "scrum/velocity_form",
+             :locals => {:url => project_release_plan_path(@project),
+                         :sprints_count => @sprints_count,
+                         :velocity => @velocity,
+                         :velocity_type => @velocity_type} %>
   <tr>
     <td>
       <%= l(:label_release_plan_stats,
-            :sps => total_story_points,
-            :pbis => pbis_with_estimation,
-            :pbis_without_sps => pbis_without_estimation) %>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <input type="submit" value="<%= l(:button_update) %>" />
+            :sps => @total_story_points,
+            :pbis => @pbis_with_estimation,
+            :pbis_without_sps => @pbis_without_estimation) %>
     </td>
   </tr>
 </table>
-<% end %>

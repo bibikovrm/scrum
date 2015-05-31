@@ -1,26 +1,7 @@
-<%= form_tag(burndown_project_product_backlog_index_path(@project), :method => :get) do %>
 <table class="box attributes">
-  <tr>
-    <td>
-      <%= hidden_field_tag("use_not_scheduled_pbis_for_velocity", 0) %>
-      <%= check_box_tag("use_not_scheduled_pbis_for_velocity", 1, use_not_scheduled_pbis_for_velocity) %>
-      <%= l(:label_use_not_scheduled_pbis_for_velocity) %>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <%= raw(l(:label_sps_per_sprint_stat,
-              :count => count,
-              :sps => text_field_tag("velocity", sps, :size => 5, :style => "margin-top: -5px;") +
-                      image_tag("reload.png",
-                                :title => l(:button_reset),
-                                :onclick => "$('input[name=velocity]').val('#{default_sps}');"))) %>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <input type="submit" value="<%= l(:button_update) %>" />
-    </td>
-  </tr>
+  <%= render :partial => "scrum/velocity_form",
+             :locals => {:url => burndown_project_product_backlog_index_path(@project),
+                         :sprints_count => @sprints_count,
+                         :velocity => @velocity,
+                         :velocity_type => @velocity_type} %>
 </table>
-<% end %>
