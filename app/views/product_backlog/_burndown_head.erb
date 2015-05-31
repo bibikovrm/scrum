@@ -9,7 +9,12 @@
   </tr>
   <tr>
     <td>
-      <%= l(:label_sps_per_sprint_stat, :count => count, :sps => sps) %>
+      <%= raw(l(:label_sps_per_sprint_stat,
+              :count => count,
+              :sps => text_field_tag("velocity", sps, :size => 5, :style => "margin-top: -5px;") +
+                      image_tag("reload.png",
+                                :title => l(:button_reset),
+                                :onclick => "$('input[name=velocity]').val('#{default_sps}');"))) %>
     </td>
   </tr>
   <tr>

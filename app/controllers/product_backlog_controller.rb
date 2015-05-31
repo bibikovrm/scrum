@@ -85,7 +85,8 @@ class ProductBacklogController < ApplicationController
     end
 
     story_points_per_sprint, scheduled_story_points_per_sprint, @sprints_count = @project.story_points_per_sprint
-    @velocity = @use_not_scheduled_pbis_for_velocity ? story_points_per_sprint : scheduled_story_points_per_sprint
+    @default_velocity = @use_not_scheduled_pbis_for_velocity ? story_points_per_sprint : scheduled_story_points_per_sprint
+    @velocity = params[:velocity].nil? ? @default_velocity : params[:velocity].to_f
     pending_story_points = @project.product_backlog.story_points
     new_sprints = 1
     while pending_story_points > 0

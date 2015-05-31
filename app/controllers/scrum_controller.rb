@@ -219,7 +219,8 @@ class ScrumController < ApplicationController
     @sprints = []
     @use_not_scheduled_pbis_for_velocity = (params[:use_not_scheduled_pbis_for_velocity] == "1")
     story_points_per_sprint, scheduled_story_points_per_sprint, @sprints_count = @project.story_points_per_sprint
-    @velocity = @use_not_scheduled_pbis_for_velocity ? story_points_per_sprint : scheduled_story_points_per_sprint
+    @default_velocity = @use_not_scheduled_pbis_for_velocity ? story_points_per_sprint : scheduled_story_points_per_sprint
+    @velocity = params[:velocity].nil? ? @default_velocity : params[:velocity].to_f
     @total_story_points = 0.0
     @pbis_with_estimation = 0
     @pbis_without_estimation = 0
