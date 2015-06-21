@@ -19,7 +19,7 @@ module Scrum
         def avoid_journal_for_scrum_position
           continue = true
           if journalized_type == "Issue" and !(Scrum::Setting.create_journal_on_pbi_position_change)
-            details = details.where("prop_key != 'position'") unless details.blank?
+            details.where!("prop_key <> 'position'") unless details.blank?
             continue = false if notes.blank? and details.blank?
           end
           return(continue)
