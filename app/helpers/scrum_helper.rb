@@ -73,18 +73,16 @@ module ScrumHelper
     render :inline => icons.join("\n")
   end
 
-  DEVIATION_ICONS = [MAJOR_DEVIATION_ICON = "exclamation.png",
-                     MINOR_DEVIATION_ICON = "warning.png",
-                     BELOW_DEVIATION_ICON = "lightning.png"]
+  DEVIATION_ICONS = [MAJOR_DEVIATION_ICON = "icon-major-deviation",
+                     MINOR_DEVIATION_ICON = "icon-minor-deviation",
+                     BELOW_DEVIATION_ICON = "icon-below-deviation"]
 
 private
 
-  def render_issue_icon(image_path, deviation_ratio = nil)
-    content_tag("div") do
-      options = {:class => "float float-icon"}
-      options[:title] = l(:label_deviation, :deviation => deviation_ratio) unless deviation_ratio.nil?
-      image_tag(image_path, options)
-    end
+  def render_issue_icon(icon, deviation_ratio = nil)
+    options = {:class => "icon float-icon #{icon}"}
+    options[:title] = l(:label_deviation, :deviation => deviation_ratio) unless deviation_ratio.nil?
+    link_to("", "#", options)
   end
 
 end

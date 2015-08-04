@@ -22,9 +22,26 @@
     background-image: url(../images/icon-move-bottom-16.png);
 }
 
+.icon-major-deviation {
+	background-image: url(../../../images/exclamation.png);
+}
+
+.icon-minor-deviation {
+	background-image: url(../../../images/warning.png);
+}
+
+.icon-below-deviation {
+	background-image: url(../../../images/lightning.png);
+}
+
+.icon-log-time {
+	background-image: url(../../../images/time_add.png);
+}
+
 .float-icon {
 	float: right;
-	min-height: 16px;
+	min-height: 10px;
+	padding-left: 16px;
 }
 
 .post-it, .post-it input {
