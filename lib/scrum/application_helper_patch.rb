@@ -95,6 +95,58 @@ module Scrum
         end
         alias_method_chain :parse_redmine_links, :scrum
 
+        def scrum_tips
+          tips = []
+          if Scrum::Setting.render_plugin_tips
+            # Plugin permissions check.
+            unless @project and !(@project.module_enabled?(:scrum))
+              scrum_permissions = Redmine::AccessControl.modules_permissions(["scrum"]).select{|p| p.project_module}.collect{|p| p.name}
+              active_scrum_permissions = Role.all.collect{|r| r.permissions & scrum_permissions}.flatten
+              if active_scrum_permissions.empty?
+                tips << l(:label_tip_no_permissions,
+                          :link => link_to(l(:label_tip_permissions_link), permissions_roles_path))
+              end
+            end
+            # Minimal plugin settings check.
+            plugin_settings_link = link_to(l(:label_tip_plugin_settings_link),
+                                           :link => plugin_settings_path(:id => :scrum))
+            if Scrum::Setting.story_points_custom_field_id.blank?
+              tips << l(:label_tip_no_plugin_setting, :link => plugin_settings_link,
+                        :setting => l(:label_setting_story_points_custom_field))
+            end
+            if Scrum::Setting.pbi_tracker_ids.empty?
+              tips << l(:label_tip_no_plugin_setting, :link => plugin_settings_link,
+                        :setting => l(:label_pbi_plural))
+            end
+            if Scrum::Setting.task_tracker_ids.empty?
+              tips << l(:label_tip_no_plugin_setting, :link => plugin_settings_link,
+                        :setting => l(:label_task_plural))
+            end
+            if Scrum::Setting.task_status_ids.empty?
+              tips << l(:label_tip_no_plugin_setting, :link => plugin_settings_link,
+                        :setting => l(:label_setting_task_statuses))
+            end
+            if Scrum::Setting.pbi_status_ids.empty?
+              tips << l(:label_tip_no_plugin_setting, :link => plugin_settings_link,
+                        :setting => l(:label_setting_pbi_statuses))
+            end
+            # Project configuration checks.
+            if @project and @project.module_enabled?(:scrum)
+              project_settings_link = link_to(l(:label_tip_project_settings_link),
+                                              settings_project_path(@project, :tab => :sprints))
+              # PB exists check.
+              if @project.product_backlog.nil?
+                tips << l(:label_tip_no_product_backlog, :link => project_settings_link)
+              end
+              # At least one Sprint check.
+              if @project.sprints.empty?
+                tips << l(:label_tip_no_sprints, :link => project_settings_link)
+              end
+            end
+          end
+          return tips
+        end
+
       end
     end
   end

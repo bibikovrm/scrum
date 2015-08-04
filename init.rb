@@ -96,6 +96,7 @@ Redmine::Plugin.register :scrum do
                                  :render_tasks_deviations => "1",
                                  :major_deviation_ratio => 150,
                                  :minor_deviation_ratio => 120,
-                                 :below_deviation_ratio => 70},
+                                 :below_deviation_ratio => 70,
+                                 :render_plugin_tips => "1"},
                     :partial => "settings/scrum_settings"
 end

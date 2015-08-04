@@ -4,6 +4,12 @@
 <fieldset>
   <legend><%= l(:label_settings) %></legend>
   <p>
+    <label><%= l(:label_setting_render_plugin_tips) %>:</label>
+    <%= hidden_field_tag("settings[render_plugin_tips]", 0) %>
+    <%= check_box_tag("settings[render_plugin_tips]", 1,
+                      Scrum::Setting.render_plugin_tips) %>
+  </p>
+  <p>
     <label><%= l(:label_setting_story_points_custom_field) %>:</label>
     <%- custom_fields = CustomField.where(:type => "IssueCustomField", :field_format => ["int", "float", "string", "list"])
         custom_fields = custom_fields.collect{|c| [c.name, c.id]}
@@ -113,7 +119,7 @@
   </p>
   <p>
     <label>
-      <%= image_tag(ScrumHelper::MAJOR_DEVIATION_ICON) %>
+      <%= link_to("", "#", :class => "icon #{ScrumHelper::MAJOR_DEVIATION_ICON}") %>
       <%= l(:label_setting_major_deviation_ratio) %>:
     </label>
     <%= text_field_tag("settings[major_deviation_ratio]",
@@ -121,7 +127,7 @@
   </p>
   <p>
     <label>
-      <%= image_tag(ScrumHelper::MINOR_DEVIATION_ICON) %>
+      <%= link_to("", "#", :class => "icon #{ScrumHelper::MINOR_DEVIATION_ICON}") %>
       <%= l(:label_setting_minor_deviation_ratio) %>:
     </label>
     <%= text_field_tag("settings[minor_deviation_ratio]",
@@ -129,7 +135,7 @@
   </p>
   <p>
     <label>
-      <%= image_tag(ScrumHelper::BELOW_DEVIATION_ICON) %>
+      <%= link_to("", "#", :class => "icon #{ScrumHelper::BELOW_DEVIATION_ICON}") %>
       <%= l(:label_setting_below_deviation_ratio) %>:
     </label>
     <%= text_field_tag("settings[below_deviation_ratio]",

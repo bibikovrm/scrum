@@ -11,7 +11,7 @@ module Scrum
     ["create_journal_on_pbi_position_change", "inherit_pbi_attributes", "render_position_on_pbi",
       "render_category_on_pbi", "render_version_on_pbi", "render_author_on_pbi",
       "render_updated_on_pbi", "check_dependencies_on_pbi_sorting",
-      "render_pbis_deviations", "render_tasks_deviations"].each do |setting|
+      "render_pbis_deviations", "render_tasks_deviations", "render_plugin_tips"].each do |setting|
       src = <<-END_SRC
       def self.#{setting}
         setting_or_default_boolean(:#{setting})
