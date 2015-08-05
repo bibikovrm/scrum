@@ -132,15 +132,55 @@ module Scrum
             end
             # Project configuration checks.
             if @project and @project.module_enabled?(:scrum)
-              project_settings_link = link_to(l(:label_tip_project_settings_link),
-                                              settings_project_path(@project, :tab => :sprints))
+              product_backlog_link = link_to(l(:label_tip_product_backlog_link),
+                                             project_product_backlog_index_path(@project))
               # PB exists check.
               if @project.product_backlog.nil?
-                tips << l(:label_tip_no_product_backlog, :link => project_settings_link)
+                tips << l(:label_tip_no_product_backlog,
+                          :link => link_to(l(:label_tip_new_product_backlog_link),
+                                           new_project_sprint_path(@project, :create_product_backlog => true)))
               end
               # At least one Sprint check.
               if @project.sprints.empty?
-                tips << l(:label_tip_no_sprints, :link => project_settings_link)
+                tips << l(:label_tip_no_sprints,
+                          :link => link_to(l(:label_tip_new_sprint_link),
+                                           new_project_sprint_path(@project)))
+              end
+              # Product backlog (+release plan) checks.
+              if @product_backlog and @product_backlog.persisted?
+                # No PBIs check.
+                if @product_backlog.pbis.empty?
+                  tips << l(:label_tip_product_backlog_without_pbis, :link => product_backlog_link)
+                end
+                # Release plan checks.
+                if params[:controller] == "scrum" and params[:action] == "release_plan"
+                  # No versions check.
+                  if @project.versions.empty?
+                    tips << l(:label_tip_project_without_versions,
+                              :link => link_to(l(:label_tip_new_version_link),
+                                               new_project_version_path(@project)))
+                  end
+                end
+              end
+              # Sprint checks.
+              if @sprint and @sprint.persisted? and !(@sprint.is_product_backlog?)
+                sprint_board_link = link_to(l(:label_tip_sprint_board_link),
+                                            sprint_path(@sprint))
+                # No PBIs check.
+                if @sprint.pbis.empty?
+                  tips << l(:label_tip_sprint_without_pbis, :sprint_board_link => sprint_board_link,
+                            :product_backlog_link => product_backlog_link)
+                end
+                # No tasks check.
+                if @sprint.tasks.empty?
+                  tips << l(:label_tip_sprint_without_tasks, :link => sprint_board_link)
+                end
+                # No estimated effort check.
+                if @sprint.efforts.empty?
+                  tips << l(:label_tip_sprint_without_efforts,
+                            :link => link_to(l(:label_tip_sprint_effort_link),
+                                             edit_effort_sprint_path(@sprint)))
+                end
               end
             end
           end

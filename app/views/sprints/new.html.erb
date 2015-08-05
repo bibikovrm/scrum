@@ -1,4 +1,4 @@
-<h2><%= l(@sprint.is_product_backlog? ? :label_sprint_new : :label_product_backlog_new) %></h2>
+<h2><%= l(@sprint.is_product_backlog? ? :label_product_backlog_new : :label_sprint_new) %></h2>
 
 <%= labelled_form_for @sprint, :url => project_sprints_path(@project) do |f| %>
   <%= render :partial => "sprints/form", :locals => {:f => f} %>

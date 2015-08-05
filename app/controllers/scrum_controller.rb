@@ -232,6 +232,7 @@ class ScrumController < ApplicationController
   end
 
   def release_plan
+    @product_backlog = @project.product_backlog
     @sprints = []
     velocity_all_pbis, velocity_scheduled_pbis, @sprints_count = @project.story_points_per_sprint
     @velocity_type = params[:velocity_type] || "only_scheduled"

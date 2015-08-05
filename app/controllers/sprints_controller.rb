@@ -40,8 +40,8 @@ class SprintsController < ApplicationController
   end
 
   def new
-    @sprint = Sprint.new(:project => @project)
-    if params[:create_product_backlog]
+    @sprint = Sprint.new(:project => @project, :is_product_backlog => params[:create_product_backlog])
+    if @sprint.is_product_backlog
       @sprint.name = l(:label_product_backlog)
       @sprint.sprint_start_date = @sprint.sprint_end_date = Date.today
     end
