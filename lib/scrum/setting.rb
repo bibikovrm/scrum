@@ -64,11 +64,7 @@ module Scrum
     end
 
     def self.sprint_board_fields_for_tracker(tracker)
-      tracker_fields = tracker_fields(tracker.id, TrackerFields::FIELDS)
-      fields = [:status_id]
-      fields << :category_id if tracker_fields.include?("category_id")
-      fields << :fixed_version_id if tracker_fields.include?("fixed_version_id")
-      return fields
+      [:status_id, :category_id, :fixed_version_id]
     end
 
     def self.task_tracker
@@ -95,7 +91,7 @@ module Scrum
       setting_or_default_integer(:below_deviation_ratio, :min => 0, :max => 99)
     end
 
-    private
+  private
 
     def self.setting_or_default(setting)
       ::Setting.plugin_scrum[setting] ||
