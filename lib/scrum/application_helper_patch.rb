@@ -109,7 +109,7 @@ module Scrum
             end
             # Minimal plugin settings check.
             plugin_settings_link = link_to(l(:label_tip_plugin_settings_link),
-                                           :link => plugin_settings_path(:id => :scrum))
+                                           plugin_settings_path(:id => :scrum))
             if Scrum::Setting.story_points_custom_field_id.blank?
               tips << l(:label_tip_no_plugin_setting, :link => plugin_settings_link,
                         :setting => l(:label_setting_story_points_custom_field))
