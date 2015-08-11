@@ -131,7 +131,7 @@ module Scrum
                         :setting => l(:label_setting_pbi_statuses))
             end
             # Project configuration checks.
-            if @project and @project.module_enabled?(:scrum)
+            if @project and @project.persisted? and @project.module_enabled?(:scrum)
               product_backlog_link = link_to(l(:label_tip_product_backlog_link),
                                              project_product_backlog_index_path(@project))
               # PB exists check.
