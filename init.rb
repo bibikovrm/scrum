@@ -92,11 +92,11 @@ Redmine::Plugin.register :scrum do
                                  :render_updated_on_pbi => "0",
                                  :check_dependencies_on_pbi_sorting => "0",
                                  :product_burndown_sprints => "4",
-                                 :render_pbis_deviations => "1",
-                                 :render_tasks_deviations => "1",
-                                 :major_deviation_ratio => 150,
-                                 :minor_deviation_ratio => 120,
-                                 :below_deviation_ratio => 70,
+                                 :render_pbis_speed => "1",
+                                 :render_tasks_speed => "1",
+                                 :lowest_speed => 70,
+                                 :low_speed => 80,
+                                 :high_speed => 140,
                                  :render_plugin_tips => "1"},
                     :partial => "settings/scrum_settings"
 end
