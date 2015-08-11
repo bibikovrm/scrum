@@ -60,7 +60,7 @@ class SprintsController < ApplicationController
         raise "Fail to update project with product backlog" unless @project.save!
       end
       flash[:notice] = l(:notice_successful_create)
-      redirect_to settings_project_path(@project, :tab => "sprints")
+      redirect_back_or_default settings_project_path(@project, :tab => "sprints")
     else
       render :action => :new
     end
@@ -74,7 +74,7 @@ class SprintsController < ApplicationController
   def update
     if @sprint.update_attributes(params[:sprint])
       flash[:notice] = l(:notice_successful_update)
-      redirect_to settings_project_path(@project, :tab => "sprints")
+      redirect_back_or_default settings_project_path(@project, :tab => "sprints")
     else
       render :action => :edit
     end
@@ -130,7 +130,7 @@ class SprintsController < ApplicationController
       end
     end
     flash[:notice] = l(:notice_successful_update)
-    redirect_to settings_project_path(@project, :tab => "sprints")
+    redirect_back_or_default settings_project_path(@project, :tab => "sprints")
   end
 
   def burndown_index

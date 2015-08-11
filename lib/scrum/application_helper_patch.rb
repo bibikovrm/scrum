@@ -138,13 +138,14 @@ module Scrum
               if @project.product_backlog.nil?
                 tips << l(:label_tip_no_product_backlog,
                           :link => link_to(l(:label_tip_new_product_backlog_link),
-                                           new_project_sprint_path(@project, :create_product_backlog => true)))
+                                           new_project_sprint_path(@project, :create_product_backlog => true,
+                                                                   :back_url => url_for(params))))
               end
               # At least one Sprint check.
               if @project.sprints.empty?
                 tips << l(:label_tip_no_sprints,
                           :link => link_to(l(:label_tip_new_sprint_link),
-                                           new_project_sprint_path(@project)))
+                                           new_project_sprint_path(@project, :back_url => url_for(params))))
               end
               # Product backlog (+release plan) checks.
               if @product_backlog and @product_backlog.persisted?
@@ -158,7 +159,7 @@ module Scrum
                   if @project.versions.empty?
                     tips << l(:label_tip_project_without_versions,
                               :link => link_to(l(:label_tip_new_version_link),
-                                               new_project_version_path(@project)))
+                                               new_project_version_path(@project, :back_url => url_for(params))))
                   end
                 end
               end
@@ -179,7 +180,13 @@ module Scrum
                 if @sprint.efforts.empty?
                   tips << l(:label_tip_sprint_without_efforts,
                             :link => link_to(l(:label_tip_sprint_effort_link),
-                                             edit_effort_sprint_path(@sprint)))
+                                             edit_effort_sprint_path(@sprint, :back_url => url_for(params))))
+                end
+                # No project members on edit Sprint effort view.
+                if @project.members.empty? and params[:action].to_s == 'edit_effort'
+                  tips << l(:label_tip_project_without_members,
+                            :link => link_to(l(:label_tip_project_members_link),
+                                             settings_project_path(@project, :tab => :members)))
                 end
               end
             end

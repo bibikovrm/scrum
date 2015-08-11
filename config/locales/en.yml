@@ -114,6 +114,8 @@ en:
   label_tip_plugin_settings_link: "Administration » Plugins » Scrum Redmine plugin"
   label_tip_product_backlog_link: "Backlog » Product backlog"
   label_tip_product_backlog_without_pbis: "Product backlog without PBIs, you can add them in %{link}"
+  label_tip_project_members_link: "Settings » Members"
+  label_tip_project_without_members: "Project without members, you can add them in %{link}"
   label_tip_project_without_versions: "Project without versions for the release plan, you can add them in %{link}"
   label_tip_sprint_board_link: "Sprint » Sprint board"
   label_tip_sprint_effort_link: "Settings » Sprints » Edit effort"
