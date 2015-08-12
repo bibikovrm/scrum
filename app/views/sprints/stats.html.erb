@@ -157,6 +157,8 @@
                            :total => @effort_by_activity_total} %>
 <%- end -%>
 
+<%- if User.current.allowed_to?(:view_sprint_stats_by_member, @project) -%>
+
 <br />
 <br />
 
@@ -170,5 +172,7 @@
            :locals => {:graph => @efforts_by_member_and_activity_chart,
                        :element => {:label => l(:enumeration_activities), :name => :activity},
                        :rows => @efforts_by_member_and_activity} %>
+
+<%- end -%>
 
 <%= render :partial => "common/scrum_footer" %>

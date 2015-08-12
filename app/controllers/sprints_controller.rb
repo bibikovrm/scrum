@@ -260,8 +260,10 @@ class SprintsController < ApplicationController
     @effort_by_activity, @effort_by_activity_total = @sprint.time_entries_by_activity
     @effort_by_activity_chart = {:width => 400, :height => 400}
 
-    @efforts_by_member_and_activity = @sprint.efforts_by_member_and_activity
-    @efforts_by_member_and_activity_chart = {:id => "stats_efforts_by_member_and_activity", :height => 400}
+    if User.current.allowed_to?(:view_sprint_stats_by_member, @project)
+      @efforts_by_member_and_activity = @sprint.efforts_by_member_and_activity
+      @efforts_by_member_and_activity_chart = {:id => "stats_efforts_by_member_and_activity", :height => 400}
+    end
   end
 
 private
