@@ -10,6 +10,8 @@ var <%= graph[:id] %>_data = [
 nv.addGraph(function() {
   var chart = nv.models.multiBarChart()
     .color(d3.scale.category10().range())
+    .reduceXTicks(false)
+    .staggerLabels(true)
     .showControls(false);
   chart.tooltip.contentGenerator(function(data) {
     return '<h3>' + data.value + '</h3><p>' + data.series[0]['key'] + ': ' + data.series[0]['value'] + '</p>';
