@@ -45,7 +45,7 @@ module Scrum
         def hours_per_story_point
           results = {}
           media = 0.0
-          sprints_to_use = sprints.last
+          sprints_to_use = sprints
           max_sprints_count = sprints_to_use.count
           last_sprints_count = Scrum::Setting.product_burndown_sprints
           last_sprints_count = sprints_to_use.count if last_sprints_count > sprints_to_use.count
