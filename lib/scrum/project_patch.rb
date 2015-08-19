@@ -42,6 +42,25 @@ module Scrum
           return [story_points_per_sprint, scheduled_story_points_per_sprint, sprints_count]
         end
 
+        def hours_per_story_point
+          results = {}
+          media = 0.0
+          sprints_to_use = sprints.last(30)
+          max_sprints_count = sprints_to_use.count
+          last_sprints_count = Scrum::Setting.product_burndown_sprints
+          last_sprints_count = sprints_to_use.count if last_sprints_count > sprints_to_use.count
+          sprints_to_use.each_with_index { |sprint, i|
+            hours_per_story_point = sprint.hours_per_story_point
+            results[sprint.name] = hours_per_story_point
+            if i >= max_sprints_count - last_sprints_count
+              media += hours_per_story_point
+            end
+          }
+          media = (media / last_sprints_count).round(2) if last_sprints_count > 0
+          results[l(:label_media_last_n_sprints, :n => last_sprints_count)] = media
+          return {l(:label_hours_per_story_point) => results}
+        end
+
       private
 
         def filter_story_points(story_points, sprints_count)

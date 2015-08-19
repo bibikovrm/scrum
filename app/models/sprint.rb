@@ -202,6 +202,15 @@ class Sprint < ActiveRecord::Base
      "#{table}.id"]
   end
 
+  def total_time
+    pbis.collect{|pbi| pbi.total_time}.compact.sum
+  end
+
+  def hours_per_story_point
+    sps = story_points
+    sps > 0 ? (total_time / sps).round(2) : 0.0
+  end
+
 private
 
   def update_project_product_backlog

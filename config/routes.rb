@@ -33,6 +33,7 @@ resources :projects do
       get :burndown
       get :burndown_graph
       get :check_dependencies
+      get :stats
     end
   end
   get "product_backlog/new_pbi/:tracker_id",

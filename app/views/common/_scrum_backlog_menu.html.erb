@@ -7,6 +7,10 @@
     <%= link_to(l(:label_product_backlog_burndown_chart), burndown_project_product_backlog_index_path(@project),
                 :class => "icon icon-burndown") %>
   <%- end -%>
+  <%- if User.current.allowed_to?(:view_product_backlog_stats, @project) -%>
+    <%= link_to(l(:label_product_backlog_stats), stats_project_product_backlog_index_path(@project),
+                :class => "icon icon-stats") %>
+  <%- end -%>
   <%- if User.current.allowed_to?(:view_release_plan, @project) -%>
     <%= link_to(l(:label_release_plan), project_release_plan_path(@project),
                 :class => "icon icon-release-plan") %>
