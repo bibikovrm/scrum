@@ -7,14 +7,15 @@
 
 class ScrumController < ApplicationController
 
-  menu_item :product_backlog
+  menu_item :product_backlog, :except => [:stats]
+  menu_item :overview, :only => [:stats]
 
   before_filter :find_issue, :only => [:change_story_points, :change_pending_effort, :change_assigned_to,
                                        :new_time_entry, :create_time_entry, :edit_task, :update_task]
   before_filter :find_sprint, :only => [:new_pbi, :create_pbi]
   before_filter :find_pbi, :only => [:new_task, :create_task, :edit_pbi, :update_pbi, :move_pbi,
                                      :move_to_last_sprint, :move_to_product_backlog]
-  before_filter :find_project_by_project_id, :only => [:release_plan]
+  before_filter :find_project_by_project_id, :only => [:release_plan, :stats]
   before_filter :authorize, :except => [:new_pbi, :create_pbi, :new_task, :create_task,
                                         :new_time_entry, :create_time_entry]
   before_filter :authorize_add_issues, :only => [:new_pbi, :create_pbi, :new_task, :create_task]
@@ -280,6 +281,16 @@ class ScrumController < ApplicationController
         @sprints[info[:sprint]][:versions] << info[:version]
       end
     end
+  end
+
+  def stats
+    if User.current.allowed_to_view_all_time_entries?(@project)
+      cond = @project.project_condition(Setting.display_subprojects_issues?)
+      @total_hours = TimeEntry.visible.where(cond).sum(:hours).to_f
+    end
+
+    @hours_per_story_point = @project.hours_per_story_point
+    @hours_per_story_point_chart = {:id => "hours_per_story_point", :height => 400}
   end
 
 private

@@ -64,10 +64,10 @@ Redmine::Plugin.register :scrum do
                     :require => :member
     permission      :view_product_backlog_burndown,
                     {:product_backlog => [:burndown]}
-    permission      :view_product_backlog_stats,
-                    {:product_backlog => [:stats]}
     permission      :view_release_plan,
                     {:scrum => [:release_plan]}
+    permission      :view_scrum_stats,
+                    {:scrum => [:stats]}
   end
 
   menu              :project_menu, :product_backlog, {:controller => :product_backlog, :action => :index},

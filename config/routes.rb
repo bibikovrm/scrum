@@ -33,7 +33,6 @@ resources :projects do
       get :burndown
       get :burndown_graph
       get :check_dependencies
-      get :stats
     end
   end
   get "product_backlog/new_pbi/:tracker_id",
@@ -43,6 +42,9 @@ resources :projects do
   get "release_plan",
       :controller => :scrum, :action => :release_plan,
       :as => :release_plan
+  get "scrum/stats",
+      :controller => :scrum, :action => :stats,
+      :as => :scrum_stats
 
 end
 

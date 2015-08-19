@@ -11,10 +11,9 @@ class ProductBacklogController < ApplicationController
   model_object Issue
 
   before_filter :find_project_by_project_id,
-                :only => [:index, :sort, :new_pbi, :create_pbi, :burndown, :check_dependencies, :stats]
+                :only => [:index, :sort, :new_pbi, :create_pbi, :burndown, :check_dependencies]
   before_filter :find_product_backlog,
-                :only => [:index, :render_pbi, :sort, :new_pbi, :create_pbi, :burndown, :check_dependencies,
-                          :stats]
+                :only => [:index, :render_pbi, :sort, :new_pbi, :create_pbi, :burndown, :check_dependencies]
   before_filter :find_pbis, :only => [:index, :sort]
   before_filter :check_issue_positions, :only => [:index]
   before_filter :authorize
@@ -111,11 +110,6 @@ class ProductBacklogController < ApplicationController
                                           :sprint => @data[i][:axis_label],
                                           :story_points => @data[i][:story_points])
     end
-  end
-
-  def stats
-    @hours_per_story_point = @project.hours_per_story_point
-    @hours_per_story_point_chart = {:id => "hours_per_story_point", :height => 400}
   end
 
 private
