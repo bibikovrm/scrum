@@ -8,7 +8,7 @@
 # Take a look to licence.txt file at plugin root folder for further details.
 
 # This plugin should be reloaded in development mode.
-if (Rails.env == "development")
+if (Rails.env == 'development')
   ActiveSupport::Dependencies.autoload_once_paths.reject!{|x| x =~ /^#{Regexp.escape(File.dirname(__FILE__))}/}
 end
 
@@ -23,17 +23,17 @@ ProjectsHelper.send(:include, Scrum::ProjectsHelperPatch)
 Tracker.send(:include, Scrum::TrackerPatch)
 User.send(:include, Scrum::UserPatch)
 
-require_dependency "scrum/helper_hooks"
-require_dependency "scrum/view_hooks"
+require_dependency 'scrum/helper_hooks'
+require_dependency 'scrum/view_hooks'
 
 Redmine::Plugin.register :scrum do
-  name              "Scrum Redmine plugin"
-  author            "Emilio González Montaña"
-  description       "This plugin for Redmine allows to follow Scrum methodology with Redmine projects"
-  version           "0.13.0"
-  url               "https://redmine.ociotec.com/projects/redmine-plugin-scrum"
-  author_url        "http://ociotec.com"
-  requires_redmine  :version_or_higher => "3.0.0"
+  name              'Scrum Redmine plugin'
+  author            'Emilio González Montaña'
+  description       'This plugin for Redmine allows to follow Scrum methodology with Redmine projects'
+  version           '0.13.0'
+  url               'https://redmine.ociotec.com/projects/redmine-plugin-scrum'
+  author_url        'http://ociotec.com'
+  requires_redmine  :version_or_higher => '3.0.0'
 
   project_module    :scrum do
     permission      :manage_sprints,
@@ -78,30 +78,30 @@ Redmine::Plugin.register :scrum do
   menu              :project_menu, :sprint, {:controller => :sprints, :action => :index},
                     :caption => :label_menu_sprint, :after => :activity, :param => :project_id
 
-  settings          :default => {:create_journal_on_pbi_position_change => "0",
-                                 :doer_color => "post-it-color-5",
+  settings          :default => {:create_journal_on_pbi_position_change => '0',
+                                 :doer_color => 'post-it-color-5',
                                  :pbi_status_ids => [],
                                  :pbi_tracker_ids => [],
-                                 :reviewer_color => "post-it-color-3",
-                                 :blocked_color => "post-it-color-6",
+                                 :reviewer_color => 'post-it-color-3',
+                                 :blocked_color => 'post-it-color-6',
                                  :story_points_custom_field_id => nil,
                                  :blocked_custom_field_id => nil,
                                  :task_status_ids => [],
                                  :task_tracker_ids => [],
                                  :verification_activity_ids => [],
-                                 :inherit_pbi_attributes => "1",
-                                 :render_position_on_pbi => "0",
-                                 :render_category_on_pbi => "1",
-                                 :render_version_on_pbi => "1",
-                                 :render_author_on_pbi => "1",
-                                 :render_updated_on_pbi => "0",
-                                 :check_dependencies_on_pbi_sorting => "0",
-                                 :product_burndown_sprints => "4",
-                                 :render_pbis_speed => "1",
-                                 :render_tasks_speed => "1",
+                                 :inherit_pbi_attributes => '1',
+                                 :render_position_on_pbi => '0',
+                                 :render_category_on_pbi => '1',
+                                 :render_version_on_pbi => '1',
+                                 :render_author_on_pbi => '1',
+                                 :render_updated_on_pbi => '0',
+                                 :check_dependencies_on_pbi_sorting => '0',
+                                 :product_burndown_sprints => '4',
+                                 :render_pbis_speed => '1',
+                                 :render_tasks_speed => '1',
                                  :lowest_speed => 70,
                                  :low_speed => 80,
                                  :high_speed => 140,
-                                 :render_plugin_tips => "1"},
-                    :partial => "settings/scrum_settings"
+                                 :render_plugin_tips => '1'},
+                    :partial => 'settings/scrum_settings'
 end
