@@ -19,7 +19,14 @@ module Scrum
                  :class_name => "Sprint", :dependent => :destroy
 
         def last_sprint
-          sprints.sort{|a, b| a.sprint_end_date <=> b.sprint_end_date}.last
+          sprints.last
+        end
+
+        def current_sprint
+          today = Date.today
+          current_sprint = sprints.where('sprint_start_date <= ?', today)
+                                  .where('sprint_end_date >= ?', today).last
+          current_sprint ? current_sprint : last_sprint
         end
 
         def story_points_per_sprint

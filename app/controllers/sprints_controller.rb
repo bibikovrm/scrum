@@ -26,8 +26,8 @@ class SprintsController < ApplicationController
   helper :timelog
 
   def index
-    if @project.last_sprint
-      redirect_to sprint_path(@project.last_sprint)
+    if (current_sprint = @project.current_sprint)
+      redirect_to sprint_path(current_sprint)
     else
       render_error l(:error_no_sprints)
     end
