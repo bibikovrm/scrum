@@ -1,4 +1,5 @@
-<tr class="sprint-board" id="<%= "pbi_#{pbi.id}_row" %>">
+<%- pbi_row_id = "pbi_#{pbi.id}_row" -%>
+<tr class="sprint-board post-it-vertical-move-cursor" id="<%= pbi_row_id %>">
   <td class="sprint-board">
     <%= render :partial => "post_its/sprint_board/pbi", :formats => [:html],
                :locals => {:project => project, :pbi => pbi, :read_only => false} %>

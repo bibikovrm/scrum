@@ -12,13 +12,14 @@ class SprintsController < ApplicationController
 
   before_filter :find_model_object,
                 :only => [:show, :edit, :update, :destroy, :edit_effort, :update_effort, :burndown,
-                          :stats]
+                          :stats, :sort]
   before_filter :find_project_from_association,
                 :only => [:show, :edit, :update, :destroy, :edit_effort, :update_effort, :burndown,
-                          :stats]
+                          :stats, :sort]
   before_filter :find_project_by_project_id,
                 :only => [:index, :new, :create, :change_task_status, :burndown_index,
                           :stats_index]
+  before_filter :find_pbis, :only => [:sort]
   before_filter :authorize
 
   helper :custom_fields
@@ -266,6 +267,21 @@ class SprintsController < ApplicationController
     end
   end
 
+  def sort
+    new_pbis_order = []
+    params.keys.each do |param|
+      id = param.scan(/pbi\_(\d+)/)
+      new_pbis_order << id[0][0].to_i if id and id[0] and id[0][0]
+    end
+    @pbis.each do |pbi|
+      if (index = new_pbis_order.index(pbi.id))
+        pbi.position = index + 1
+        pbi.save!
+      end
+    end
+    render :nothing => true
+  end
+
 private
 
   def init_members_efforts(members_efforts, member)
@@ -290,6 +306,12 @@ private
       member_efforts_days[date] = 0.0
     end
     return member_efforts_days
+  end
+
+  def find_pbis
+    @pbis = @sprint.pbis
+  rescue
+    render_404
   end
 
 end

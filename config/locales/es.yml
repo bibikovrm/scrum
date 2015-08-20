@@ -143,6 +143,7 @@ es:
   permission_edit_sprint_board: "Editar tablero del Sprint"
   permission_manage_sprints: "Administrar Sprints"
   permission_sort_product_backlog: "Ordenar la pila de producto"
+  permission_sort_sprint_board: "Ordenar tablero del Sprint"
   permission_view_product_backlog: "Ver pila de producto"
   permission_view_product_backlog_burndown: "Ver burndown de la pila de producto"
   permission_view_release_plan: "Ver plan de liberaciones"

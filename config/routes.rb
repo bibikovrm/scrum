@@ -16,6 +16,7 @@ resources :projects do
       get :burndown
       get :burndown_graph
       get :stats
+      post :sort
     end
     collection do
       get :burndown_index
