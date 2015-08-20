@@ -123,6 +123,7 @@ es:
   label_tip_project_without_versions: "Proyecto sin versiones para el plan de liberaciones, puedes crearlas en %{link}"
   label_tip_sprint_board_link: "Sprint » Tablero del Sprint"
   label_tip_sprint_effort_link: "Configuración » Sprints » Editar esfuerzo"
+  label_tip_sprint_with_orphan_tasks: "Sprint con tareas huérfanas (sin EPP padre) %{link}"
   label_tip_sprint_without_efforts: "Sprint sin esfuerzo planificado, puedes añadirlo en %{link}"
   label_tip_sprint_without_pbis: "Sprint sin EPPs, puedes añadirlos en %{sprint_board_link} o moviéndolos al Sprint en %{product_backlog_link}"
   label_tip_sprint_without_tasks: "Sprint sin tareas, puedes añadirlas en %{link}"

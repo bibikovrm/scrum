@@ -123,6 +123,7 @@ en:
   label_tip_project_without_versions: "Project without versions for the release plan, you can add them in %{link}"
   label_tip_sprint_board_link: "Sprint » Sprint board"
   label_tip_sprint_effort_link: "Settings » Sprints » Edit effort"
+  label_tip_sprint_with_orphan_tasks: "Sprint with orphan tasks (no parent PBI) %{link}"
   label_tip_sprint_without_efforts: "Sprint without estimated effort, you can add it in %{link}"
   label_tip_sprint_without_pbis: "Sprint without PBIs, you can add them in %{sprint_board_link} or moving them to the Sprint in %{product_backlog_link}"
   label_tip_sprint_without_tasks: "Sprint without tasks, you can add them in %{link}"
