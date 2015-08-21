@@ -13,6 +13,7 @@ if (Rails.env == 'development')
 end
 
 ApplicationHelper.send(:include, Scrum::ApplicationHelperPatch)
+CalendarsController.send(:include, Scrum::CalendarsControllerPatch)
 Issue.send(:include, Scrum::IssuePatch)
 IssueQuery.send(:include, Scrum::IssueQueryPatch)
 IssuesController.send(:include, Scrum::IssuesControllerPatch)
@@ -20,6 +21,7 @@ IssueStatus.send(:include, Scrum::IssueStatusPatch)
 Journal.send(:include, Scrum::JournalPatch)
 Project.send(:include, Scrum::ProjectPatch)
 ProjectsHelper.send(:include, Scrum::ProjectsHelperPatch)
+Query.send(:include, Scrum::QueryPatch)
 Tracker.send(:include, Scrum::TrackerPatch)
 User.send(:include, Scrum::UserPatch)
 
