@@ -291,6 +291,10 @@ class ScrumController < ApplicationController
 
     @hours_per_story_point = @project.hours_per_story_point
     @hours_per_story_point_chart = {:id => "hours_per_story_point", :height => 400}
+
+    @sps_by_pbi_category, @sps_by_pbi_category_total = @project.sps_by_category
+    @sps_by_pbi_type, @sps_by_pbi_type_total = @project.sps_by_pbi_type
+    @effort_by_activity, @effort_by_activity_total = @project.effort_by_activity
   end
 
 private
