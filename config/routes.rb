@@ -55,6 +55,9 @@ post "issues/:id/story_points",
 post "issues/:id/pending_effort",
      :controller => :scrum, :action => :change_pending_effort,
      :as => :change_pending_effort
+post "issues/:id/pending_efforts",
+     :controller => :scrum, :action => :change_pending_efforts,
+     :as => :change_pending_efforts
 post "issues/:id/assigned_to",
      :controller => :scrum, :action => :change_assigned_to,
      :as => :change_assigned_to

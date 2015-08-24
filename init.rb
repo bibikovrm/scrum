@@ -46,8 +46,8 @@ Redmine::Plugin.register :scrum do
     permission      :edit_sprint_board,
                     {:sprints => [:change_task_status, :sort],
                      :scrum => [:change_story_points, :change_pending_effort, :change_assigned_to,
-                               :new_pbi, :create_pbi, :edit_pbi, :update_pbi,
-                               :new_task, :create_task, :edit_task, :update_task]},
+                                :new_pbi, :create_pbi, :edit_pbi, :update_pbi,
+                                :new_task, :create_task, :edit_task, :update_task]},
                     :require => :member
     permission      :sort_sprint_board,
                     {:sprints => [:sort]},
