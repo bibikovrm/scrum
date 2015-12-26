@@ -20,7 +20,7 @@ module Scrum
           continue = true
           if (journalized_type == 'Issue') and
               (!(Scrum::Setting.create_journal_on_pbi_position_change))
-            details.replace(details.where.not(prop_key: 'position')) unless details.blank?
+            details.replace(details.where.not(:prop_key => 'position')) unless details.blank?
             continue = false if notes.blank? and details.blank?
           end
           return(continue)
