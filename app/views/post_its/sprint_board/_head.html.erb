@@ -1,5 +1,5 @@
-<table class="box attributes">
-  <tr>
+<table class="box attributes" width="100%">
+  <tr valign="top">
     <td width="300px">
       <div class="tabular">
         <p>
@@ -21,7 +21,7 @@
     </td>
     <%- if !(sprint.description.blank?) -%>
       <td>
-        <%= raw(Redmine::WikiFormatting::Textile::Formatter.new(sprint.description).to_html(true)) %>
+        <%= textilizable(sprint.description) %>
       </td>
     <%- end -%>
   </tr>
