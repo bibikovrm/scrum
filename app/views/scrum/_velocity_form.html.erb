@@ -9,7 +9,9 @@
 
       <%= label_tag(:velocity_type_only_scheduled) do %>
         <%= radio_button_tag(:velocity_type, "only_scheduled", velocity_type == "only_scheduled") %>
-        <%= l(:label_velocity_only_scheduled_pbis) %>
+        <%= content_tag('abbr', :title => l(:label_velocity_only_scheduled_pbis_hint)) do %>
+          <%= l(:label_velocity_only_scheduled_pbis) %>
+        <% end %>
       <% end %>
       &nbsp;&nbsp;&nbsp;
 

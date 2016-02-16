@@ -134,6 +134,7 @@ es:
     other: "Usar todos los EPPs de los últimos %{count} Sprints para calcular la velocidad"
   label_velocity_custom: "Valor personalizado:"
   label_velocity_only_scheduled_pbis: "Sólo los planificados"
+  label_velocity_only_scheduled_pbis_hint: "Esto excluye del cálculo cualquier EPP creado una vez que el Sprint ha comenzado"
   notice_pbi_created: "El elemento de la pila de producto fue creado con éxito"
   notice_sprint_has_issues: "El Sprint tiene peticiones"
   notice_task_created: "La tarea fue creada con éxito"
