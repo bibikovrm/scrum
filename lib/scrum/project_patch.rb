@@ -17,6 +17,8 @@ module Scrum
                  :dependent => :destroy
         has_many :sprints_and_product_backlog, -> { order("sprint_start_date ASC, name ASC") },
                  :class_name => "Sprint", :dependent => :destroy
+        has_many :open_sprints_and_product_backlog, -> { where(:status => 'open').order("sprint_start_date ASC, name ASC") },
+                 :class_name => "Sprint", :dependent => :destroy
 
         def last_sprint
           sprints.last

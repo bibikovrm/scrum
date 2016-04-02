@@ -2,9 +2,9 @@
   <div class="splitcontent">
     <div class="splitcontentleft">
       <p>
-        <%- sprints = @issue.project.sprints_and_product_backlog
-            options = options_for_select(sprints.collect {|sprint| [sprint.name, sprint.id]}, @issue.sprint_id) -%>
-        <%= form.select :sprint_id, options, :include_blank => true %>
+        <%= form.select :sprint_id,
+                        options_for_select(@issue.assignable_sprints, @issue.sprint),
+                        :include_blank => true %>
       </p>
     </div>
     <%- if @issue.is_task? -%>

@@ -95,6 +95,8 @@ en:
   label_sprint_plural: "Sprints"
   label_sprint_stats: "Sprint stats"
   label_sprint_stats_name: "%{name} stats"
+  label_sprint_status_closed: "Closed"
+  label_sprint_status_open: "Open"
   label_sps_by_pbi_category: "SPs by PBI category"
   label_sps_by_pbi_creation_date: "SPs by PBI creation date"
   label_sps_by_pbi_type: "SPs by PBI type"

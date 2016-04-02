@@ -250,7 +250,21 @@ module Scrum
           return ((!(position.nil?)) and (!(max.nil?)) and (position >= max))
         end
 
-      protected
+        def assignable_sprints
+          return @assignable_sprints if @assignable_sprints
+
+          sprints = project.open_sprints_and_product_backlog.to_a
+          if sprint
+            if sprint_id_changed?
+              # nothing to do
+            else
+              sprints << sprint
+            end
+          end
+          @assignable_sprints = sprints.uniq.sort
+        end
+
+        protected
 
         def copy_attribute(source_issue, attribute)
           if self.safe_attribute?(attribute) and source_issue.safe_attribute?(attribute)

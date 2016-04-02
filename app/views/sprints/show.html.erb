@@ -28,7 +28,8 @@
 </table>
 
 <%- if User.current.allowed_to?(:add_issues, @project) and
-       User.current.allowed_to?(:edit_sprint_board, @project) -%>
+       User.current.allowed_to?(:edit_sprint_board, @project) and
+       @sprint.open? -%>
   <div>
     <%- Tracker.pbi_trackers(@project).each do |tracker| -%>
       <%= link_to tracker.name, new_pbi_path(@sprint, tracker), :remote => true,

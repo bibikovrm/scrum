@@ -13,4 +13,8 @@
     <%= f.text_field :sprint_end_date, :size => 10, :required => true, :label => l(:field_end_date) %>
     <%= calendar_for "sprint_sprint_end_date" %>
   </p>
+  <p><%= f.select :status,
+                  Sprint::SPRINT_STATUSES.collect { |status|
+                    [l("label_sprint_status_#{status}"), status]
+                  } %></p>
 </div>

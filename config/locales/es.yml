@@ -95,6 +95,8 @@ es:
   label_sprint_plural: "Sprints"
   label_sprint_stats: "Estadísticas del Sprint"
   label_sprint_stats_name: "Estadísticas del %{name}"
+  label_sprint_status_closed: "Cerrado"
+  label_sprint_status_open: "Abierto"
   label_sps_by_pbi_category: "PHs por categoría de EPP"
   label_sps_by_pbi_creation_date: "PHs por fecha de creación de EPP"
   label_sps_by_pbi_type: "PHs por tipo de EPP"

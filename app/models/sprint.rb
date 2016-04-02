@@ -12,17 +12,21 @@ class Sprint < ActiveRecord::Base
   has_many :issues, :dependent => :destroy
   has_many :efforts, :class_name => "SprintEffort", :dependent => :destroy
   scope :sorted, -> { order(fields_for_order_statement) }
+  scope :open, -> { where(:status => 'open') }
 
   include Redmine::SafeAttributes
-  safe_attributes :name, :description, :sprint_start_date, :sprint_end_date
+  safe_attributes :name, :description, :sprint_start_date, :sprint_end_date, :status
   attr_protected :id
+
+  SPRINT_STATUSES = %w(open closed)
 
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => [:project_id]
   validates_length_of :name, :maximum => 60
   validates_presence_of :sprint_start_date
   validates_presence_of :sprint_end_date
-  
+  validates_inclusion_of :status, :in => SPRINT_STATUSES
+
   before_destroy :update_project_product_backlog
 
   def to_s
@@ -215,6 +219,14 @@ class Sprint < ActiveRecord::Base
   def hours_per_story_point
     sps = story_points
     sps > 0 ? (total_time / sps).round(2) : 0.0
+  end
+
+  def closed?
+    status == 'closed'
+  end
+
+  def open?
+    status == 'open'
   end
 
 private
