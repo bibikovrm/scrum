@@ -241,6 +241,11 @@ ul.pbis li table tr td.header-1 {
 	text-align: left;
 }
 
+.pb-pbi-mini-post-its-container {
+	font-size: 1.4em;
+	color: black;
+}
+
 ul.pbis li table tr td.header-2 {
 	text-align: right;
 }
