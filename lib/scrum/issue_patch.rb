@@ -298,16 +298,20 @@ module Scrum
 
         def min_position
           min = nil
-          sprint.pbis.each do |pbi|
-            min = pbi.position if min.nil? or (pbi.position < min)
+          unless sprint.nil?
+            sprint.pbis.each do |pbi|
+              min = pbi.position if min.nil? or (pbi.position < min)
+            end
           end
           return min
         end
 
         def max_position
           max = nil
-          sprint.pbis.each do |pbi|
-            max = pbi.position if max.nil? or (pbi.position > max)
+          unless sprint.nil?
+            sprint.pbis.each do |pbi|
+              max = pbi.position if max.nil? or (pbi.position > max)
+            end
           end
           return max
         end
