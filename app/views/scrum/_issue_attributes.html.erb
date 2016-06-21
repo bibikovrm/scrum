@@ -86,11 +86,13 @@
                         :no_label => true %>
       <% end %>
     </p>
+    <%= wikitoolbar_for 'issue_description' %>
   <%- end -%>
 
   <%- if issue.id -%>
     <p>
       <%= f.text_area :notes, :cols => 60, :rows => 5, :class => "wiki-edit" %>
     </p>
+    <%= wikitoolbar_for 'issue_notes' %>
   <%- end -%>
 </div>
