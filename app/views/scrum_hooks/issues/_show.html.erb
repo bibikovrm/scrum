@@ -13,11 +13,12 @@
       rows.right l(:field_position), @issue.position, :class => 'position'
     elsif @issue.is_task?
       if @issue.pending_effort
-        content = render_to_string(:partial => 'scrum_hooks/issues/pending_effort',
-                                   :locals => {:issue => @issue})
-        if User.current.allowed_to?(:edit_issues, @issue.project)
-          content += render_to_string(:partial => 'scrum_hooks/issues/edit_pending_effort',
+        ac = ActionController::Base.new()
+        content = ac.render_to_string(:partial => 'scrum_hooks/issues/pending_effort',
                                       :locals => {:issue => @issue})
+        if User.current.allowed_to?(:edit_issues, @issue.project)
+          content += ac.render_to_string(:partial => 'scrum_hooks/issues/edit_pending_effort',
+                                         :locals => {:issue => @issue})
         end
       end
       rows.right l(:field_pending_effort), content, :class => 'pending_effort'
