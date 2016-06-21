@@ -282,7 +282,7 @@ module Scrum
             else
               move_issue_to_the_end_of_the_sprint
             end
-          elsif sprint and (old_sprint = Sprint.find(sprint_id_was))
+          elsif sprint and (old_sprint = Sprint.find_by_id(sprint_id_was))
             if old_sprint.is_product_backlog
               # From PB to Sprint
               move_issue_to_the_end_of_the_sprint

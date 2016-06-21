@@ -3,7 +3,7 @@
     <div class="splitcontentleft">
       <p>
         <%= form.select :sprint_id,
-                        options_for_select(@issue.assignable_sprints, @issue.sprint),
+                        options_from_collection_for_select(@issue.assignable_sprints, 'id', 'name', @issue.sprint),
                         :include_blank => true %>
       </p>
     </div>
