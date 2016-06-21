@@ -19,7 +19,7 @@
       if @issue.pending_effort
         content = raw(l('datetime.distance_in_words.x_hours', :count => @issue.pending_effort)) +
                   raw('&nbsp;') +
-                  link_to('', '#', :class => 'icon icon-magnifier',
+                  link_to('', '#', :class => 'icon icon-zoom-in',
                           :onclick => '$("#pending_effort").dialog({modal: true});')
         if User.current.allowed_to?(:edit_issues, @issue.project)
           content += link_to('', '#', :class => 'icon icon-edit',
