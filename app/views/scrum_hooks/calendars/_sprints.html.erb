@@ -1,7 +1,8 @@
 <script language="javascript">
-  function AddSprintToDay(sprintName, sprintUrl, day, start)
+  function AddSprintToDay(sprintName, sprintUrl, day, week, start)
   {
     var cellElement = null;
+    var cellElementWeekNumber = null;
     var dayOneFound = false;
     var elements = document.getElementsByTagName("*");
     for (var i = 0; (cellElement == null) && (i < elements.length); i++)
@@ -16,6 +17,26 @@
         if (dayOneFound && (oneDay == day))
         {
           cellElement = elements[i].parentNode;
+          if (cellElement != null)
+          {
+            var cellParentTr = cellElement.parentNode;
+            if (cellParentTr != null)
+            {
+              var cellParentTrFirstId = cellParentTr.childNodes[1];
+              if (cellParentTrFirstId != null)
+              {
+                cellElementWeekNumber = parseInt(cellParentTrFirstId.innerText);
+              }
+              if ((cellElementWeekNumber != null) && (cellElementWeekNumber == week))
+              {
+                cellElement = elements[i].parentNode;
+              }
+              else
+              {
+                cellElement = null;
+              }
+            }
+          }
         }
       }
     }
@@ -33,7 +54,7 @@
   <%- if sprints and sprints.any? -%>
     <%- sprints.each do |sprint| -%>
       AddSprintToDay("<%= sprint[:name] %>", "<%= sprint[:url] %>", <%= sprint[:day] %>,
-                     <%= sprint[:start] ? 'true' : 'false' %>);
+                     <%= sprint[:week] %>, <%= sprint[:start] ? 'true' : 'false' %>);
     <%- end -%>
   <%- end -%>
 </script>

@@ -38,6 +38,7 @@ module Scrum
                                         :action => :show,
                                         :id => sprint.id),
                         :day => sprint.send(date_field).day,
+                        :week => sprint.send(date_field).cweek,
                         :start => start}
           end
         end
