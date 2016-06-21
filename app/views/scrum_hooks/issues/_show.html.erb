@@ -1,27 +1,38 @@
 <%- if @project.module_enabled?(:scrum) -%>
   <%= issue_fields_rows do |rows|
     if @issue.sprint.nil?
-      link = nil
-    elsif @issue.sprint.is_product_backlog
-      link = project_product_backlog_index_path(@project)
+      content = ''
     else
-      link = @issue.sprint
+      if @issue.sprint.is_product_backlog
+        object = project_product_backlog_index_path(@project)
+      else
+        object = @issue.sprint
+      end
+      content = link_to(h(@issue.sprint.name), object)
     end
-    rows.left l(:label_sprint), link_to(h(@issue.sprint.name), link), :class => 'sprint'
+    rows.left l(:label_sprint), content, :class => 'sprint'
 
     if @issue.is_pbi?
       rows.right l(:field_position), @issue.position, :class => 'position'
     elsif @issue.is_task?
+      content = ''
       if @issue.pending_effort
-        ac = ActionController::Base.new()
-        content = ac.render_to_string(:partial => 'scrum_hooks/issues/pending_effort',
-                                      :locals => {:issue => @issue})
+        content = raw(l('datetime.distance_in_words.x_hours', :count => @issue.pending_effort)) +
+                  raw('&nbsp;') +
+                  link_to('', '#', :class => 'icon icon-magnifier',
+                          :onclick => '$("#pending_effort").dialog({modal: true});')
         if User.current.allowed_to?(:edit_issues, @issue.project)
-          content += ac.render_to_string(:partial => 'scrum_hooks/issues/edit_pending_effort',
-                                         :locals => {:issue => @issue})
+          content += link_to('', '#', :class => 'icon icon-edit',
+                             :onclick => '$("#edit_pending_effort").dialog({modal: true});')
         end
       end
       rows.right l(:field_pending_effort), content, :class => 'pending_effort'
     end
   end %>
+  <%- if @issue.is_task? and @issue.pending_effort -%>
+    <%= render(:partial => 'scrum_hooks/issues/pending_effort', :locals => {:issue => @issue}) %>
+    <%- if User.current.allowed_to?(:edit_issues, @issue.project) -%>
+      <%= render(:partial => 'scrum_hooks/issues/edit_pending_effort', :locals => {:issue => @issue}) %>
+    <%- end -%>
+  <%- end -%>
 <%- end -%>

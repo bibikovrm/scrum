@@ -1,6 +1,4 @@
-<%= link_to '', '#', :class => 'icon icon-edit',
-            :onclick => '$("#edit_pending_effort").toggle();' %>
-<div id="edit_pending_effort" style="display: none;">
+<div id="edit_pending_effort" class="scrum-dialog" title="<%= l(:field_pending_effort) %>">
   <%= form_tag(change_pending_efforts_path(issue), :method => :post) do %>
     <table align="center">
       <tr>
