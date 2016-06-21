@@ -298,7 +298,7 @@ class ScrumController < ApplicationController
   end
 
   def stats
-    if User.current.allowed_to_view_all_time_entries?(@project)
+    if User.current.allowed_to?(:view_time_entries, @project)
       cond = @project.project_condition(Setting.display_subprojects_issues?)
       @total_hours = TimeEntry.visible.where(cond).sum(:hours).to_f
     end
