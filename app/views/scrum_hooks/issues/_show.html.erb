@@ -20,19 +20,15 @@
         content = raw(l('datetime.distance_in_words.x_hours', :count => @issue.pending_effort)) +
                   raw('&nbsp;') +
                   link_to('', '#', :class => 'icon icon-zoom-in',
-                          :onclick => '$("#pending_effort").dialog({modal: true});')
+                          :onclick => '$("#pending_effort").dialog({modal: true});') +
+                  render(:partial => 'scrum_hooks/issues/pending_effort', :locals => {:issue => @issue})
         if User.current.allowed_to?(:edit_issues, @issue.project)
           content += link_to('', '#', :class => 'icon icon-edit',
-                             :onclick => '$("#edit_pending_effort").dialog({modal: true});')
+                             :onclick => '$("#edit_pending_effort").dialog({modal: true});') +
+                     render(:partial => 'scrum_hooks/issues/edit_pending_effort', :locals => {:issue => @issue})
         end
       end
       rows.right l(:field_pending_effort), content, :class => 'pending_effort'
     end
   end %>
-  <%- if @issue.is_task? and @issue.pending_effort -%>
-    <%= render(:partial => 'scrum_hooks/issues/pending_effort', :locals => {:issue => @issue}) %>
-    <%- if User.current.allowed_to?(:edit_issues, @issue.project) -%>
-      <%= render(:partial => 'scrum_hooks/issues/edit_pending_effort', :locals => {:issue => @issue}) %>
-    <%- end -%>
-  <%- end -%>
 <%- end -%>
