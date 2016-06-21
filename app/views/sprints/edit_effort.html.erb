@@ -28,18 +28,18 @@
     <table class="list" style="overflow: auto;">
       <thead>
         <tr>
-          <th><%= l(:field_user) %></th>
+          <th style="text-align: left;"><%= l(:field_user) %></th>
           <%- ((@sprint.sprint_start_date)..(@sprint.sprint_end_date)).each do |date| -%>
-            <th><%= I18n.l(date, :format => :scrum_day) %><br /><%= date.day %></th>
+            <th style="text-align: center;"><%= I18n.l(date, :format => :scrum_day) %><br /><%= date.day %></th>
           <%- end -%>
         </tr>
       </thead>
       <tbody>
         <%- @project.members.each do |member| -%>
           <tr class="<%= cycle 'odd', 'even' %>">
-            <td><%= link_to_user(member.user) %></td>
+            <td style="text-align: left"><%= link_to_user(member.user) %></td>
             <%- days.times do |day| -%>
-              <td align="center">
+              <td style="text-align: center;">
                 <%- effort = @sprint.efforts.find_by_user_id_and_date(member.user.id,
                                                                       @sprint.sprint_start_date + day) -%>
                 <%= text_field_tag "user[#{member.user.id}][#{day}]",
