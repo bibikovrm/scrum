@@ -96,3 +96,6 @@
     <%= wikitoolbar_for 'issue_notes' %>
   <%- end -%>
 </div>
+
+<%= render :partial => "scrum/issue_attributes", :formats => [:js],
+           :locals => {:issue => issue} %>
