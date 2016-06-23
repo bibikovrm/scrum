@@ -21,6 +21,7 @@ module Scrum
 
         before_save :update_position, :if => lambda {|issue| issue.sprint_id_changed? and issue.is_pbi?}
         before_save :update_pending_effort, :if => lambda {|issue| issue.status_id_changed? and issue.is_task?}
+        before_save :update_assigned_to, :if => lambda {|issue| issue.status_id_changed? and issue.is_task?}
 
         def has_story_points?
           ((!((custom_field_id = Scrum::Setting.story_points_custom_field_id).nil?)) and
@@ -299,6 +300,17 @@ module Scrum
 
         def update_pending_effort
           self.pending_effort = 0 if self.closed?
+        end
+
+        def update_assigned_to
+          new_status = IssueStatus.task_statuses.first
+          if new_status
+            if self.status == new_status
+              self.assigned_to = nil
+            else
+              self.assigned_to = User.current
+            end
+          end
         end
 
         def min_position
