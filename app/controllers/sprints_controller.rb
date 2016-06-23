@@ -94,12 +94,15 @@ class SprintsController < ApplicationController
   end
 
   def change_task_status
-    task = Issue.find(params[:task].match(/^task_(\d+)$/)[1].to_i)
-    task.init_journal(User.current)
-    task.status = IssueStatus.find(params[:status].to_i)
-    raise "New status is not allowed" unless task.new_statuses_allowed_to.include?(task.status)
-    task.save!
-    render :nothing => true
+    @issue = Issue.find(params[:task].match(/^task_(\d+)$/)[1].to_i)
+    @old_status = @issue.status
+    @issue.init_journal(User.current)
+    @issue.status = IssueStatus.find(params[:status].to_i)
+    raise "New status is not allowed" unless @issue.new_statuses_allowed_to.include?(@issue.status)
+    @issue.save!
+    respond_to do |format|
+      format.js { render 'scrum/update_task' }
+    end
   end
 
   def edit_effort
@@ -141,7 +144,6 @@ class SprintsController < ApplicationController
       render_error l(:error_no_sprints)
     end
   rescue Exception => exception
-    puts("%%% exception: #{exception.inspect}")
     render_404
   end
 

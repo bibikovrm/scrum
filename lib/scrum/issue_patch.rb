@@ -20,6 +20,7 @@ module Scrum
         safe_attributes :sprint_id, :if => lambda {|issue, user| user.allowed_to?(:edit_issues, issue.project)}
 
         before_save :update_position, :if => lambda {|issue| issue.sprint_id_changed? and issue.is_pbi?}
+        before_save :update_pending_effort, :if => lambda {|issue| issue.status_id_changed? and issue.is_task?}
 
         def has_story_points?
           ((!((custom_field_id = Scrum::Setting.story_points_custom_field_id).nil?)) and
@@ -145,7 +146,7 @@ module Scrum
           if is_task? and id and new_effort
             effort = PendingEffort.where(:issue_id => id, :date => Date.today).first
             # Replace invalid float number separatos (i.e. 0,5) with valid separator (i.e. 0.5)
-            new_effort.gsub!(",", ".")
+            new_effort.gsub!(",", ".") if new_effort.is_a?(String)
             if effort.nil?
               date = (pending_efforts.empty? and sprint and sprint.sprint_start_date) ? sprint.sprint_start_date : Date.today
               effort = PendingEffort.new(:issue_id => id, :date => date, :effort => new_effort)
@@ -264,7 +265,7 @@ module Scrum
           @assignable_sprints = sprints.uniq.sort
         end
 
-        protected
+      protected
 
         def copy_attribute(source_issue, attribute)
           if self.safe_attribute?(attribute) and source_issue.safe_attribute?(attribute)
@@ -294,6 +295,10 @@ module Scrum
               move_issue_to_the_end_of_the_sprint
             end
           end
+        end
+
+        def update_pending_effort
+          self.pending_effort = 0 if self.closed?
         end
 
         def min_position
