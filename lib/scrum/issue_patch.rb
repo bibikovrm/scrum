@@ -22,6 +22,7 @@ module Scrum
         before_save :update_position, :if => lambda {|issue| issue.sprint_id_changed? and issue.is_pbi?}
         before_save :update_pending_effort, :if => lambda {|issue| issue.status_id_changed? and issue.is_task?}
         before_save :update_assigned_to, :if => lambda {|issue| issue.status_id_changed? and issue.is_task?}
+        before_save :update_parent_pbi, :if => lambda {|issue| issue.status_id_changed? and issue.is_task? and !issue.parent_id.nil?}
 
         def has_story_points?
           ((!((custom_field_id = Scrum::Setting.story_points_custom_field_id).nil?)) and
@@ -309,6 +310,30 @@ module Scrum
               self.assigned_to = nil
             else
               self.assigned_to = User.current
+            end
+          end
+        end
+
+        def update_parent_pbi
+          new_status = IssueStatus.task_statuses.first
+          in_progress_status = IssueStatus.task_statuses.second
+          if new_status && in_progress_status
+            pbi = self.parent
+            if pbi and pbi.is_pbi?
+              all_tasks_new = true
+              pbi.children.each do |task|
+                if task.is_task?
+                  task = self if task.id == self.id
+                  all_tasks_new = false if task.status != new_status
+                end
+              end
+              if pbi.status == new_status and !all_tasks_new
+                pbi.status = in_progress_status
+                pbi.save!
+              elsif pbi.status != new_status and all_tasks_new
+                pbi.status = new_status
+                pbi.save!
+              end
             end
           end
         end

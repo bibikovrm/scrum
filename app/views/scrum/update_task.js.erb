@@ -11,11 +11,11 @@
       other_pbi_status_ids = IssueStatus.task_statuses.select{|other| other != @issue.status}.collect{
         |other| "pbi_#{@issue.parent_id}_status_#{other.id}"
       } -%>
-  $("#<%= "task_#{@issue.id}" %>").replaceWith("<%=
-    escape_javascript(render :partial => "post_its/sprint_board/task",
+  $("#<%= "pbi_#{@issue.parent_id}_row" %>").replaceWith("<%=
+    escape_javascript(render :partial => "post_its/sprint_board/pbi_row",
                              :formats => [:html],
-                             :locals => {:project => @project, :task => @issue, :pbi_status_id => pbi_status_id,
-                                         :other_pbi_status_ids => other_pbi_status_ids, :read_only => false}).html_safe
+                             :locals => {:project => @issue.project, :sprint_board_id => 'sprint_board',
+                                         :pbi => @issue.parent, :task_statuses => IssueStatus.task_statuses}).html_safe
   %>");
   <%- if @old_status != @issue.status -%>
     var task = $("#<%= "task_#{@issue.id}" %>");
