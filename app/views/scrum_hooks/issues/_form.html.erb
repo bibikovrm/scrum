@@ -1,4 +1,4 @@
-<%- if @project.module_enabled?(:scrum) -%>
+<%- if !@project.nil? and @project.module_enabled?(:scrum) -%>
   <div class="splitcontent">
     <div class="splitcontentleft">
       <p>
