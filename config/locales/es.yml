@@ -22,6 +22,8 @@ es:
   field_end_date: "Fecha de fin"
   field_pending_effort: "Esfuerzo pendiente"
   field_position: "Posición"
+  field_shared: "Compartido"
+  field_shared_note: "Un Sprint compartido es visible en los proyectos hijos, con lo que podrás asignar peticiones de los proyectos hijos a este Sprint."
   field_sprint: "Sprint"
   label_add_task: "Abre una ventana emergente para añadir un nuevo/a %{tracker} a este EPP"
   label_blocked: "Bloqueado"

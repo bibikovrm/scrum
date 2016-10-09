@@ -17,4 +17,8 @@
                   Sprint::SPRINT_STATUSES.collect { |status|
                     [l("label_sprint_status_#{status}"), status]
                   } %></p>
+  <p>
+    <%= f.check_box :shared, :label => l(:field_shared) %>
+    <em class="info"><%= l(:field_shared_note) %></em>
+  </p>
 </div>

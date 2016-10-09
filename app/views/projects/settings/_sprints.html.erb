@@ -8,6 +8,7 @@
         <th><%= l(:field_start_date) %></th>
         <th><%= l(:field_end_date) %></th>
         <th><%= l(:field_status) %></th>
+        <th><%= l(:field_shared) %></th>
         <th><%= l(:label_product_backlog) %></th>
         <th><%= l(:label_pbi_plural) %></th>
         <th style="width:15%"></th>
@@ -20,6 +21,7 @@
           <td align="center"><%= format_date(sprint.sprint_start_date) %></td>
           <td align="center"><%= format_date(sprint.sprint_end_date) %></td>
           <td class="status"><%= l("label_sprint_status_#{sprint.status}") %></td>
+          <td align="center"><%= checked_image sprint.shared %></td>
           <td align="center"><%= checked_image sprint.is_product_backlog? %></td>
           <td align="center"><%= sprint.pbis.count %></td>
           <td class="buttons">

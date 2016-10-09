@@ -256,7 +256,7 @@ module Scrum
         def assignable_sprints
           return @assignable_sprints if @assignable_sprints
 
-          sprints = project.open_sprints_and_product_backlog.to_a
+          sprints = project.all_open_sprints_and_product_backlog.to_a
           if sprint
             if sprint_id_changed?
               # nothing to do
@@ -265,6 +265,10 @@ module Scrum
             end
           end
           @assignable_sprints = sprints.uniq.sort
+        end
+
+        def scrum?
+          return project.nil? ? false : project.scrum?
         end
 
       protected

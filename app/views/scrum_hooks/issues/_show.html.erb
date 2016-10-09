@@ -1,10 +1,10 @@
-<%- if @project.module_enabled?(:scrum) -%>
+<%- if @issue.scrum? -%>
   <%= issue_fields_rows do |rows|
     if @issue.sprint.nil?
       content = ''
     else
       if @issue.sprint.is_product_backlog
-        object = project_product_backlog_index_path(@project)
+        object = project_product_backlog_index_path(@issue.sprint.project)
       else
         object = @issue.sprint
       end

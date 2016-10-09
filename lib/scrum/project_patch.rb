@@ -84,6 +84,24 @@ module Scrum
           sps_by_pbi_field(:activity, :time_entries_by_activity)
         end
 
+        def all_open_sprints_and_product_backlog(only_shared = false)
+          # Get this project Sprints.
+          conditions = {}
+          conditions[:shared] = true if only_shared
+          all_sprints = open_sprints_and_product_backlog.where(conditions).to_a
+          # If parent try to recursivelly add shared Sprints from parents.
+          unless parent.nil?
+            all_sprints += parent.all_open_sprints_and_product_backlog(true)
+          end
+          return all_sprints
+        end
+
+        def scrum?
+          is_scrum = module_enabled?(:scrum)
+          is_scrum = parent.scrum? unless is_scrum or parent.nil?
+          return is_scrum
+        end
+
       private
 
         def filter_story_points(story_points, sprints_count)

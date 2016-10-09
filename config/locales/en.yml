@@ -22,6 +22,8 @@ en:
   field_end_date: "End date"
   field_pending_effort: "Pending effort"
   field_position: "Position"
+  field_shared: "Shared"
+  field_shared_note: "A shared Sprint is visible in child projects, so you will be able to assign child projects issues to this Sprint."
   field_sprint: "Sprint"
   label_add_task: "Opens a pop-up windows to add a %{tracker} to this PBI"
   label_blocked: "Blocked"

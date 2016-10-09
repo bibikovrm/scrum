@@ -1,14 +1,15 @@
-<%- if !@project.nil? and @project.module_enabled?(:scrum) -%>
+<%- assignable_sprints = @issue.assignable_sprints -%>
+<%- if assignable_sprints.any? -%>
   <div class="splitcontent">
     <div class="splitcontentleft">
       <p>
         <%- selected = @issue.sprint ? @issue.sprint.id.to_s : nil -%>
         <%= form.select :sprint_id,
-                        options_from_collection_for_select(@issue.assignable_sprints, 'id', 'name', selected),
+                        options_from_collection_for_select(assignable_sprints, 'id', 'name', selected),
                         :include_blank => true %>
       </p>
     </div>
-    <%- if @issue.is_task? -%>
+    <%- if @issue.is_task? and @issue.scrum? -%>
       <div class="splitcontentright">
         <p>
           <%= form.text_field :pending_effort, :size => 3 %>
