@@ -87,6 +87,7 @@
 
 .settings-post-it {
 	margin-right: 20px;
+	white-space: nowrap;
 }
 
 .post-it-color-1 {

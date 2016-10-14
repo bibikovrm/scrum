@@ -92,6 +92,7 @@ Redmine::Plugin.register :scrum do
                                  :task_tracker_ids => [],
                                  :verification_activity_ids => [],
                                  :inherit_pbi_attributes => '1',
+                                 :random_posit_rotation => '1',
                                  :render_position_on_pbi => '0',
                                  :render_category_on_pbi => '1',
                                  :render_version_on_pbi => '1',

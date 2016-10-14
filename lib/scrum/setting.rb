@@ -8,10 +8,18 @@
 module Scrum
   class Setting
 
-    ["create_journal_on_pbi_position_change", "inherit_pbi_attributes", "render_position_on_pbi",
-      "render_category_on_pbi", "render_version_on_pbi", "render_author_on_pbi",
-      "render_updated_on_pbi", "check_dependencies_on_pbi_sorting",
-      "render_pbis_speed", "render_tasks_speed", "render_plugin_tips"].each do |setting|
+    %w(check_dependencies_on_pbi_sorting
+       create_journal_on_pbi_position_change
+       inherit_pbi_attributes
+       random_posit_rotation
+       render_author_on_pbi
+       render_category_on_pbi
+       render_pbis_speed
+       render_plugin_tips
+       render_position_on_pbi
+       render_tasks_speed
+       render_updated_on_pbi
+       render_version_on_pbi).each do |setting|
       src = <<-END_SRC
       def self.#{setting}
         setting_or_default_boolean(:#{setting})
@@ -20,7 +28,9 @@ module Scrum
       class_eval src, __FILE__, __LINE__
     end
 
-    ["doer_color", "reviewer_color", "blocked_color"].each do |setting|
+    %w(blocked_color
+       doer_color
+       reviewer_color).each do |setting|
       src = <<-END_SRC
       def self.#{setting}
         setting_or_default(:#{setting})
@@ -29,8 +39,11 @@ module Scrum
       class_eval src, __FILE__, __LINE__
     end
 
-    ["task_status_ids", "task_tracker_ids", "pbi_status_ids", "pbi_tracker_ids",
-      "verification_activity_ids"].each do |setting|
+    %w(pbi_status_ids
+       pbi_tracker_ids
+       task_status_ids
+       task_tracker_ids
+       verification_activity_ids).each do |setting|
       src = <<-END_SRC
       def self.#{setting}
         collect_ids(:#{setting})
@@ -39,7 +52,8 @@ module Scrum
       class_eval src, __FILE__, __LINE__
     end
 
-    ["story_points_custom_field_id", "blocked_custom_field_id"].each do |setting|
+    %w(blocked_custom_field_id
+       story_points_custom_field_id).each do |setting|
       src = <<-END_SRC
       def self.#{setting}
         ::Setting.plugin_scrum[:#{setting}]
@@ -49,10 +63,10 @@ module Scrum
     end
 
     module TrackerFields
-      FIELDS = "fields"
-      CUSTOM_FIELDS = "custom_fields"
-      SPRINT_BOARD_FIELDS = "sprint_board_fields"
-      SPRINT_BOARD_CUSTOM_FIELDS = "sprint_board_custom_fields"
+      FIELDS = 'fields'
+      CUSTOM_FIELDS = 'custom_fields'
+      SPRINT_BOARD_FIELDS = 'sprint_board_fields'
+      SPRINT_BOARD_CUSTOM_FIELDS = 'sprint_board_custom_fields'
     end
 
     def self.tracker_fields(tracker, type = TrackerFields::FIELDS)
@@ -99,7 +113,7 @@ module Scrum
     end
 
     def self.setting_or_default_boolean(setting)
-      setting_or_default(setting) == "1"
+      setting_or_default(setting) == '1'
     end
 
     def self.setting_or_default_integer(setting, options = {})

@@ -76,6 +76,7 @@ es:
   label_setting_lowest_speed: "Porcentaje para velocidad muy baja"
   label_setting_pbi_statuses: "Estado de los EPPs para la Pila de producto y el tablero del Sprint"
   label_setting_product_burndown_sprints: "Calcularlo con este número de Sprints"
+  label_setting_random_postit_rotation: "Rotación aleatoria de los post-its"
   label_setting_render_author_on_pbi: "Mostrar autor"
   label_setting_render_category_on_pbi: "Mostrar categoría"
   label_setting_render_pbis_speed: "Mostrar velocidad de los EPPs"

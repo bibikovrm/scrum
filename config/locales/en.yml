@@ -76,6 +76,7 @@ en:
   label_setting_lowest_speed: "Lowest speed percentage"
   label_setting_pbi_statuses: "PBI statuses for Product backlog & Sprint board"
   label_setting_product_burndown_sprints: "Calculate it with this number of Sprints"
+  label_setting_random_postit_rotation: "Random post-it rotation"
   label_setting_render_author_on_pbi: "Render author"
   label_setting_render_category_on_pbi: "Render category"
   label_setting_render_pbis_speed: "Render PBIs speed"

@@ -127,8 +127,10 @@ module Scrum
               classes << 'post-it-horizontal-move-cursor'
             end
           end
-          classes << "post-it-rotation-#{rand(5)}" if options[:rotate]
-          classes << "post-it-small-rotation-#{rand(5)}" if options[:small_rotate]
+          if Scrum::Setting.random_posit_rotation
+            classes << "post-it-rotation-#{rand(5)}" if options[:rotate]
+            classes << "post-it-small-rotation-#{rand(5)}" if options[:small_rotate]
+          end
           classes << 'post-it-scale' if options[:scale]
           classes << 'post-it-small-scale' if options[:small_scale]
           classes.join(' ')
@@ -407,7 +409,9 @@ module Scrum
               classes << 'blocked-post-it'
               classes << Scrum::Setting.blocked_color
           end
-          classes << "post-it-rotation-#{rand(5)}"
+          if Scrum::Setting.random_posit_rotation
+            classes << "post-it-rotation-#{rand(5)}"
+          end
           classes.join(' ')
         end
 
