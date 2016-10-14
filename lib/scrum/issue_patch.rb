@@ -5,7 +5,7 @@
 #   * No derivates of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-require_dependency "issue"
+require_dependency 'issue'
 
 module Scrum
   module IssuePatch
@@ -13,16 +13,26 @@ module Scrum
       base.class_eval do
 
         belongs_to :sprint
-        has_many :pending_efforts, -> { order("date ASC") }
+        has_many :pending_efforts, -> { order('date ASC') }
 
         acts_as_list :scope => :sprint
 
-        safe_attributes :sprint_id, :if => lambda {|issue, user| user.allowed_to?(:edit_issues, issue.project)}
+        safe_attributes :sprint_id, :if => lambda { |issue, user|
+          user.allowed_to?(:edit_issues, issue.project)
+        }
 
-        before_save :update_position, :if => lambda {|issue| issue.sprint_id_changed? and issue.is_pbi?}
-        before_save :update_pending_effort, :if => lambda {|issue| issue.status_id_changed? and issue.is_task?}
-        before_save :update_assigned_to, :if => lambda {|issue| issue.status_id_changed? and issue.is_task?}
-        before_save :update_parent_pbi, :if => lambda {|issue| issue.status_id_changed? and issue.is_task? and !issue.parent_id.nil?}
+        before_save :update_position, :if => lambda { |issue|
+          issue.sprint_id_changed? and issue.is_pbi?
+        }
+        before_save :update_pending_effort, :if => lambda { |issue|
+          issue.status_id_changed? and issue.is_task?
+        }
+        before_save :update_assigned_to, :if => lambda { |issue|
+          issue.status_id_changed? and issue.is_task?
+        }
+        before_save :update_parent_pbi, :if => lambda { |issue|
+          (issue.status_id_changed? or issue.new_record?) and issue.is_task? and !issue.parent_id.nil?
+        }
 
         def has_story_points?
           ((!((custom_field_id = Scrum::Setting.story_points_custom_field_id).nil?)) and
@@ -34,8 +44,8 @@ module Scrum
              !((custom_field_id = Scrum::Setting.story_points_custom_field_id).nil?) and
              !((custom_value = self.custom_value_for(custom_field_id)).nil?) and
              !((value = custom_value.value).blank?)
-            # Replace invalid float number separatos (i.e. 0,5) with valid separator (i.e. 0.5)
-            value.gsub(",", ".")
+            # Replace invalid float number separator (i.e. 0,5) with valid separator (i.e. 0.5)
+            value.gsub(',', '.')
           end
         end
 
@@ -77,7 +87,7 @@ module Scrum
         end
 
         def tasks_by_status_id
-          raise "Issue is not an user story" unless is_pbi?
+          raise 'Issue is not an user story' unless is_pbi?
           statuses = {}
           IssueStatus.task_statuses.each do |status|
             statuses[status.id] = children.select{|issue| (issue.status == status) and issue.visible?}
@@ -101,27 +111,27 @@ module Scrum
         end
 
         def post_it_css_class(options = {})
-          classes = ["post-it", "big-post-it", tracker.post_it_css_class]
+          classes = ['post-it', 'big-post-it', tracker.post_it_css_class]
           if is_pbi?
-            classes << "sprint-pbi"
+            classes << 'sprint-pbi'
             if options[:draggable] and
                User.current.allowed_to?(:edit_product_backlog, project) and
                editable?
-              classes << "post-it-vertical-move-cursor"
+              classes << 'post-it-vertical-move-cursor'
             end
           else
-            classes << "sprint-task"
+            classes << 'sprint-task'
             if options[:draggable] and
                User.current.allowed_to?(:edit_sprint_board, project) and
                editable?
-              classes << "post-it-horizontal-move-cursor"
+              classes << 'post-it-horizontal-move-cursor'
             end
           end
           classes << "post-it-rotation-#{rand(5)}" if options[:rotate]
           classes << "post-it-small-rotation-#{rand(5)}" if options[:small_rotate]
-          classes << "post-it-scale" if options[:scale]
-          classes << "post-it-small-scale" if options[:small_scale]
-          classes.join(" ")
+          classes << 'post-it-scale' if options[:scale]
+          classes << 'post-it-small-scale' if options[:small_scale]
+          classes.join(' ')
         end
 
         def self.doer_post_it_css_class
@@ -147,8 +157,8 @@ module Scrum
         def pending_effort=(new_effort)
           if is_task? and id and new_effort
             effort = PendingEffort.where(:issue_id => id, :date => Date.today).first
-            # Replace invalid float number separatos (i.e. 0,5) with valid separator (i.e. 0.5)
-            new_effort.gsub!(",", ".") if new_effort.is_a?(String)
+            # Replace invalid float number separator (i.e. 0,5) with valid separator (i.e. 0.5)
+            new_effort.gsub!(',', '.') if new_effort.is_a?(String)
             if effort.nil?
               date = (pending_efforts.empty? and sprint and sprint.sprint_start_date) ? sprint.sprint_start_date : Date.today
               effort = PendingEffort.new(:issue_id => id, :date => date, :effort => new_effort)
@@ -212,7 +222,7 @@ module Scrum
               !((custom_field_id = Scrum::Setting.blocked_custom_field_id).nil?) and
               !((custom_value = self.custom_value_for(custom_field_id)).nil?) and
               !((value = custom_value.value).blank?)
-            return (value == "1")
+            return (value == '1')
           end
         end
 
@@ -223,13 +233,13 @@ module Scrum
         def move_pbi_to(position, other_pbi_id = nil)
           if !(sprint.nil?) and is_pbi?
             case position
-              when "top"
+              when 'top'
                 move_issue_to_the_begin_of_the_sprint
                 save!
-              when "bottom"
+              when 'bottom'
                 move_issue_to_the_end_of_the_sprint
                 save!
-              when "before", "after"
+              when 'before', 'after'
                 if other_pbi_id.nil? or (other_pbi = Issue.find(other_pbi_id)).nil?
                   raise "Other PBI ID ##{other_pbi_id} is invalid"
                 elsif !(other_pbi.is_pbi?)
@@ -237,7 +247,7 @@ module Scrum
                 elsif (other_pbi.sprint_id != sprint_id)
                   raise "Other PBI ID ##{other_pbi_id} is not in this product backlog"
                 else
-                  move_issue_respecting_to_pbi(other_pbi, position == "after")
+                  move_issue_respecting_to_pbi(other_pbi, position == 'after')
                 end
             end
           end
@@ -324,7 +334,7 @@ module Scrum
           if new_status && in_progress_status
             pbi = self.parent
             if pbi and pbi.is_pbi?
-              all_tasks_new = true
+              all_tasks_new = (self.status == new_status)
               pbi.children.each do |task|
                 if task.is_task?
                   task = self if task.id == self.id
@@ -385,26 +395,26 @@ module Scrum
         end
 
         def self.doer_or_reviewer_post_it_css_class(type)
-          classes = ["post-it"]
+          classes = ['post-it']
           case type
             when :doer
-              classes << "doer-post-it"
+              classes << 'doer-post-it'
               classes << Scrum::Setting.doer_color
             when :reviewer
-              classes << "reviewer-post-it"
+              classes << 'reviewer-post-it'
               classes << Scrum::Setting.reviewer_color
             when :blocked
-              classes << "blocked-post-it"
+              classes << 'blocked-post-it'
               classes << Scrum::Setting.blocked_color
           end
           classes << "post-it-rotation-#{rand(5)}"
-          classes.join(" ")
+          classes.join(' ')
         end
 
         @@activities = nil
         def self.activities
           unless @@activities
-            @@activities = Enumeration.where(:type => "TimeEntryActivity")
+            @@activities = Enumeration.where(:type => 'TimeEntryActivity')
           end
           @@activities
         end

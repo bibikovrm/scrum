@@ -49,7 +49,7 @@ class SprintsController < ApplicationController
   end
 
   def create
-    raise "Product backlog is already set" if params[:create_product_backlog] and
+    raise 'Product backlog is already set' if params[:create_product_backlog] and
                                               !(@project.product_backlog.nil?)
     @sprint = Sprint.new(:user => User.current,
                          :project => @project,
@@ -58,10 +58,10 @@ class SprintsController < ApplicationController
     if request.post? and @sprint.save
       if params[:create_product_backlog]
         @project.product_backlog = @sprint
-        raise "Fail to update project with product backlog" unless @project.save!
+        raise 'Fail to update project with product backlog' unless @project.save!
       end
       flash[:notice] = l(:notice_successful_create)
-      redirect_back_or_default settings_project_path(@project, :tab => "sprints")
+      redirect_back_or_default settings_project_path(@project, :tab => 'sprints')
     else
       render :action => :new
     end
@@ -76,7 +76,7 @@ class SprintsController < ApplicationController
     @sprint.safe_attributes = params[:sprint]
     if @sprint.save
       flash[:notice] = l(:notice_successful_update)
-      redirect_back_or_default settings_project_path(@project, :tab => "sprints")
+      redirect_back_or_default settings_project_path(@project, :tab => 'sprints')
     else
       render :action => :edit
     end
@@ -91,7 +91,7 @@ class SprintsController < ApplicationController
   rescue
     flash[:error] = l(:notice_unable_delete_sprint)
   ensure
-    redirect_to settings_project_path(@project, :tab => "sprints")
+    redirect_to settings_project_path(@project, :tab => 'sprints')
   end
 
   def change_task_status
@@ -99,7 +99,7 @@ class SprintsController < ApplicationController
     @old_status = @issue.status
     @issue.init_journal(User.current)
     @issue.status = IssueStatus.find(params[:status].to_i)
-    raise "New status is not allowed" unless @issue.new_statuses_allowed_to.include?(@issue.status)
+    raise 'New status is not allowed' unless @issue.new_statuses_allowed_to.include?(@issue.status)
     @issue.save!
     respond_to do |format|
       format.js { render 'scrum/update_task' }
@@ -135,7 +135,7 @@ class SprintsController < ApplicationController
       end
     end
     flash[:notice] = l(:notice_successful_update)
-    redirect_back_or_default settings_project_path(@project, :tab => "sprints")
+    redirect_back_or_default settings_project_path(@project, :tab => 'sprints')
   end
 
   def burndown_index
@@ -153,14 +153,14 @@ class SprintsController < ApplicationController
     last_pending_effort = @sprint.estimated_hours
     last_day = nil
     ((@sprint.sprint_start_date)..(@sprint.sprint_end_date)).each do |date|
-      if @sprint.efforts.where(["date = ?", date]).count > 0
-        efforts = @sprint.efforts.where(["date >= ?", date])
+      if @sprint.efforts.where(['date = ?', date]).count > 0
+        efforts = @sprint.efforts.where(['date >= ?', date])
         estimated_effort = efforts.collect{|effort| effort.effort}.compact.sum
         if date <= Date.today
           efforts = []
           @sprint.issues.each do |issue|
             if issue.use_in_burndown?
-              efforts << issue.pending_efforts.where(["date <= ?", date]).last
+              efforts << issue.pending_efforts.where(['date <= ?', date]).last
             end
           end
           pending_effort = efforts.compact.collect{|effort| effort.effort}.compact.sum
@@ -208,14 +208,14 @@ class SprintsController < ApplicationController
     @estimated_efforts_totals = {:days => {}, :total => 0.0}
     @done_efforts_totals = {:days => {}, :total => 0.0}
     ((@sprint.sprint_start_date)..(@sprint.sprint_end_date)).each do |date|
-      if @sprint.efforts.where(["date = ?", date]).count > 0
+      if @sprint.efforts.where(['date = ?', date]).count > 0
         @days << {:date => date, :label => "#{I18n.l(date, :format => :scrum_day)} #{date.day}"}
         if User.current.allowed_to?(:view_sprint_stats_by_member, @project)
-          estimated_effort_conditions = ["date = ?", date]
-          done_effort_conditions = ["spent_on = ?", date]
+          estimated_effort_conditions = ['date = ?', date]
+          done_effort_conditions = ['spent_on = ?', date]
         else
-          estimated_effort_conditions = ["date = ? AND user_id = ?", date, User.current.id]
-          done_effort_conditions = ["spent_on = ? AND user_id = ?", date, User.current.id]
+          estimated_effort_conditions = ['date = ? AND user_id = ?', date, User.current.id]
+          done_effort_conditions = ['spent_on = ? AND user_id = ?', date, User.current.id]
         end
         @sprint.efforts.where(estimated_effort_conditions).each do |sprint_effort|
           if sprint_effort.effort
@@ -262,7 +262,7 @@ class SprintsController < ApplicationController
 
     if User.current.allowed_to?(:view_sprint_stats_by_member, @project)
       @efforts_by_member_and_activity = @sprint.efforts_by_member_and_activity
-      @efforts_by_member_and_activity_chart = {:id => "stats_efforts_by_member_and_activity", :height => 400}
+      @efforts_by_member_and_activity_chart = {:id => 'stats_efforts_by_member_and_activity', :height => 400}
     end
   end
 
