@@ -73,7 +73,8 @@ class SprintsController < ApplicationController
   end
 
   def update
-    if @sprint.update_attributes(params[:sprint])
+    @sprint.safe_attributes = params[:sprint]
+    if @sprint.save
       flash[:notice] = l(:notice_successful_update)
       redirect_back_or_default settings_project_path(@project, :tab => "sprints")
     else

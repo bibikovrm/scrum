@@ -15,7 +15,7 @@ class Sprint < ActiveRecord::Base
   scope :open, -> { where(:status => 'open') }
 
   include Redmine::SafeAttributes
-  safe_attributes :name, :description, :sprint_start_date, :sprint_end_date, :status
+  safe_attributes :name, :description, :sprint_start_date, :sprint_end_date, :status, :shared
   attr_protected :id
 
   SPRINT_STATUSES = %w(open closed)
