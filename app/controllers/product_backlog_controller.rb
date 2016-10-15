@@ -26,11 +26,11 @@ class ProductBacklogController < ApplicationController
   def sort
     @pbis.each do |pbi|
       pbi.init_journal(User.current)
-      pbi.position = params["pbi"].index(pbi.id.to_s) + 1
+      pbi.position = params['pbi'].index(pbi.id.to_s) + 1
       if Scrum::Setting.check_dependencies_on_pbi_sorting
-        dependencies = get_dependencies(pbi)
+        dependencies = pbi.get_dependencies
         if dependencies.count > 0
-          raise "PBI ##{pbi.id} depends on other PBIs (#{dependencies.collect{|p| "##{p.id}"}.join(", ")}), it cannot be sorted"
+          raise "PBI ##{pbi.id} depends on other PBIs (#{dependencies.collect{|p| "##{p.id}"}.join(', ')}), it cannot be sorted"
         end
       end
       pbi.save!
@@ -39,7 +39,7 @@ class ProductBacklogController < ApplicationController
   end
 
   def check_dependencies
-    @pbis_dependencies = get_dependencies
+    @pbis_dependencies = @product_backlog.get_dependencies
     respond_to do |format|
       format.js
     end
@@ -81,11 +81,11 @@ class ProductBacklogController < ApplicationController
                 :pending_story_points => 0}
     end
     velocity_all_pbis, velocity_scheduled_pbis, @sprints_count = @project.story_points_per_sprint
-    @velocity_type = params[:velocity_type] || "only_scheduled"
+    @velocity_type = params[:velocity_type] || 'only_scheduled'
     case @velocity_type
-      when "all"
+      when 'all'
         @velocity = velocity_all_pbis
-      when "only_scheduled"
+      when 'only_scheduled'
         @velocity = velocity_scheduled_pbis
       else
         @velocity = params[:custom_velocity].to_f unless params[:custom_velocity].blank?
@@ -147,21 +147,6 @@ private
     else
       raise "Invalid type: #{issue.inspect}"
     end
-  end
-
-  def get_dependencies(pbi = nil)
-    dependencies = []
-    if pbi
-      @product_backlog.pbis(:position_bellow => pbi.position).each do |other_pbi|
-        dependencies << other_pbi if pbi.all_dependent_issues.include?(other_pbi)
-      end
-    else
-      @product_backlog.pbis.each do |a_pbi|
-        pbi_dependencies = get_dependencies(a_pbi)
-        dependencies << {:pbi => a_pbi, :dependencies => pbi_dependencies} if pbi_dependencies.count > 0
-      end
-    end
-    return dependencies
   end
 
 end

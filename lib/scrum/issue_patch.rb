@@ -283,6 +283,27 @@ module Scrum
           return project.nil? ? false : project.scrum?
         end
 
+        def get_dependencies
+          dependencies = []
+          unless sprint.nil?
+            sprint.pbis(:position_bellow => position).each do |other_pbi|
+              if self != other_pbi
+                if self.respond_to?(:all_dependent_issues)
+                  # Old Redmine API (<3.3.0).
+                  is_dependent = all_dependent_issues.include?(other_pbi)
+                elsif self.respond_to?(:would_reschedule?) and self.respond_to?(:blocks?)
+                  # New Redmine API (>=3.3.0).
+                  is_dependent = (would_reschedule?(other_pbi) or blocks?(other_pbi))
+                else
+                  is_dependent = false
+                end
+                dependencies << other_pbi if is_dependent
+              end
+            end
+          end
+          return dependencies
+        end
+
       protected
 
         def copy_attribute(source_issue, attribute)

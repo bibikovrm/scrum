@@ -229,6 +229,15 @@ class Sprint < ActiveRecord::Base
     status == 'open'
   end
 
+  def get_dependencies
+    dependencies = []
+    pbis.each do |pbi|
+      pbi_dependencies = pbi.get_dependencies
+      dependencies << {:pbi => pbi, :dependencies => pbi_dependencies} if pbi_dependencies.count > 0
+    end
+    return dependencies
+  end
+
 private
 
   def update_project_product_backlog
