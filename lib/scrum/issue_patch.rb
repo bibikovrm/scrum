@@ -237,9 +237,11 @@ module Scrum
             case position
               when 'top'
                 move_issue_to_the_begin_of_the_sprint
+                check_bad_dependencies
                 save!
               when 'bottom'
                 move_issue_to_the_end_of_the_sprint
+                check_bad_dependencies
                 save!
               when 'before', 'after'
                 if other_pbi_id.nil? or (other_pbi = Issue.find(other_pbi_id)).nil?
@@ -302,6 +304,16 @@ module Scrum
             end
           end
           return dependencies
+        end
+
+        def check_bad_dependencies
+          if Scrum::Setting.check_dependencies_on_pbi_sorting
+            dependencies = get_dependencies
+            if dependencies.count > 0
+              others = dependencies.collect{ |issue| "##{issue.id}" }.join(', ')
+              raise "##{id} depends on other issues (#{others}), it cannot be sorted"
+            end
+          end
         end
 
       protected
@@ -408,10 +420,22 @@ module Scrum
         def move_issue_respecting_to_pbi(other_pbi, after)
           self.position = other_pbi.position
           self.position += 1 if after
-          self.save!
           sprint.pbis(:position_above => after ? self.position : self.position - 1).each do |next_pbi|
             if next_pbi.id != self.id
               next_pbi.position += 1
+            end
+          end
+
+          self.check_bad_dependencies
+          sprint.pbis(:position_above => after ? self.position : self.position - 1).each do |next_pbi|
+            if next_pbi.id != self.id
+              next_pbi.check_bad_dependencies
+            end
+          end
+
+          self.save!
+          sprint.pbis(:position_above => after ? self.position : self.position - 1).each do |next_pbi|
+            if next_pbi.id != self.id
               next_pbi.save!
             end
           end
