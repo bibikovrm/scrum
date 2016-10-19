@@ -357,7 +357,7 @@ module Scrum
           if new_status
             if self.status == new_status
               self.assigned_to = nil
-            else
+            elsif self.assigned_to.nil?
               self.assigned_to = User.current
             end
           end
