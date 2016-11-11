@@ -88,6 +88,9 @@
 .settings-post-it {
 	margin-right: 20px;
 	white-space: nowrap;
+	padding: 2px;
+	padding-right: 9px;
+	border-radius: 9px;
 }
 
 .post-it-color-1 {
