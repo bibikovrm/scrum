@@ -125,6 +125,12 @@
     <%= select_tag 'settings[task_status_ids]', options, :multiple => true %>
   </p>
   <p>
+    <label><%= l(:label_setting_clear_new_tasks_assignee) %>:</label>
+    <%= hidden_field_tag('settings[clear_new_tasks_assignee]', 0) %>
+    <%= check_box_tag('settings[clear_new_tasks_assignee]', 1,
+                      Scrum::Setting.clear_new_tasks_assignee) %>
+  </p>
+  <p>
     <label><%= l(:label_setting_pbi_statuses) %>:</label>
     <%- statuses = IssueStatus.all.collect{|s| [s.name, s.id]} -%>
     <%- options = options_for_select(statuses, Scrum::Setting.pbi_status_ids) -%>

@@ -9,6 +9,7 @@ module Scrum
   class Setting
 
     %w(check_dependencies_on_pbi_sorting
+       clear_new_tasks_assignee
        create_journal_on_pbi_position_change
        inherit_pbi_attributes
        random_posit_rotation

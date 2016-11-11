@@ -68,6 +68,7 @@ en:
   label_scrum_stats: "Scrum stats"
   label_setting_blocked_custom_field: "Blocked custom field"
   label_setting_check_dependencies_on_pbi_sorting: "Check PBIs dependencies on sorting"
+  label_setting_clear_new_tasks_assignee: "Clear assignee for tasks in new status"
   label_setting_create_journal_on_pbi_position_change: "Create journal on a product backlog item position change"
   label_setting_fields_on_tracker: "Fields to use with %{tracker}"
   label_setting_high_speed: "High speed percentage"
