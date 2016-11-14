@@ -161,18 +161,11 @@ class SprintsController < ApplicationController
                   :pending_sps_tooltip => l(:label_pending_sps_tooltip,
                                             :date => date_label,
                                             :sps => sps)}
-        last_day = date.day
-        last_pending_sps = sps
       end
-      if last_pending_sps.nil?
-        last_pending_sps = @sprint.story_points.to_f
-      end
-      @data << {:day => last_day,
-                :axis_label => l(:label_end),
-                :pending_sps => last_pending_sps,
-                :pending_sps_tooltip => l(:label_pending_sps_tooltip,
-                                          :date => l(:label_end),
-                                          :sps => 0)}
+      @data.last[:axis_label] = l(:label_end)
+      @data.last[:pending_sps_tooltip] = l(:label_pending_sps_tooltip,
+                                           :date => l(:label_end),
+                                           :sps => 0)
       @type = :sps
     else
       @data = []

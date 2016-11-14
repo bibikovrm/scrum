@@ -241,7 +241,7 @@ class Sprint < ActiveRecord::Base
   def completed_sps_by_day
     total_sps = story_points
     days = {}
-    (sprint_start_date..sprint_end_date).each do |day|
+    (sprint_start_date..(sprint_end_date + 1)).each do |day|
       days[day] = total_sps
     end
     closed_statuses = IssueStatus::closed_status_ids
