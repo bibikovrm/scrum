@@ -140,7 +140,7 @@ class SprintsController < ApplicationController
 
   def burndown_index
     if @project.last_sprint
-      redirect_to burndown_sprint_path(@project.last_sprint)
+      redirect_to burndown_sprint_path(@project.last_sprint, :type => params[:type])
     else
       render_error l(:error_no_sprints)
     end
@@ -151,8 +151,6 @@ class SprintsController < ApplicationController
   def burndown
     if params[:type] == 'sps'
       @data = []
-      last_day = nil
-      last_pending_sps = nil
       @sprint.completed_sps_by_day.each do |date, sps|
         date_label = "#{I18n.l(date, :format => :scrum_day)} #{date.day}"
         @data << {:day => date,

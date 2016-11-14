@@ -1,7 +1,7 @@
 <%= render :partial => "common/scrum_sprint_menu" %>
 
 <h2>
-  <%= l(:label_sprint_burndown_chart) %>
+  <%= l((@type == :sps) ? :label_sprint_burndown_chart_sps : :label_sprint_burndown_chart_hours) %>
 </h2>
 
 <%= render :partial => "post_its/sprint_board/head",
@@ -14,18 +14,6 @@
   <%= javascript_include_tag "xcharts.min.js", :plugin => "scrum" %>
   <%= stylesheet_link_tag "xcharts.min.css", :plugin => "scrum" %>
 <% end %>
-
-<div class="contextual scrum-menu">
-  <%- if User.current.allowed_to?(:view_sprint_burndown, @project) -%>
-    <%= link_to(l(:label_burndown_by_effort),
-                burndown_sprint_path(@sprint, :type => :effort),
-                :class => "icon icon-burndown") %>
-    <%= link_to(l(:label_burndown_by_sps),
-                burndown_sprint_path(@sprint, :type => :sps),
-                :class => "icon icon-burndown") %>
-  <%- end -%>
-</div>
-<br/>
 
 <%- if @type == :sps -%>
   <div style="position: relative;">

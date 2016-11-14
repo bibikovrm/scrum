@@ -5,8 +5,13 @@
                 :class => "icon icon-sprint-board") %>
   <%- end -%>
   <%- if User.current.allowed_to?(:view_sprint_burndown, @project) -%>
-    <%= link_to(l(:label_sprint_burndown_chart),
-                @sprint ? burndown_sprint_path(@sprint) : burndown_index_project_sprints_path(@project),
+    <%= link_to(l(:label_sprint_burndown_chart_hours),
+                @sprint ? burndown_sprint_path(@sprint, :type => :effort) :
+                          burndown_index_project_sprints_path(@project, :type => :effort),
+                :class => "icon icon-burndown") %>
+    <%= link_to(l(:label_sprint_burndown_chart_sps),
+                @sprint ? burndown_sprint_path(@sprint, :type => :sps) :
+                          burndown_index_project_sprints_path(@project, :type => :sps),
                 :class => "icon icon-burndown") %>
   <%- end -%>
   <%- if User.current.allowed_to?(:view_sprint_stats, @project) -%>
