@@ -20,6 +20,10 @@ module Scrum
           IssueStatus.where(:id => Scrum::Setting.pbi_status_ids).order("position ASC")
         end
 
+        def self.closed_status_ids
+          IssueStatus.where(:is_closed => true).collect{|status| status.id}
+        end
+
       end
     end
   end

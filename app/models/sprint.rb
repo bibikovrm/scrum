@@ -238,6 +238,37 @@ class Sprint < ActiveRecord::Base
     return dependencies
   end
 
+  def completed_sps_by_day
+    total_sps = story_points
+    days = {}
+    (sprint_start_date..sprint_end_date).each do |day|
+      days[day] = total_sps
+    end
+    closed_statuses = IssueStatus::closed_status_ids
+    pbis.each do |pbi|
+      if pbi.closed?
+        completed_date = nil
+        pbi.journals.order("created_on DESC").each do |journal|
+          if completed_date.nil?
+            journal.details.where(:prop_key => 'status_id',
+                                  :value => closed_statuses).each do |detail|
+              completed_date = journal.created_on
+            end
+          end
+        end
+        unless completed_date.nil?
+          sps = pbi.story_points
+          days.each_key do |day|
+            if day >= completed_date
+              days[day] -= sps.to_f
+            end
+          end
+        end
+      end
+    end
+    return days
+  end
+
 private
 
   def update_project_product_backlog

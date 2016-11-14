@@ -149,47 +149,75 @@ class SprintsController < ApplicationController
   end
 
   def burndown
-    @data = []
-    last_pending_effort = @sprint.estimated_hours
-    last_day = nil
-    ((@sprint.sprint_start_date)..(@sprint.sprint_end_date)).each do |date|
-      if @sprint.efforts.where(['date = ?', date]).count > 0
-        efforts = @sprint.efforts.where(['date >= ?', date])
-        estimated_effort = efforts.collect{|effort| effort.effort}.compact.sum
-        if date <= Date.today
-          efforts = []
-          @sprint.issues.each do |issue|
-            if issue.use_in_burndown?
-              efforts << issue.pending_efforts.where(['date <= ?', date]).last
-            end
-          end
-          pending_effort = efforts.compact.collect{|effort| effort.effort}.compact.sum
-        end
+    if params[:type] == 'sps'
+      @data = []
+      last_day = nil
+      last_pending_sps = nil
+      @sprint.completed_sps_by_day.each do |date, sps|
         date_label = "#{I18n.l(date, :format => :scrum_day)} #{date.day}"
         @data << {:day => date,
                   :axis_label => date_label,
-                  :estimated_effort => estimated_effort,
-                  :estimated_effort_tooltip => l(:label_estimated_effort_tooltip,
-                                                 :date => date_label,
-                                                 :hours => estimated_effort),
-                  :pending_effort => last_pending_effort,
-                  :pending_effort_tooltip => l(:label_pending_effort_tooltip,
-                                               :date => date_label,
-                                               :hours => last_pending_effort)}
-        last_pending_effort = pending_effort
+                  :pending_sps => sps,
+                  :pending_sps_tooltip => l(:label_pending_sps_tooltip,
+                                            :date => date_label,
+                                            :sps => sps)}
         last_day = date.day
+        last_pending_sps = sps
       end
-    end
-    @data << {:day => last_day,
-              :axis_label => l(:label_end),
-              :estimated_effort => 0,
-              :estimated_effort_tooltip => l(:label_estimated_effort_tooltip,
+      if last_pending_sps.nil?
+        last_pending_sps = @sprint.story_points.to_f
+      end
+      @data << {:day => last_day,
+                :axis_label => l(:label_end),
+                :pending_sps => last_pending_sps,
+                :pending_sps_tooltip => l(:label_pending_sps_tooltip,
+                                          :date => l(:label_end),
+                                          :sps => 0)}
+      @type = :sps
+    else
+      @data = []
+      last_pending_effort = @sprint.estimated_hours
+      last_day = nil
+      ((@sprint.sprint_start_date)..(@sprint.sprint_end_date)).each do |date|
+        if @sprint.efforts.where(['date = ?', date]).count > 0
+          efforts = @sprint.efforts.where(['date >= ?', date])
+          estimated_effort = efforts.collect{|effort| effort.effort}.compact.sum
+          if date <= Date.today
+            efforts = []
+            @sprint.issues.each do |issue|
+              if issue.use_in_burndown?
+                efforts << issue.pending_efforts.where(['date <= ?', date]).last
+              end
+            end
+            pending_effort = efforts.compact.collect{|effort| effort.effort}.compact.sum
+          end
+          date_label = "#{I18n.l(date, :format => :scrum_day)} #{date.day}"
+          @data << {:day => date,
+                    :axis_label => date_label,
+                    :estimated_effort => estimated_effort,
+                    :estimated_effort_tooltip => l(:label_estimated_effort_tooltip,
+                                                   :date => date_label,
+                                                   :hours => estimated_effort),
+                    :pending_effort => last_pending_effort,
+                    :pending_effort_tooltip => l(:label_pending_effort_tooltip,
+                                                 :date => date_label,
+                                                 :hours => last_pending_effort)}
+          last_pending_effort = pending_effort
+          last_day = date.day
+        end
+      end
+      @data << {:day => last_day,
+                :axis_label => l(:label_end),
+                :estimated_effort => 0,
+                :estimated_effort_tooltip => l(:label_estimated_effort_tooltip,
+                                               :date => l(:label_end),
+                                               :hours => 0),
+                :pending_effort => last_pending_effort,
+                :pending_effort_tooltip => l(:label_pending_effort_tooltip,
                                              :date => l(:label_end),
-                                             :hours => 0),
-              :pending_effort => last_pending_effort,
-              :pending_effort_tooltip => l(:label_pending_effort_tooltip,
-                                           :date => l(:label_end),
-                                           :hours => last_pending_effort)}
+                                             :hours => last_pending_effort)}
+      @type = :effort
+    end
   end
 
   def stats_index

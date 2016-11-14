@@ -15,18 +15,46 @@
   <%= stylesheet_link_tag "xcharts.min.css", :plugin => "scrum" %>
 <% end %>
 
-<div style="position: relative;">
-  <svg height="80" width="300" class="xchart"
-       style="position: absolute; top: 0px; right: 0px;">
-    <g class="line color0"><path class="line" stroke-width="10" d="M5 15 H70" /></g>
-    <g class="axis"><text x="80" y="18"><%= l(:label_estimated_effort) %></text></g>
-    <g class="line color1"><path class="line" stroke-width="10" d="M5 35 H70" /></g>
-    <g class="axis"><text x="80" y="38"><%= l(:field_pending_effort) %></text></g>
-  </svg>
-  <figure id="burndown-chart"
-          style="left-margin: auto; right-margin:auto; width: 90%; height: 500px;" />
+<div class="contextual scrum-menu">
+  <%- if User.current.allowed_to?(:view_sprint_burndown, @project) -%>
+    <%= link_to(l(:label_burndown_by_effort),
+                burndown_sprint_path(@sprint, :type => :effort),
+                :class => "icon icon-burndown") %>
+    <%= link_to(l(:label_burndown_by_sps),
+                burndown_sprint_path(@sprint, :type => :sps),
+                :class => "icon icon-burndown") %>
+  <%- end -%>
 </div>
+<br/>
 
-<%= render :partial => "sprints/burndown", :formats => [:js], :locals => {:data => @data} %>
+<%- if @type == :sps -%>
+  <div style="position: relative;">
+    <svg height="80" width="300" class="xchart"
+         style="position: absolute; top: 0px; right: 0px;">
+      <g class="line color0"><path class="line" stroke-width="10" d="M5 15 H70" /></g>
+      <g class="axis"><text x="80" y="18"><%= l(:label_pending_sps) %></text></g>
+    </svg>
+    <figure id="burndown-chart"
+            style="left-margin: auto; right-margin:auto; width: 90%; height: 500px;" />
+  </div>
+  <%= render :partial => "sprints/burndown_by_sps",
+             :formats => [:js],
+             :locals => {:data => @data} %>
+<%- else -%>
+  <div style="position: relative;">
+    <svg height="80" width="300" class="xchart"
+         style="position: absolute; top: 0px; right: 0px;">
+      <g class="line color0"><path class="line" stroke-width="10" d="M5 15 H70" /></g>
+      <g class="axis"><text x="80" y="18"><%= l(:label_estimated_effort) %></text></g>
+      <g class="line color1"><path class="line" stroke-width="10" d="M5 35 H70" /></g>
+      <g class="axis"><text x="80" y="38"><%= l(:field_pending_effort) %></text></g>
+    </svg>
+    <figure id="burndown-chart"
+            style="left-margin: auto; right-margin:auto; width: 90%; height: 500px;" />
+  </div>
+  <%= render :partial => "sprints/burndown",
+             :formats => [:js],
+             :locals => {:data => @data} %>
+<%- end -%>
 
 <%= render :partial => "common/scrum_footer" %>
