@@ -11,6 +11,7 @@
         <th><%= l(:field_shared) %></th>
         <th><%= l(:label_product_backlog) %></th>
         <th><%= l(:label_pbi_plural) %></th>
+        <th><%= l(:label_task_plural) %></th>
         <th style="width:15%"></th>
       </tr>
     </thead>
@@ -24,6 +25,7 @@
           <td align="center"><%= checked_image sprint.shared %></td>
           <td align="center"><%= checked_image sprint.is_product_backlog? %></td>
           <td align="center"><%= sprint.pbis.count %></td>
+          <td align="center"><%= sprint.tasks.count %></td>
           <td class="buttons">
             <%- if User.current.allowed_to?(:manage_sprints, @project) -%>
               <%- unless checked_image sprint.is_product_backlog? -%>
