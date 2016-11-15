@@ -1,4 +1,4 @@
-<%- if @project.sprints_and_product_backlog.empty? -%>
+<%- if @project.sprints_and_product_backlogs.empty? -%>
   <p class="nodata"><%= l(:label_no_data) %></p>
 <%- else -%>
   <table class="list">
@@ -16,7 +16,7 @@
       </tr>
     </thead>
     <tbody>
-      <% for sprint in @project.sprints_and_product_backlog %>
+      <% for sprint in @project.sprints_and_product_backlogs %>
         <tr class="version <%= cycle 'odd', 'even' %> <%= sprint.status %>">
           <td><%= link_to(h(sprint.name), sprint.is_product_backlog? ? product_backlog_path(sprint) : sprint) %></td>
           <td align="center"><%= format_date(sprint.sprint_start_date) %></td>
