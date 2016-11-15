@@ -89,10 +89,10 @@ module Scrum
           # Get this project Sprints.
           conditions = {}
           conditions[:shared] = true if only_shared
-          all_sprints = open_sprints_and_product_backlog.where(conditions).to_a
+          all_sprints = open_sprints_and_product_backlogs.where(conditions).to_a
           # If parent try to recursivelly add shared Sprints from parents.
           unless parent.nil?
-            all_sprints += parent.all_open_sprints_and_product_backlog(true)
+            all_sprints += parent.all_open_sprints_and_product_backlogs(true)
           end
           return all_sprints
         end

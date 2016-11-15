@@ -5,7 +5,7 @@
 #   * No derivates of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-require_dependency "issue_query"
+require_dependency 'issue_query'
 
 module Scrum
   module IssueQueryPatch
@@ -21,12 +21,12 @@ module Scrum
         def initialize_available_filters_with_scrum
           filters = initialize_available_filters_without_scrum
           if project
-            sprints = project.sprints_and_product_backlog
+            sprints = project.sprints_and_product_backlogs
             if sprints.any?
-              add_available_filter "sprint_id",
+              add_available_filter 'sprint_id',
                                    :type => :list_optional,
                                    :values => sprints.sort.collect{|s| [s.name, s.id.to_s]}
-              add_available_filter "position",
+              add_available_filter 'position',
                                    :type => :integer
               add_associations_custom_fields_filters :sprint
             end
