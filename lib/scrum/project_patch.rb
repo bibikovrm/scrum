@@ -85,7 +85,7 @@ module Scrum
           sps_by_pbi_field(:activity, :time_entries_by_activity)
         end
 
-        def all_open_sprints_and_product_backlog(only_shared = false)
+        def all_open_sprints_and_product_backlogs(only_shared = false)
           # Get this project Sprints.
           conditions = {}
           conditions[:shared] = true if only_shared
