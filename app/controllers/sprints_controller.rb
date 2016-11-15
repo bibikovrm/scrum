@@ -49,8 +49,6 @@ class SprintsController < ApplicationController
   end
 
   def create
-    raise 'Product backlog is already set' if params[:create_product_backlog] and
-                                              !(@project.product_backlog.nil?)
     @sprint = Sprint.new(:user => User.current,
                          :project => @project,
                          :is_product_backlog => (!(params[:create_product_backlog].nil?)))

@@ -112,7 +112,7 @@ fr:
   label_tip_new_version_link: "Configuration » Versions » Nouvelle version"
   label_tip_new_sprint_link: "Configuration » Sprints » Nouveau Sprint"
   label_tip_no_permissions: "Les permissions du plugin ne sont pas définies, vous pouvez les configurer dans %{link}"
-  label_tip_no_product_backlog: "Il n'existe pas de Product Backlog, vous pouvez en créer un dans %{link}"
+  label_tip_no_product_backlogs: "Il n'existe pas de Product Backlog, vous pouvez en créer un dans %{link}"
   label_tip_no_sprints: "Il n'existe aucun sprint, vous pouvez en créér dans %{link}"
   label_tip_no_plugin_setting: "Le paramètre “%{setting}” n'est pas défini, vous pouvez le configurer dans %{link}"
   label_tip_permissions_link: "Administration » Roles & permissions » Permissions report"

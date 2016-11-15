@@ -57,7 +57,7 @@ Redmine::Plugin.register :scrum do
     permission      :view_sprint_stats, {:sprints => [:stats_index, :stats]}
     permission      :view_sprint_stats_by_member, {}
     permission      :view_product_backlog,
-                    {:product_backlog => [:index, :check_dependencies]}
+                    {:product_backlog => [:index, :show, :check_dependencies]}
     permission      :edit_product_backlog,
                     {:product_backlog => [:new_pbi, :create_pbi],
                      :scrum => [:edit_pbi, :update_pbi, :move_to_last_sprint,
@@ -70,7 +70,7 @@ Redmine::Plugin.register :scrum do
     permission      :view_product_backlog_burndown,
                     {:product_backlog => [:burndown]}
     permission      :view_release_plan,
-                    {:scrum => [:release_plan]}
+                    {:product_backlog => [:release_plan]}
     permission      :view_scrum_stats,
                     {:scrum => [:stats]}
   end

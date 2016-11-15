@@ -12,13 +12,14 @@ module Scrum
     def self.included(base)
       base.class_eval do
 
-        belongs_to :product_backlog, :class_name => "Sprint"
-        has_many :sprints, -> { where(:is_product_backlog => false).order("sprint_start_date ASC, name ASC") },
+        has_many :product_backlogs, -> { where(:is_product_backlog => true).order('name ASC') },
+                 :class_name => 'Sprint'
+        has_many :sprints, -> { where(:is_product_backlog => false).order('sprint_start_date ASC, name ASC') },
                  :dependent => :destroy
-        has_many :sprints_and_product_backlog, -> { order("sprint_start_date ASC, name ASC") },
-                 :class_name => "Sprint", :dependent => :destroy
-        has_many :open_sprints_and_product_backlog, -> { where(:status => 'open').order("sprint_start_date ASC, name ASC") },
-                 :class_name => "Sprint", :dependent => :destroy
+        has_many :sprints_and_product_backlogs, -> { order('sprint_start_date ASC, name ASC') },
+                 :class_name => 'Sprint', :dependent => :destroy
+        has_many :open_sprints_and_product_backlogs, -> { where(:status => 'open').order('sprint_start_date ASC, name ASC') },
+                 :class_name => 'Sprint', :dependent => :destroy
 
         def last_sprint
           sprints.last
@@ -114,7 +115,7 @@ module Scrum
         def sps_by_pbi_field(field, method)
           results = {}
           total = 0.0
-          all_sprints = sprints_and_product_backlog
+          all_sprints = sprints_and_product_backlogs
           all_sprints.each do |sprint|
             sprint_results, sprint_total = sprint.send(method)
             sprint_results.each do |result|

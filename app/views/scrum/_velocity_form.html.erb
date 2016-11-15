@@ -1,5 +1,5 @@
 <tr>
-  <td>
+  <td colspan="2">
     <%= form_tag(url, :method => :get, :id => "velocity_form") do %>
       <%= label_tag(:velocity_type_all) do %>
         <%= radio_button_tag(:velocity_type, "all", velocity_type == "all") %>

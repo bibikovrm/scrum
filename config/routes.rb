@@ -27,22 +27,20 @@ resources :projects do
        :controller => :sprints, :action => :change_task_status,
        :as => :sprints_change_task_status
 
-  resources :product_backlog, :shallow => true, :only => [:index] do
-    collection do
+  resources :product_backlog, :shallow => true do
+    member do
       post :sort
       post :create_pbi
       get :burndown
       get :burndown_graph
       get :check_dependencies
+      get :release_plan
     end
   end
   get "product_backlog/new_pbi/:tracker_id",
       :controller => :product_backlog, :action => :new_pbi,
       :as => :product_backlog_new_pbi
 
-  get "release_plan",
-      :controller => :scrum, :action => :release_plan,
-      :as => :release_plan
   get "scrum/stats",
       :controller => :scrum, :action => :stats,
       :as => :scrum_stats

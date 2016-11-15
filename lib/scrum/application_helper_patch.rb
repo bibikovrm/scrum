@@ -100,7 +100,7 @@ module Scrum
           if Scrum::Setting.render_plugin_tips
             # Plugin permissions check.
             unless @project and !(@project.module_enabled?(:scrum))
-              scrum_permissions = Redmine::AccessControl.modules_permissions(["scrum"]).select{|p| p.project_module}.collect{|p| p.name}
+              scrum_permissions = Redmine::AccessControl.modules_permissions(['scrum']).select{|p| p.project_module}.collect{|p| p.name}
               active_scrum_permissions = Role.all.collect{|r| r.permissions & scrum_permissions}.flatten
               if active_scrum_permissions.empty?
                 tips << l(:label_tip_no_permissions,
@@ -134,9 +134,9 @@ module Scrum
             if @project and @project.persisted? and @project.module_enabled?(:scrum)
               product_backlog_link = link_to(l(:label_tip_product_backlog_link),
                                              project_product_backlog_index_path(@project))
-              # PB exists check.
-              if @project.product_backlog.nil?
-                tips << l(:label_tip_no_product_backlog,
+              # At least one PB check.
+              if @project.product_backlogs.empty?
+                tips << l(:label_tip_no_product_backlogs,
                           :link => link_to(l(:label_tip_new_product_backlog_link),
                                            new_project_sprint_path(@project, :create_product_backlog => true,
                                                                    :back_url => url_for(params))))
@@ -154,7 +154,7 @@ module Scrum
                   tips << l(:label_tip_product_backlog_without_pbis, :link => product_backlog_link)
                 end
                 # Release plan checks.
-                if params[:controller] == "scrum" and params[:action] == "release_plan"
+                if params[:controller] == 'scrum' and params[:action] == 'release_plan'
                   # No versions check.
                   if @project.versions.empty?
                     tips << l(:label_tip_project_without_versions,

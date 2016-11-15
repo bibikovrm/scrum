@@ -113,7 +113,7 @@ zh:
   label_tip_new_version_link: "设置 » 版本 » 新建版本"
   label_tip_new_sprint_link: "设置 » Sprints » 新建 Sprint"
   label_tip_no_permissions: "插件权限未配置。请在使用前，先通过如下链接配置相关权限：%{link} "
-  label_tip_no_product_backlog: "当前不存在 Product Backlog，请通过如下链接添加： %{link} "
+  label_tip_no_product_backlogs: "当前不存在 Product Backlogs，请通过如下链接添加： %{link} "
   label_tip_no_sprints: "当前不存在 Sprints，请先通过 %{link} 创建。"
   label_tip_no_plugin_setting: "“%{setting}” 插件未配置，请通过如下链接设置：%{link} "
   label_tip_permissions_link: "管理 » 角色和权限 » 权限报表"

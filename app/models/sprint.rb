@@ -23,8 +23,8 @@ class Sprint < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => [:project_id]
   validates_length_of :name, :maximum => 60
-  validates_presence_of :sprint_start_date
-  validates_presence_of :sprint_end_date
+  validates_presence_of :sprint_start_date, :unless => :is_product_backlog?
+  validates_presence_of :sprint_end_date, :unless => :is_product_backlog?
   validates_inclusion_of :status, :in => SPRINT_STATUSES
 
   before_destroy :update_project_product_backlog

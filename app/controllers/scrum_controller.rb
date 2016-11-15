@@ -16,7 +16,7 @@ class ScrumController < ApplicationController
   before_filter :find_sprint, :only => [:new_pbi, :create_pbi]
   before_filter :find_pbi, :only => [:new_task, :create_task, :edit_pbi, :update_pbi, :move_pbi,
                                      :move_to_last_sprint, :move_to_product_backlog]
-  before_filter :find_project_by_project_id, :only => [:release_plan, :stats]
+  before_filter :find_project_by_project_id, :only => [:stats]
   before_filter :authorize, :except => [:new_pbi, :create_pbi, :new_task, :create_task,
                                         :new_time_entry, :create_time_entry,
                                         :change_pending_efforts]
@@ -93,7 +93,7 @@ class ScrumController < ApplicationController
     @pbi.tracker = @project.trackers.find(params[:tracker_id])
     @pbi.author = User.current
     @pbi.sprint = @sprint
-    @top = true unless params[:top].nil? or (params[:top] == "false")
+    @top = true unless params[:top].nil? or (params[:top] == 'false')
     respond_to do |format|
       format.html
       format.js
@@ -146,12 +146,12 @@ class ScrumController < ApplicationController
     begin
       @position = params[:position]
       case params[:position]
-        when "top", "bottom"
+        when 'top', 'bottom'
           @pbi.move_pbi_to(@position)
-        when "before"
+        when 'before'
           @other_pbi = params[:before_other_pbi]
           @pbi.move_pbi_to(@position, @other_pbi)
-        when "after"
+        when 'after'
           @other_pbi = params[:after_other_pbi]
           @pbi.move_pbi_to(@position, @other_pbi)
         else
@@ -246,57 +246,6 @@ class ScrumController < ApplicationController
     end
   end
 
-  def release_plan
-    @product_backlog = @project.product_backlog
-    @sprints = []
-    velocity_all_pbis, velocity_scheduled_pbis, @sprints_count = @project.story_points_per_sprint
-    @velocity_type = params[:velocity_type] || "only_scheduled"
-    case @velocity_type
-      when "all"
-        @velocity = velocity_all_pbis
-      when "only_scheduled"
-        @velocity = velocity_scheduled_pbis
-      else
-        @velocity = params[:custom_velocity].to_f unless params[:custom_velocity].blank?
-    end
-    @velocity = 1.0 if @velocity.blank? or @velocity < 1.0
-    @total_story_points = 0.0
-    @pbis_with_estimation = 0
-    @pbis_without_estimation = 0
-    versions = {}
-    accumulated_story_points = @velocity
-    current_sprint = {:pbis => [], :story_points => 0.0, :versions => []}
-    if @project.product_backlog
-      @project.product_backlog.pbis.each do |pbi|
-        if pbi.story_points
-          @pbis_with_estimation += 1
-          story_points = pbi.story_points.to_f
-          @total_story_points += story_points
-          while accumulated_story_points < story_points
-            @sprints << current_sprint
-            accumulated_story_points += @velocity
-            current_sprint = {:pbis => [], :story_points => 0.0, :versions => []}
-          end
-          accumulated_story_points -= story_points
-          current_sprint[:pbis] << pbi
-          current_sprint[:story_points] += story_points
-          if pbi.fixed_version
-            versions[pbi.fixed_version.id] = {:version => pbi.fixed_version,
-                                              :sprint => @sprints.count}
-          end
-        else
-          @pbis_without_estimation += 1
-        end
-      end
-      if current_sprint and (current_sprint[:pbis].count > 0)
-        @sprints << current_sprint
-      end
-      versions.values.each do |info|
-        @sprints[info[:sprint]][:versions] << info[:version]
-      end
-    end
-  end
-
   def stats
     if User.current.allowed_to?(:view_time_entries, @project)
       cond = @project.project_condition(Setting.display_subprojects_issues?)
@@ -304,7 +253,7 @@ class ScrumController < ApplicationController
     end
 
     @hours_per_story_point = @project.hours_per_story_point
-    @hours_per_story_point_chart = {:id => "hours_per_story_point", :height => 400}
+    @hours_per_story_point_chart = {:id => 'hours_per_story_point', :height => 400}
 
     @sps_by_pbi_category, @sps_by_pbi_category_total = @project.sps_by_category
     @sps_by_pbi_type, @sps_by_pbi_type_total = @project.sps_by_pbi_type
