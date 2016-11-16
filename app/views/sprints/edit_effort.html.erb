@@ -19,7 +19,7 @@
   <%- end -%>
 </div>
 
-<%- if @project.sprints_and_product_backlog.empty? -%>
+<%- if @project.sprints_and_product_backlogs.empty? -%>
   <p class="nodata"><%= l(:label_no_data) %></p>
 <%- else -%>
   <%= form_tag(update_effort_sprint_path(@sprint)) do |f| %>
