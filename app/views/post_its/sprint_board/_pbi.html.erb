@@ -1,5 +1,5 @@
 <%- pbi_id = "pbi_#{pbi.id}" -%>
-<table id="<%= pbi_id %>" class="<%= pbi.post_it_css_class(:rotate => true, :scale => true) %>">
+<table id="<%= pbi_id %>" class="<%= pbi.post_it_css_class(:rotate => true, :scale => true, :draggable => true) %>">
   <tr>
     <td class="content" colspan="3">
       <%- if User.current.allowed_to?(:edit_sprint_board, project) and 

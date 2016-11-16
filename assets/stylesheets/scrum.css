@@ -304,6 +304,12 @@ table.sprint-board tr.sprint-board td.sprint-board {
 	border: 0.5em solid darkgrey;
 }
 
+.sprint-row-space {
+	border: 0.5em solid darkgrey;
+	height: 11em;
+	background-color: lightyellow;
+}
+
 table.sprint-pbi, table.sprint-task {
 	height: 9em;
 	margin-right: 0.8em;

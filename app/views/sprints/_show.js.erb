@@ -2,6 +2,8 @@
   <%= javascript_tag do %>
     $(document).ready(function() {
       $("#<%= sprint_board_id %>").sortable({
+        handle: ".sprint-pbi",
+        placeholder: "sprint-row-space",
         update: function() {
           if ($.isFunction($.fn.setupAjaxIndicator)) {
             setupAjaxIndicator();
