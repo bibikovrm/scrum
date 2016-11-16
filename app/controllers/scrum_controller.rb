@@ -177,8 +177,8 @@ class ScrumController < ApplicationController
 
   def move_to_product_backlog
     begin
-      raise "The project hasn't defined the Product Backlog yet" unless @project.product_backlog
-      move_issue_to_sprint(@pbi, @project.product_backlog)
+      product_backlog = @project.product_backlogs.find(params[:id])
+      move_issue_to_sprint(@pbi, product_backlog)
     rescue Exception => @exception
       logger.error("Exception: #{@exception.inspect}")
     end

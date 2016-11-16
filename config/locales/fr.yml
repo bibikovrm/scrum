@@ -49,7 +49,7 @@ fr:
   label_move_pbi_after: "Déplacer après"
   label_move_pbi_before: "Déplacer avant"
   label_move_pbi_to_last_sprint: "Déplacer dans le dernier sprint"
-  label_move_pbi_to_product_backlog: "Déplacer dans le Product Backlog"
+  label_move_pbi_to_name: "Déplacer dans %{name}"
   label_no_invalid_dependencies: "Il n'y a aucune dépendance invalide."
   label_pbi_plural: "Items du Product Backlog"
   label_pbi_post_it: "Product Backlog item post-it" 

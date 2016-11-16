@@ -48,7 +48,7 @@ zh:
   label_move_pbi_after: "移动到...之后"
   label_move_pbi_before: "移动到...之前"
   label_move_pbi_to_last_sprint: "移动到最近一个 Sprint"
-  label_move_pbi_to_product_backlog: "移动到 Product Backlog"
+  label_move_pbi_to_name: "移动到 %{name}"
   label_no_invalid_dependencies: "当前无有效的依赖关系。"
   label_pbi_plural: "Product Backlog Items（PBIs）"
   label_pbi_post_it: "PBI 便利贴" 

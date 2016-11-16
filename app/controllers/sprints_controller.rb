@@ -55,7 +55,7 @@ class SprintsController < ApplicationController
     @sprint.safe_attributes = params[:sprint]
     if request.post? and @sprint.save
       if params[:create_product_backlog]
-        @project.product_backlog = @sprint
+        @project.product_backlogs << @sprint
         raise 'Fail to update project with product backlog' unless @project.save!
       end
       flash[:notice] = l(:notice_successful_create)
