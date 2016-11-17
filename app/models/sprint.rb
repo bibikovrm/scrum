@@ -240,9 +240,13 @@ class Sprint < ActiveRecord::Base
 
   def completed_sps_by_day
     total_sps = story_points
+    non_working_days = Setting.non_working_week_days.collect{|day| (day == '7') ? 0 : day.to_i}
     days = {}
-    (sprint_start_date..(sprint_end_date + 1)).each do |day|
-      days[day] = total_sps
+    end_date = sprint_end_date + 1
+    (sprint_start_date..end_date).each do |day|
+      if (day == end_date) or (!(non_working_days.include?(day.wday)))
+        days[day] = total_sps
+      end
     end
     closed_statuses = IssueStatus::closed_status_ids
     pbis.each do |pbi|

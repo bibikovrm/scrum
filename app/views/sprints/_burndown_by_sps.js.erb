@@ -16,10 +16,10 @@
 				// Pending SPs serie.
 				"className": ".pending-sps",
 				"data": [
-				<%- data.each_with_index do |value, i| -%>
+				<%- data.each_with_index do |value, day| -%>
 					<%- unless value[:pending_sps].nil? -%>
 					{
-						"x": <%= i %>,
+						"x": <%= day %>,
 						"y": <%= value[:pending_sps] %>,
 						"axis_label": "<%= value[:axis_label] %>",
 						"tooltip": "<%= value[:pending_sps_tooltip] %>"
