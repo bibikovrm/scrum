@@ -27,8 +27,6 @@ class Sprint < ActiveRecord::Base
   validates_presence_of :sprint_end_date, :unless => :is_product_backlog?
   validates_inclusion_of :status, :in => SPRINT_STATUSES
 
-  before_destroy :update_project_product_backlog
-
   def to_s
     name
   end
@@ -274,13 +272,6 @@ class Sprint < ActiveRecord::Base
   end
 
 private
-
-  def update_project_product_backlog
-    if is_product_backlog?
-      project.product_backlog = nil
-      project.save!
-    end
-  end
 
   def sps_by_pbi_field(field_id, subfield_id, field, subfield, field_min, label_min)
     results = {}
