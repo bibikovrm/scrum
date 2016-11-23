@@ -58,14 +58,17 @@
     <%= check_box_tag('settings[random_posit_rotation]', 1,
                       Scrum::Setting.random_posit_rotation) %>
   </p>
-  <%- colors = {1 => 'post-it-color-1', 2 => 'post-it-color-2', 3 => 'post-it-color-3',
-                4 => 'post-it-color-4', 5 => 'post-it-color-5', 6 => 'post-it-color-6'}
+  <%- colors = {1  => 'post-it-color-1',  2  => 'post-it-color-2', 3 => 'post-it-color-3',
+                4  => 'post-it-color-4',  5  => 'post-it-color-5', 6 => 'post-it-color-6',
+                7  => 'post-it-color-7',  8  => 'post-it-color-8', 9 => 'post-it-color-9',
+                10 => 'post-it-color-10', 11 => 'post-it-color-11'}
       Tracker.all.each do |tracker| -%>
     <%- included = (Scrum::Setting.pbi_tracker_ids.include?(tracker.id) or
             Scrum::Setting.task_tracker_ids.include?(tracker.id)) -%>
     <p id="tracker_<%= tracker.id %>_color"
        style="display: <%= included ? 'block' : 'none' %>;">
       <label><%= tracker.name %>:</label>
+      <nobr>
       <%- colors.each_pair do |color_id, color_css_class| -%>
         <span style="white-space: nowrap;">
           <%- setting_name = "tracker_#{tracker.id}_color".to_sym
@@ -76,6 +79,7 @@
           </span>
         </span>
       <%- end -%>
+      </nobr>
     </p>
   <%- end -%>
   <p>
