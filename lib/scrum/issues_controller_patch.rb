@@ -27,10 +27,12 @@ module Scrum
           if @issue.id.nil?
             @issue.sprint = nil
             unless @project.nil?
-              if @issue.is_task? and (current_sprint = @project.current_sprint)
-                @issue.sprint = current_sprint
-              elsif @issue.is_pbi? and (product_backlog = @project.product_backlog)
-                @issue.sprint = product_backlog
+              if @project.scrum?
+                if @issue.is_task? and (current_sprint = @project.current_sprint)
+                  @issue.sprint = current_sprint
+                elsif @issue.is_pbi? and (product_backlog = @project.product_backlogs.first)
+                  @issue.sprint = product_backlog
+                end
               end
             end
           end
