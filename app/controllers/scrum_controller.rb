@@ -189,7 +189,7 @@ class ScrumController < ApplicationController
 
   def new_task
     @task = Issue.new
-    @task.project = @project
+    @task.project = @pbi.project
     @task.tracker = Tracker.find(params[:tracker_id])
     @task.parent = @pbi
     @task.author = User.current
@@ -210,7 +210,7 @@ class ScrumController < ApplicationController
     begin
       @continue = !(params[:create_and_continue].nil?)
       @task = Issue.new
-      @task.project = @project
+      @task.project = @pbi.project
       @task.parent_issue_id = @pbi.id
       @task.author = User.current
       @task.sprint = @sprint
