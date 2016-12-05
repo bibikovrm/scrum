@@ -18,6 +18,10 @@
           <label><%= l(:field_end_date) %>:</label>
           <%= format_date sprint.sprint_end_date %>
         </p>
+        <p>
+          <label><%= l(:label_filter_by_assignee) %>:</label>
+          <select id="tasks-assignees"></select>
+        </p>
       </div>
     </td>
     <%- if !(sprint.description.blank?) -%>

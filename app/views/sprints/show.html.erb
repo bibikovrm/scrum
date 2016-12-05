@@ -9,7 +9,7 @@
 
 <%- sprint_board_id = 'sprint_board' -%>
 <table class="sprint-board">
-  <thead>
+  <thead class="sprint-board">
     <tr class="sprint-board">
       <th class="sprint-board"><%= l(:label_pbi_plural) %></th>
       <%- task_statuses = IssueStatus.task_statuses
@@ -18,7 +18,7 @@
       <%- end -%>
     </tr>
   </thead>
-  <tbody id="<%= sprint_board_id %>">
+  <tbody id="<%= sprint_board_id %>" class="sprint-board">
     <%- @sprint.pbis.each do |pbi| -%>
       <%= render :partial => 'post_its/sprint_board/pbi_row', :formats => [:html],
                  :locals => {:project => @project, :sprint_board_id => sprint_board_id, :pbi => pbi,
