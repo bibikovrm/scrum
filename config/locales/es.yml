@@ -71,6 +71,8 @@ es:
   label_release_plan_stats: "Un total de %{sps} PHs y %{pbis} EPPs (hay otros %{pbis_without_sps} EPPs sin estimación)"
   label_reviewer: "Revisor"
   label_scrum_stats: "Estadísticas de Scrum"
+  label_setting_auto_update_pbi_status: "Auto actualizar EPPs padres"
+  label_setting_auto_update_pbi_status_explanation: "Cambiar estado de los EPPs padres basado en el estado de las tareas hijas."
   label_setting_blocked_custom_field: "Campo personalizado para bloqueo"
   label_setting_check_dependencies_on_pbi_sorting: "Comprobar las dependencias de los EPPs al ordenar"
   label_setting_clear_new_tasks_assignee: "Vaciar asignado a para tareas en estado nuevo"

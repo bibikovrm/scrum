@@ -31,7 +31,8 @@ module Scrum
           issue.project.scrum? and issue.status_id_changed? and issue.is_task?
         }
         before_save :update_parent_pbi, :if => lambda { |issue|
-          issue.project.scrum? and (issue.status_id_changed? or issue.new_record?) and
+          issue.project.scrum? and Scrum::Setting.auto_update_pbi_status and
+          (issue.status_id_changed? or issue.new_record?) and
           issue.is_task? and !issue.parent_id.nil?
         }
 

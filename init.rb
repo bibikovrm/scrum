@@ -90,6 +90,7 @@ Redmine::Plugin.register :scrum do
                                  :blocked_custom_field_id => nil,
                                  :task_status_ids => [],
                                  :task_tracker_ids => [],
+                                 :auto_update_pbi_status => '1',
                                  :clear_new_tasks_assignee => '1',
                                  :verification_activity_ids => [],
                                  :inherit_pbi_attributes => '1',
