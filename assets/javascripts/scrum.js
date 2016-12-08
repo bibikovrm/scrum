@@ -10,7 +10,15 @@ function touchHandler(event) {
 		touch.clientX, touch.clientY, false,
 		false, false, false, 0, null);
 	touch.target.dispatchEvent(simulatedEvent);
-	event.preventDefault();
+	if (!event) {
+		event = window.event;
+	}
+	var sender = event.srcElement || event.target;
+	if (sender &&
+		sender.nodeName.toLowerCase() != "a" &&
+		sender.nodeName.toLowerCase() != "input") {
+		event.preventDefault();
+	}
 }
 
 function draggableOnTouchScreen(element_id) {

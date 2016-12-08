@@ -47,3 +47,7 @@
     </td>
   </tr>
 </table>
+<%= render :partial => 'post_its/sprint_board/pbi', :formats => [:js],
+           :locals => {:project => project,
+                       :pbi => pbi,
+                       :pbi_id => pbi_id} %>
