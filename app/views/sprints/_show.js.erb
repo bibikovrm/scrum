@@ -3,7 +3,7 @@
     $(document).ready(function() {
       var $assignees = $("#tasks-assignees");
       var users = { };
-      $assignees.append("<option value='all'></option>");
+      $assignees.append("<option value='all'><%= l(:label_any) %></option>");
       $("table.sprint-board a.user").each(function(row_index, user_link) {
         users[$.trim(user_link.text)] = row_index;
       });
