@@ -12,7 +12,7 @@
                       :class => "icon icon-add float-icon",
                       :title => l(:label_add_task, :tracker => tracker.name) %>
         <%- end -%>
-    <%- end -%>
+      <%- end -%>
       <%= render_issue_icons(pbi) %>
       <%= render :partial => "post_its/sprint_board/fields", :formats => [:html],
                  :locals => {:project => project, :issue => pbi} %>

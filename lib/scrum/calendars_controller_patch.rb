@@ -36,7 +36,8 @@ module Scrum
             sprints << {:name => sprint.name,
                         :url => url_for(:controller => :sprints,
                                         :action => :show,
-                                        :id => sprint.id),
+                                        :id => sprint.id,
+                                        :only_path => true),
                         :day => sprint.send(date_field).day,
                         :week => sprint.send(date_field).cweek,
                         :start => start}
