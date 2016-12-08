@@ -161,7 +161,7 @@ class SprintsController < ApplicationController
       @data.last[:axis_label] = l(:label_end)
       @data.last[:pending_sps_tooltip] = l(:label_pending_sps_tooltip,
                                            :date => l(:label_end),
-                                           :sps => 0)
+                                           :sps => @data.last[:pending_sps])
       @type = :sps
     else
       @data = []
