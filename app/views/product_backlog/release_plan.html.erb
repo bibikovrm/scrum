@@ -18,30 +18,32 @@
                          :pbis_without_estimation => @pbis_without_estimation} %>
 </table>
 
-<table class="sprint-board">
-  <tr class="sprint-board">
-    <th class="sprint-board"><%= l(:label_sprint_plural) %></th>
-    <th class="sprint-board"><%= l(:label_version_plural) %></th>
-    <th class="sprint-board"><%= l(:label_pbi_plural) %></th>
-  </tr>
-  <%- @sprints.each_with_index do |sprint, index| -%>
-  <tr class="sprint-board">
-    <td class="sprint-board" align="center">
-      <%= "#{l(:field_sprint)} +#{index + 1}" %>
-    </td>
-    <td class="sprint-board">
-      <%= raw(sprint[:versions].collect{|version| link_to_version(version)}.join(", ")) %>
-    </td>
-    <td class="sprint-board">
-      <ul id="pbis" class="pbis">
-        <%- sprint[:pbis].each do |pbi| -%>
-        <%= render :partial => 'post_its/product_backlog/pbi',
-                   :locals => {:project => @project, :pbi => pbi, :read_only => true} %>
-        <%- end -%>
-      </ul>
-    </td>
-  </tr>
-  <%- end -%>
-</table>
+<%= render :layout => 'common/fullscreen_content' do %>
+  <table class="sprint-board">
+    <tr class="sprint-board">
+      <th class="sprint-board"><%= l(:label_sprint_plural) %></th>
+      <th class="sprint-board"><%= l(:label_version_plural) %></th>
+      <th class="sprint-board"><%= l(:label_pbi_plural) %></th>
+    </tr>
+    <%- @sprints.each_with_index do |sprint, index| -%>
+    <tr class="sprint-board">
+      <td class="sprint-board" align="center">
+        <%= "#{l(:field_sprint)} +#{index + 1}" %>
+      </td>
+      <td class="sprint-board">
+        <%= raw(sprint[:versions].collect{|version| link_to_version(version)}.join(", ")) %>
+      </td>
+      <td class="sprint-board">
+        <ul id="pbis" class="pbis">
+          <%- sprint[:pbis].each do |pbi| -%>
+          <%= render :partial => 'post_its/product_backlog/pbi',
+                     :locals => {:project => @project, :pbi => pbi, :read_only => true} %>
+          <%- end -%>
+        </ul>
+      </td>
+    </tr>
+    <%- end -%>
+  </table>
+<% end %>
 
 <%= render :partial => 'common/scrum_footer' %>

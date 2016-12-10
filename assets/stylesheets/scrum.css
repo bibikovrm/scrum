@@ -30,6 +30,14 @@
     background-image: url(../images/icon-move-bottom-16.png);
 }
 
+.icon-fullscreen {
+	background-image: url(../images/icon-fullscreen-16.png);
+}
+
+.icon-normal-screen {
+	background-image: url(../images/icon-normal-screen-16.png);
+}
+
 .icon-major-deviation {
 	background-image: url(../../../images/exclamation.png);
 }
@@ -234,7 +242,7 @@
 
 ul.pbis {
 	padding: 0px;
-	width: 95%;
+	width: 90%;
 	margin: 0px auto 0px auto;
 }
 
@@ -300,6 +308,7 @@ ul.pbis li table tr td.content {
 table.sprint-board {
 	border-collapse: collapse;
 	overflow: auto;
+	width: 90%;
 	margin: 0px auto 10px auto;
 }
 
@@ -470,7 +479,7 @@ table.sprint-pbi input, table.sprint-task input {
 }
 
 .burndown {
-	width: 100%;
+	width: 90%;
 	text-align: center;
 }
 
@@ -554,4 +563,44 @@ table.scrum-stats-chart-table {
 
 .scrum-menu a {
 	margin-left: 1em;
+}
+
+.scrum-content {
+	position: relative;
+}
+
+.scrum-content-fullscreen {
+	background-color: white;
+	z-index: 50;
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0px;
+	right: 0px;
+	overflow: auto;
+}
+
+.scrum-contextual {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+
+.scrum-content .icon-normal-screen {
+	display: none;
+}
+
+.scrum-content-fullscreen .icon-normal-screen {
+	display: inline;
+	margin-top: 5px;
+	margin-right: 10px;
+}
+
+.scrum-content .icon-fullscreen {
+	display: inline;
+	margin-top: -5px;
+}
+
+.scrum-content-fullscreen .icon-fullscreen {
+	display: none;
 }
