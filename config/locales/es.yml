@@ -66,6 +66,7 @@ es:
   label_product_backlog: "Pila de producto"
   label_product_backlog_burndown_chart: "Burndown de la pila de producto"
   label_product_backlog_new: "Nueva pila de producto"
+  label_product_backlog_plural: "Pilas de producto"
   label_release_plan: "Plan de liberaciones"
   label_release_plan_name: "Plan de liberaciones de %{name}"
   label_release_plan_stats: "Un total de %{sps} PHs y %{pbis} EPPs (hay otros %{pbis_without_sps} EPPs sin estimación)"

@@ -66,6 +66,7 @@ en:
   label_product_backlog: "Product backlog"
   label_product_backlog_burndown_chart: "Product backlog burndown"
   label_product_backlog_new: "New product backlog"
+  label_product_backlog_plural: "Product backlogs"
   label_release_plan: "Release plan"
   label_release_plan_name: "%{name} release plan"
   label_release_plan_stats: "A total of %{sps} SPs and %{pbis} PBIs (there are other %{pbis_without_sps} PBIs without estimation)"
