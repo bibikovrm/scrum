@@ -84,6 +84,14 @@ module Scrum
           tracker.is_pbi?
         end
 
+        def is_simple_pbi?
+          is_pbi? and
+          !((custom_field_id = Scrum::Setting.simple_pbi_custom_field_id).nil?) and
+          !((custom_value = self.custom_value_for(custom_field_id)).nil?) and
+          (custom_value.value == '1') and
+          self.children.empty?
+        end
+
         def is_task?
           tracker.is_task?
         end

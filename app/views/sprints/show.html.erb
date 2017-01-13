@@ -22,7 +22,9 @@
     <tbody id="<%= sprint_board_id %>" class="sprint-board">
     <%- @sprint.pbis.each do |pbi| -%>
       <%= render :partial => 'post_its/sprint_board/pbi_row', :formats => [:html],
-                 :locals => {:project => @project, :sprint_board_id => sprint_board_id, :pbi => pbi,
+                 :locals => {:project => @project,
+                             :sprint_board_id => sprint_board_id,
+                             :pbi => pbi,
                              :task_statuses => task_statuses} %>
     <%- end -%>
     </tbody>

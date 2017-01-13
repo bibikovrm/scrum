@@ -1,5 +1,9 @@
 <%- pbi_id = "pbi_#{pbi.id}" -%>
-<table id="<%= pbi_id %>" class="<%= pbi.post_it_css_class(:rotate => true, :scale => true, :draggable => true) %>">
+<%- is_simple = pbi.is_simple_pbi? -%>
+<table id="<%= pbi_id %>"
+       class="<%= pbi.post_it_css_class(:rotate => true,
+                                        :scale => true,
+                                        :draggable => true) %>">
   <tr>
     <td class="content" colspan="3">
       <%- if User.current.allowed_to?(:edit_sprint_board, project) and 
@@ -7,10 +11,12 @@
              pbi.editable? and !read_only -%>
         <%= link_to "", edit_pbi_path(pbi), :remote => true, :method => "GET",
                     :class => "icon icon-edit float-icon", :title => l(:label_edit_pbi) %>
-        <%- Tracker.task_trackers.each do |tracker| -%>
-          <%= link_to "", new_task_path(pbi, tracker), :remote => true, :method => "GET",
-                      :class => "icon icon-add float-icon",
-                      :title => l(:label_add_task, :tracker => tracker.name) %>
+        <%- unless is_simple -%>
+          <%- Tracker.task_trackers.each do |tracker| -%>
+            <%= link_to "", new_task_path(pbi, tracker), :remote => true, :method => "GET",
+                        :class => "icon icon-add float-icon",
+                        :title => l(:label_add_task, :tracker => tracker.name) %>
+          <%- end -%>
         <%- end -%>
       <%- end -%>
       <%= render_issue_icons(pbi) %>
