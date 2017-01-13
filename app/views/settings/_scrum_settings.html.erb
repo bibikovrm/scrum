@@ -23,6 +23,13 @@
         options = options_for_select(custom_fields, Scrum::Setting.blocked_custom_field_id) -%>
     <%= select_tag 'settings[blocked_custom_field_id]', options, :include_blank => true %>
   </p>
+  <p>
+    <label><%= l(:label_setting_simple_pbi_custom_field) %>:</label>
+    <%- custom_fields = CustomField.where(:type => 'IssueCustomField', :field_format => ['bool'])
+        custom_fields = custom_fields.collect{|c| [c.name, c.id]}
+        options = options_for_select(custom_fields, Scrum::Setting.simple_pbi_custom_field_id) -%>
+    <%= select_tag 'settings[simple_pbi_custom_field_id]', options, :include_blank => true %>
+  </p>
   <%- trackers = Tracker.all.collect{|t| [t.name, t.id]} -%>
   <p>
     <label><%= l(:label_pbi_plural) %>:</label>
