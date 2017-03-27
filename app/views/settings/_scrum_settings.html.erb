@@ -222,6 +222,17 @@
 </fieldset>
 
 <fieldset>
+  <legend><%= l(:label_sprint_burndown_chart) %></legend>
+  <p>
+    <label><%= l(:label_setting_sprint_burndown_day_zero) %>:</label>
+    <%= hidden_field_tag('settings[sprint_burndown_day_zero]', 0) %>
+    <%= check_box_tag('settings[sprint_burndown_day_zero]', 1,
+                      Scrum::Setting.sprint_burndown_day_zero) %>
+    <em><%= l(:label_setting_sprint_burndown_day_zero_explanation) %></em>
+  </p>
+</fieldset>
+
+<fieldset>
   <legend><%= l(:label_product_backlog) %></legend>
   <p>
     <label><%= l(:label_setting_create_journal_on_pbi_position_change) %>:</label>

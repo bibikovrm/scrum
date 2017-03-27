@@ -167,6 +167,7 @@ class SprintsController < ApplicationController
       @data = []
       last_pending_effort = @sprint.estimated_hours
       last_day = nil
+      last_label = l(:label_begin) if Scrum::Setting.sprint_burndown_day_zero
       ((@sprint.sprint_start_date)..(@sprint.sprint_end_date)).each do |date|
         if @sprint.efforts.where(['date = ?', date]).count > 0
           efforts = @sprint.efforts.where(['date >= ?', date])
@@ -181,29 +182,32 @@ class SprintsController < ApplicationController
             pending_effort = efforts.compact.collect{|effort| effort.effort}.compact.sum
           end
           date_label = "#{I18n.l(date, :format => :scrum_day)} #{date.day}"
+          last_label = date_label unless Scrum::Setting.sprint_burndown_day_zero
           @data << {:day => date,
-                    :axis_label => date_label,
+                    :axis_label => last_label,
                     :estimated_effort => estimated_effort,
                     :estimated_effort_tooltip => l(:label_estimated_effort_tooltip,
-                                                   :date => date_label,
+                                                   :date => last_label,
                                                    :hours => estimated_effort),
                     :pending_effort => last_pending_effort,
                     :pending_effort_tooltip => l(:label_pending_effort_tooltip,
-                                                 :date => date_label,
+                                                 :date => last_label,
                                                  :hours => last_pending_effort)}
           last_pending_effort = pending_effort
           last_day = date.day
+          last_label = date_label if Scrum::Setting.sprint_burndown_day_zero
         end
       end
+      last_label = l(:label_end) unless Scrum::Setting.sprint_burndown_day_zero
       @data << {:day => last_day,
-                :axis_label => l(:label_end),
+                :axis_label => last_label,
                 :estimated_effort => 0,
                 :estimated_effort_tooltip => l(:label_estimated_effort_tooltip,
-                                               :date => l(:label_end),
+                                               :date => last_label,
                                                :hours => 0),
                 :pending_effort => last_pending_effort,
                 :pending_effort_tooltip => l(:label_pending_effort_tooltip,
-                                             :date => l(:label_end),
+                                             :date => last_label,
                                              :hours => last_pending_effort)}
       @type = :effort
     end

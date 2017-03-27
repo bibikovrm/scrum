@@ -108,6 +108,7 @@ Redmine::Plugin.register :scrum do
                                  :lowest_speed => 70,
                                  :low_speed => 80,
                                  :high_speed => 140,
-                                 :render_plugin_tips => '1'},
+                                 :render_plugin_tips => '1',
+                                 :sprint_burndown_day_zero => '1'},
                     :partial => 'settings/scrum_settings'
 end

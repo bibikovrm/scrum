@@ -21,7 +21,8 @@ module Scrum
        render_position_on_pbi
        render_tasks_speed
        render_updated_on_pbi
-       render_version_on_pbi).each do |setting|
+       render_version_on_pbi
+       sprint_burndown_day_zero).each do |setting|
       src = <<-END_SRC
       def self.#{setting}
         setting_or_default_boolean(:#{setting})
