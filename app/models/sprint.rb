@@ -81,7 +81,7 @@ class Sprint < ActiveRecord::Base
     sum = 0.0
     tasks.each do |task|
       if task.use_in_burndown?
-        pending_effort = task.pending_efforts.where(["date < ?", self.sprint_start_date]).order("date ASC").first
+        pending_effort = task.pending_efforts.where(['date < ?', self.sprint_start_date]).order('date ASC').last
         pending_effort = pending_effort.effort unless pending_effort.nil?
         if (!(pending_effort.nil?))
           sum += pending_effort
