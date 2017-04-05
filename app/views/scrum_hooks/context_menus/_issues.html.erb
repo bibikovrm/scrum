@@ -1,4 +1,4 @@
-<%- if defined?(@project) and @project.scrum? %>
+<%- if defined?(@project) and !(@project.nil?) and @project.scrum? %>
   <%- issue_ids = @issues.collect{ |issue| issue.id } -%>
   <li class="folder">
     <a href="#" class="submenu"><%= l(:field_sprint) %></a>
