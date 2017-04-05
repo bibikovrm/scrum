@@ -25,7 +25,7 @@
   <%= form_tag(update_effort_sprint_path(@sprint)) do |f| %>
     <%= back_url_hidden_field_tag %>
     <%- days = (@sprint.sprint_end_date - @sprint.sprint_start_date).to_i + 1 -%>
-    <table class="list" style="overflow: auto;">
+    <table class="list" style="display: block; overflow: auto;">
       <thead>
         <tr>
           <th style="text-align: left;"><%= l(:field_user) %></th>
