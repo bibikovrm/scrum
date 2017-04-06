@@ -18,7 +18,7 @@ module Scrum
         acts_as_list :scope => :sprint
 
         safe_attributes :sprint_id, :if => lambda { |issue, user|
-          user.allowed_to?(:edit_issues, issue.project)
+          issue.project.scrum? and user.allowed_to?(:edit_issues, issue.project)
         }
 
         before_save :update_position, :if => lambda { |issue|
@@ -365,7 +365,7 @@ module Scrum
           new_status = IssueStatus.task_statuses.first
           if new_status
             if self.status == new_status
-              if Scrum::Setting.clear_new_tasks_assignee
+              if Scrum::Setting.clear_new_tasks_assignee and !(new_record?)
                 self.assigned_to = nil
               end
             elsif self.assigned_to.nil?
