@@ -18,20 +18,20 @@ module Scrum
         acts_as_list :scope => :sprint
 
         safe_attributes :sprint_id, :if => lambda { |issue, user|
-          issue.project.scrum? and user.allowed_to?(:edit_issues, issue.project)
+          issue.project and issue.project.scrum? and user.allowed_to?(:edit_issues, issue.project)
         }
 
         before_save :update_position, :if => lambda { |issue|
-          issue.project.scrum? and issue.sprint_id_changed? and issue.is_pbi?
+          issue.project and issue.project.scrum? and issue.sprint_id_changed? and issue.is_pbi?
         }
         before_save :update_pending_effort, :if => lambda { |issue|
-          issue.project.scrum? and issue.status_id_changed? and issue.is_task?
+          issue.project and issue.project.scrum? and issue.status_id_changed? and issue.is_task?
         }
         before_save :update_assigned_to, :if => lambda { |issue|
-          issue.project.scrum? and issue.status_id_changed? and issue.is_task?
+          issue.project and issue.project.scrum? and issue.status_id_changed? and issue.is_task?
         }
         before_save :update_parent_pbi, :if => lambda { |issue|
-          issue.project.scrum? and Scrum::Setting.auto_update_pbi_status and
+          issue.project and issue.project.scrum? and Scrum::Setting.auto_update_pbi_status and
           (issue.status_id_changed? or issue.new_record?) and
           issue.is_task? and !issue.parent_id.nil?
         }
