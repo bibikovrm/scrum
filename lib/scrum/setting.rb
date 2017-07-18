@@ -60,7 +60,7 @@ module Scrum
        story_points_custom_field_id).each do |setting|
       src = <<-END_SRC
       def self.#{setting}
-        ::Setting.plugin_scrum[:#{setting}]
+        ::Setting.plugin_scrum[:#{setting}.to_s]
       end
       END_SRC
       class_eval src, __FILE__, __LINE__
@@ -90,7 +90,7 @@ module Scrum
     end
 
     def self.tracker_id_color(id)
-      setting_or_default("tracker_#{id}_color")
+      setting_or_default("tracker_#{id.to_s}_color")
     end
 
     def self.product_burndown_sprints
@@ -112,8 +112,7 @@ module Scrum
   private
 
     def self.setting_or_default(setting)
-      ::Setting.plugin_scrum[setting] ||
-      Redmine::Plugin::registered_plugins[:scrum].settings[:default][setting]
+      ::Setting.plugin_scrum[setting.to_s] || Redmine::Plugin::registered_plugins[:scrum].settings[:default][setting.to_s]
     end
 
     def self.setting_or_default_boolean(setting)
@@ -128,11 +127,11 @@ module Scrum
     end
 
     def self.collect_ids(setting)
-      (::Setting.plugin_scrum[setting] || []).collect{|value| value.to_i}
+      (::Setting.plugin_scrum[setting.to_s] || []).collect{|value| value.to_i}
     end
 
     def self.collect(setting)
-      (::Setting.plugin_scrum[setting] || [])
+      (::Setting.plugin_scrum[setting.to_s] || [])
     end
 
   end

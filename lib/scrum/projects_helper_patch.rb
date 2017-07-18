@@ -17,7 +17,10 @@ module Scrum
           if User.current.allowed_to?(:manage_sprints, @project)
             index = tabs.index({:name => 'versions', :action => :manage_versions,
                                 :partial => 'projects/settings/versions',
-                                :label => :label_version_plural})
+                                :label => :label_version_plural,
+                                :url => {:tab => 'versions',
+                                         :version_status => params[:version_status],
+                                         :version_name => params[:version_name]}})
             if index
               tabs.insert(index,
                           {:name => 'product_backlogs', :action => :edit_sprints,
