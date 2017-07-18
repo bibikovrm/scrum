@@ -15,9 +15,16 @@ module Scrum
         def project_settings_tabs_with_scrum
           tabs = project_settings_tabs_without_scrum
           if User.current.allowed_to?(:manage_sprints, @project)
-            index = tabs.index({:name => 'versions', :action => :manage_versions,
-                                :partial => 'projects/settings/versions',
-                                :label => :label_version_plural})
+            options = {:name => 'versions', :action => :manage_versions,
+                       :partial => 'projects/settings/versions',
+                       :label => :label_version_plural}
+            index = tabs.index(options)
+            unless index # Needed for Redmine v3.4.x
+              options[:url] = {:tab => 'versions',
+                               :version_status => params[:version_status],
+                               :version_name => params[:version_name]}
+              index = tabs.index(options)
+            end
             if index
               tabs.insert(index,
                           {:name => 'product_backlogs', :action => :edit_sprints,

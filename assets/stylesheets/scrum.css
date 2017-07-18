@@ -56,8 +56,10 @@
 
 .float-icon {
 	float: right;
-	min-height: 10px;
+	min-height: 16px;
 	padding-left: 16px;
+	padding-top: 0px;
+  padding-bottom: 0px;
 }
 
 .post-it, .post-it input {
@@ -69,9 +71,9 @@
 	-moz-box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.7);
 	-o-box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.7);
 	-webkit-box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.7);
-	-transition: -transform 0.15s linear;  
-	-moz-transition: -moz-transform 0.15s linear;  
-	-o-transition: -o-transform 0.15s linear;  
+	-transition: -transform 0.15s linear;
+	-moz-transition: -moz-transform 0.15s linear;
+	-o-transition: -o-transform 0.15s linear;
 	-webkit-transition: -webkit-transform 0.15s linear;
 }
 
@@ -177,26 +179,26 @@
 }
 
 .post-it-rotation-1 {
-	-o-transform: rotate(-0.5deg);  
-	-webkit-transform: rotate(-0.5deg);  
+	-o-transform: rotate(-0.5deg);
+	-webkit-transform: rotate(-0.5deg);
 	-moz-transform: rotate(-0.5deg);
 }
 
 .post-it-rotation-2 {
-	-o-transform: rotate(0.5deg);  
-	-webkit-transform: rotate(0.5deg);  
+	-o-transform: rotate(0.5deg);
+	-webkit-transform: rotate(0.5deg);
 	-moz-transform: rotate(0.5deg);
 }
 
 .post-it-rotation-3 {
-	-o-transform: rotate(-1deg);  
-	-webkit-transform: rotate(-1deg);  
+	-o-transform: rotate(-1deg);
+	-webkit-transform: rotate(-1deg);
 	-moz-transform: rotate(-1deg);
 }
 
 .post-it-rotation-4 {
-	-o-transform: rotate(1deg);  
-	-webkit-transform: rotate(1deg);  
+	-o-transform: rotate(1deg);
+	-webkit-transform: rotate(1deg);
 	-moz-transform: rotate(1deg);
 }
 
@@ -204,26 +206,26 @@
 }
 
 .post-it-small-rotation-1 {
-	-o-transform: rotate(-0.1deg);  
-	-webkit-transform: rotate(-0.1deg);  
+	-o-transform: rotate(-0.1deg);
+	-webkit-transform: rotate(-0.1deg);
 	-moz-transform: rotate(-0.1deg);
 }
 
 .post-it-small-rotation-2 {
-	-o-transform: rotate(0.1deg);  
-	-webkit-transform: rotate(0.1deg);  
+	-o-transform: rotate(0.1deg);
+	-webkit-transform: rotate(0.1deg);
 	-moz-transform: rotate(0.1deg);
 }
 
 .post-it-small-rotation-3 {
-	-o-transform: rotate(-0.2deg);  
-	-webkit-transform: rotate(-0.2deg);  
+	-o-transform: rotate(-0.2deg);
+	-webkit-transform: rotate(-0.2deg);
 	-moz-transform: rotate(-0.2deg);
 }
 
 .post-it-small-rotation-4 {
-	-o-transform: rotate(0.2deg);  
-	-webkit-transform: rotate(0.2deg);  
+	-o-transform: rotate(0.2deg);
+	-webkit-transform: rotate(0.2deg);
 	-moz-transform: rotate(0.2deg);
 }
 

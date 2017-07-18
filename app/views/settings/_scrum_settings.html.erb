@@ -77,14 +77,14 @@
                 7  => 'post-it-color-7',  8  => 'post-it-color-8'}
       Tracker.all.each do |tracker| -%>
     <%- included = (Scrum::Setting.pbi_tracker_ids.include?(tracker.id) or
-            Scrum::Setting.task_tracker_ids.include?(tracker.id)) -%>
+                    Scrum::Setting.task_tracker_ids.include?(tracker.id)) -%>
     <p id="tracker_<%= tracker.id %>_color"
        style="display: <%= included ? 'block' : 'none' %>;">
       <label><%= tracker.name %>:</label>
       <nobr>
       <%- colors.each_pair do |color_id, color_css_class| -%>
         <span style="white-space: nowrap;">
-          <%- setting_name = "tracker_#{tracker.id}_color".to_sym
+          <%- setting_name = "tracker_#{tracker.id.to_s}_color"
               selected = (@settings[setting_name].nil? and (color_id == 1)) ? true : (@settings[setting_name] == color_css_class) -%>
           <%= radio_button_tag("settings[#{setting_name}]", color_css_class, selected) %>
           <span class="post-it settings-post-it <%= color_css_class %>">
