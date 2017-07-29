@@ -56,7 +56,7 @@
     </p>
   <%- end -%>
 
-  <%- if issue.is_task? -%>
+  <%- if issue.is_task? and User.current.allowed_to?(:edit_pending_effort, issue.project)-%>
     <p>
       <%= f.text_field :pending_effort, :size => 4, :maxlength => 10, :label => l(:field_pending_effort) %>
     </p>

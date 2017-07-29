@@ -6,7 +6,7 @@
                                         :draggable => true) %>">
   <tr>
     <td class="content" colspan="3">
-      <%- if User.current.allowed_to?(:edit_sprint_board, project) and 
+      <%- if User.current.allowed_to?(:edit_sprint_board, project) and
              User.current.allowed_to?(:edit_issues, project) and
              pbi.editable? and !read_only -%>
         <%= link_to "", edit_pbi_path(pbi), :remote => true, :method => "GET",
@@ -49,7 +49,9 @@
       <%- end -%>
     </td>
     <td class="pending">
-      <%= render_hours(pbi.pending_effort, :title => l(:field_pending_effort), :ignore_zero => true) %>
+      <%- if User.current.allowed_to?(:view_pending_effort, project) -%>
+        <%= render_hours(pbi.pending_effort, :title => l(:field_pending_effort), :ignore_zero => true) %>
+      <%- end -%>
     </td>
   </tr>
 </table>

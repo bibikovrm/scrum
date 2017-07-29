@@ -28,13 +28,13 @@ class ScrumController < ApplicationController
   before_filter :authorize,
                 :except => [:new_pbi, :create_pbi, :new_task, :create_task,
                             :new_time_entry, :create_time_entry,
-                            :change_pending_efforts, :move_to_last_sprint,
+                            :move_to_last_sprint,
                             :move_not_closed_pbis_to_last_sprint,
                             :move_to_product_backlog]
   before_filter :authorize_add_issues,
                 :only => [:new_pbi, :create_pbi, :new_task, :create_task]
   before_filter :authorize_edit_issues,
-                :only => [:change_pending_efforts, :move_to_last_sprint,
+                :only => [:move_to_last_sprint,
                           :move_not_closed_pbis_to_last_sprint,
                           :move_to_product_backlog]
   before_filter :authorize_log_time,
@@ -359,7 +359,7 @@ private
     issue.assigned_to_id = params[:issue][:assigned_to_id] unless params[:issue][:assigned_to_id].nil?
     issue.subject = params[:issue][:subject] unless params[:issue][:subject].nil?
     issue.priority_id = params[:issue][:priority_id] unless params[:issue][:priority_id].nil?
-    issue.estimated_hours = params[:issue][:estimated_hours].gsub(',', '.') unless params[:issue][:estimated_hours].nil?
+    issue.estimated_hours = params[:issue][:estimated_hours].gsub(',', '.') if issue.safe_attribute?(:estimated_hours) and (!(params[:issue][:estimated_hours].nil?))
     issue.done_ratio = params[:issue][:done_ratio] unless params[:issue][:done_ratio].nil?
     issue.description = params[:issue][:description] unless params[:issue][:description].nil?
     issue.category_id = params[:issue][:category_id] if issue.safe_attribute?(:category_id) and (!(params[:issue][:category_id].nil?))

@@ -72,6 +72,11 @@ Redmine::Plugin.register :scrum do
                     {:product_backlog => [:release_plan]}
     permission      :view_scrum_stats,
                     {:scrum => [:stats]}
+    permission      :view_pending_effort,
+                    {}
+    permission      :edit_pending_effort,
+                    {:scrum => [:change_pending_effort, :change_pending_efforts]},
+                    :require => :memeber
   end
 
   menu              :project_menu, :product_backlog, {:controller => :product_backlog, :action => :index},

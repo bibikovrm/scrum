@@ -57,16 +57,16 @@ module ScrumHelper
 
   def render_issue_icons(issue)
     icons = []
-    if ((issue.is_pbi? and Scrum::Setting.render_pbis_speed) or
-        (issue.is_task? and Scrum::Setting.render_tasks_speed))
-      if (speed = issue.speed)
-        if speed <= Scrum::Setting.lowest_speed
-          icons << render_issue_icon(LOWEST_SPEED_ICON, speed)
-        elsif speed <= Scrum::Setting.low_speed
-          icons << render_issue_icon(LOW_SPEED_ICON, speed)
-        elsif speed >= Scrum::Setting.high_speed
-          icons << render_issue_icon(HIGH_SPEED_ICON, speed)
-        end
+    if (User.current.allowed_to?(:view_time_entries, issue.project) and
+        ((issue.is_pbi? and Scrum::Setting.render_pbis_speed) or
+         (issue.is_task? and Scrum::Setting.render_tasks_speed)) and
+        (speed = issue.speed))
+      if speed <= Scrum::Setting.lowest_speed
+        icons << render_issue_icon(LOWEST_SPEED_ICON, speed)
+      elsif speed <= Scrum::Setting.low_speed
+        icons << render_issue_icon(LOW_SPEED_ICON, speed)
+      elsif speed >= Scrum::Setting.high_speed
+        icons << render_issue_icon(HIGH_SPEED_ICON, speed)
       end
     end
     render :inline => icons.join('\n')
