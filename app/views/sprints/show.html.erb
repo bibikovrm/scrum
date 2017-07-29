@@ -30,6 +30,9 @@
     </tbody>
   </table>
 
+  <%= render :partial => 'post_its/sprint_board/footer',
+             :locals => {:project => @project, :sprint => @sprint, :path => method(:sprint_path)} %>
+
   <%- if User.current.allowed_to?(:add_issues, @project) and
       User.current.allowed_to?(:edit_sprint_board, @project) and
       @sprint.open? -%>

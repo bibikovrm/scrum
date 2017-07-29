@@ -95,6 +95,9 @@ post "scrum/:id/update_task",
 post "scrum/:pbi_id/move_to_last_sprint",
      :controller => :scrum, :action => :move_to_last_sprint,
      :as => :move_to_last_sprint
+post "scrum/:sprint_id/move_not_closed_pbis_to_last_sprint",
+     :controller => :scrum, :action => :move_not_closed_pbis_to_last_sprint,
+     :as => :move_not_closed_pbis_to_last_sprint
 post "scrum/:pbi_id/move_to_product_backlog",
      :controller => :scrum, :action => :move_to_product_backlog,
      :as => :move_to_product_backlog

@@ -10,24 +10,40 @@ class ScrumController < ApplicationController
   menu_item :product_backlog, :except => [:stats]
   menu_item :overview, :only => [:stats]
 
-  before_filter :find_issue, :only => [:change_story_points, :change_pending_effort, :change_assigned_to,
-                                       :new_time_entry, :create_time_entry, :edit_task, :update_task,
-                                       :change_pending_efforts]
-  before_filter :find_sprint, :only => [:new_pbi, :create_pbi]
-  before_filter :find_pbi, :only => [:new_task, :create_task, :edit_pbi, :update_pbi, :move_pbi,
-                                     :move_to_last_sprint, :move_to_product_backlog]
-  before_filter :find_project_by_project_id, :only => [:stats]
-  before_filter :authorize, :except => [:new_pbi, :create_pbi, :new_task, :create_task,
-                                        :new_time_entry, :create_time_entry,
-                                        :change_pending_efforts]
-  before_filter :authorize_add_issues, :only => [:new_pbi, :create_pbi, :new_task, :create_task]
-  before_filter :authorize_log_time, :only => [:new_time_entry, :create_time_entry]
-  before_filter :authorize_edit_issues, :only => [:change_pending_efforts]
+  before_filter :find_issue,
+                :only => [:change_story_points, :change_pending_effort,
+                          :change_assigned_to, :new_time_entry,
+                          :create_time_entry, :edit_task, :update_task,
+                          :change_pending_efforts]
+  before_filter :find_sprint,
+                :only => [:new_pbi, :create_pbi,
+                          :move_not_closed_pbis_to_last_sprint]
+  before_filter :find_pbi,
+                :only => [:new_task, :create_task, :edit_pbi, :update_pbi,
+                          :move_pbi, :move_to_last_sprint,
+                          :move_to_product_backlog]
+  before_filter :find_project_by_project_id,
+                :only => [:stats]
 
-  helper :scrum
-  helper :timelog
+  before_filter :authorize,
+                :except => [:new_pbi, :create_pbi, :new_task, :create_task,
+                            :new_time_entry, :create_time_entry,
+                            :change_pending_efforts, :move_to_last_sprint,
+                            :move_not_closed_pbis_to_last_sprint,
+                            :move_to_product_backlog]
+  before_filter :authorize_add_issues,
+                :only => [:new_pbi, :create_pbi, :new_task, :create_task]
+  before_filter :authorize_edit_issues,
+                :only => [:change_pending_efforts, :move_to_last_sprint,
+                          :move_not_closed_pbis_to_last_sprint,
+                          :move_to_product_backlog]
+  before_filter :authorize_log_time,
+                :only => [:new_time_entry, :create_time_entry]
+
   helper :custom_fields
   helper :projects
+  helper :scrum
+  helper :timelog
 
   def change_story_points
     begin
@@ -173,6 +189,32 @@ class ScrumController < ApplicationController
     respond_to do |format|
       format.js
     end
+  end
+
+  def move_not_closed_pbis_to_last_sprint
+    begin
+      last_sprint = @project.last_sprint
+      raise "The project hasn't defined any Sprint yet" unless last_sprint
+      not_closed_pbis = @sprint.not_closed_pbis
+      if not_closed_pbis.empty?
+        flash[:notice] = l(:label_nothing_to_move)
+      else
+        not_closed_pbis_links = []
+        not_closed_pbis.each do |pbi|
+          link = view_context.link_to_issue(pbi,
+                                            :project => pbi.project != @project,
+                                            :tracker => true)
+          not_closed_pbis_links << link
+          move_issue_to_sprint(pbi, last_sprint)
+        end
+        flash[:notice] = l(:label_pbis_moved,
+                           :pbis => not_closed_pbis_links.join(', '))
+      end
+    rescue Exception => exception
+      logger.error("Exception: #{exception.inspect}")
+      flash[:error] = exception
+    end
+    redirect_to sprint_path(@sprint)
   end
 
   def move_to_product_backlog

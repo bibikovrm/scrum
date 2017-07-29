@@ -60,8 +60,7 @@ Redmine::Plugin.register :scrum do
                     {:product_backlog => [:index, :show, :check_dependencies]}
     permission      :edit_product_backlog,
                     {:product_backlog => [:new_pbi, :create_pbi],
-                     :scrum => [:edit_pbi, :update_pbi, :move_to_last_sprint,
-                                :move_to_product_backlog]},
+                     :scrum => [:edit_pbi, :update_pbi]},
                     :require => :member
     permission      :sort_product_backlog,
                     {:product_backlog => [:sort],

@@ -59,6 +59,10 @@ class Sprint < ActiveRecord::Base
     issues.where(conditions).order(order).select{|issue| issue.visible?}
   end
 
+  def not_closed_pbis
+    pbis.delete_if {|pbi| pbi.closed?}
+  end
+
   def story_points
     pbis.collect{|pbi| pbi.story_points.to_f}.compact.sum
   end
