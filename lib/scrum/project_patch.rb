@@ -103,7 +103,30 @@ module Scrum
           return is_scrum
         end
 
+        def pbis_count
+          return pbis.count
+        end
+
+        def total_sps
+          return pbis.collect {|pbi| pbi.story_points.to_f || 0.0}.sum
+        end
+
+        def closed_sps
+          return pbis.collect {|pbi| pbi.closed? ? (pbi.story_points.to_f || 0.0) : 0.0}.sum
+        end
+
       private
+
+        def pbis
+          return Issue.visible.includes(:custom_values).where(pbis_conditons)
+        end
+
+        def pbis_conditons(initial_conditions=[])
+          conditions = initial_conditions
+          conditions << self.project_condition(::Setting.display_subprojects_issues?)
+          conditions << "(tracker_id IN (#{Tracker.pbi_trackers(self).collect {|tracker| tracker.id}.join(', ')}))"
+          return conditions.join(' AND ')
+        end
 
         def filter_story_points(story_points, sprints_count)
           story_points /= sprints_count if story_points > 0 and sprints_count > 0
