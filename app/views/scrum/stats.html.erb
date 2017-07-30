@@ -15,8 +15,23 @@
 <% end %>
 
 <h3 align="center">
+  <%= l(:label_closed_story_points) %>
+</h3>
+<div id="<%= @closed_story_points_per_sprint_chart[:id] %>">
+  <svg style="height: <%= @closed_story_points_per_sprint_chart[:height] %>px;">
+  </svg>
+</div>
+<%= render :partial => 'common/bar_chart',
+           :formats => [:js],
+           :locals => {:graph => @closed_story_points_per_sprint_chart,
+                       :element => {:label => l(:enumeration_activities), :name => :activity},
+                       :rows => @closed_story_points_per_sprint} %>
+
+<br />
+<br />
+
+<h3 align="center">
   <%= l(:label_hours_per_story_point) %>
-  (<%= l(:label_sprint_plural) %>)
 </h3>
 <div id="<%= @hours_per_story_point_chart[:id] %>">
   <svg style="height: <%= @hours_per_story_point_chart[:height] %>px;">
@@ -27,10 +42,6 @@
            :locals => {:graph => @hours_per_story_point_chart,
                        :element => {:label => l(:enumeration_activities), :name => :activity},
                        :rows => @hours_per_story_point} %>
-
-<% content_for :sidebar do %>
-  <%= render :partial => 'projects/sidebar' %>
-<% end %>
 
 <br />
 <br />
@@ -85,5 +96,13 @@
                            :rows => @effort_by_activity,
                            :total => @effort_by_activity_total} %>
 <%- end -%>
+
+<% content_for :sidebar do %>
+  <%- if Redmine::VERSION::STRING < '3.4.0' -%>
+    <%= render :partial => 'projects/sidebar' %>
+  <%- else -%>
+    <%= call_hook(:view_projects_show_sidebar_bottom, :project => @project) %>
+  <%- end -%>
+<% end %>
 
 <%= render :partial => 'common/scrum_footer' %>

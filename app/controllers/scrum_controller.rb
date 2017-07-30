@@ -294,6 +294,9 @@ class ScrumController < ApplicationController
       @total_hours = TimeEntry.visible.where(cond).sum(:hours).to_f
     end
 
+    @closed_story_points_per_sprint = @project.closed_story_points_per_sprint
+    @closed_story_points_per_sprint_chart = {:id => 'closed_story_points_per_sprint', :height => 400}
+
     @hours_per_story_point = @project.hours_per_story_point
     @hours_per_story_point_chart = {:id => 'hours_per_story_point', :height => 400}
 

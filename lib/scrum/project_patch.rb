@@ -54,23 +54,14 @@ module Scrum
           return [story_points_per_sprint, scheduled_story_points_per_sprint, sprints_count]
         end
 
+        def closed_story_points_per_sprint
+          return value_per_sprint(:closed_story_points,
+                                  :label_closed_story_points)
+        end
+
         def hours_per_story_point
-          results = {}
-          media = 0.0
-          sprints_to_use = sprints
-          max_sprints_count = sprints_to_use.count
-          last_sprints_count = Scrum::Setting.product_burndown_sprints
-          last_sprints_count = sprints_to_use.count if last_sprints_count > sprints_to_use.count
-          sprints_to_use.each_with_index { |sprint, i|
-            hours_per_story_point = sprint.hours_per_story_point
-            results[sprint.name] = hours_per_story_point
-            if i >= max_sprints_count - last_sprints_count
-              media += hours_per_story_point
-            end
-          }
-          media = (media / last_sprints_count).round(2) if last_sprints_count > 0
-          results[l(:label_media_last_n_sprints, :n => last_sprints_count)] = media
-          return {l(:label_hours_per_story_point) => results}
+          return value_per_sprint(:hours_per_story_point,
+                                  :label_hours_per_story_point)
         end
 
         def sps_by_category
@@ -156,6 +147,25 @@ module Scrum
                             :percentage => total ? ((value * 100.0) / total).round(2) : 0.0}
           }
           [new_results, total]
+        end
+
+        def value_per_sprint(sprint_method, label_value)
+          results = {}
+          media = 0.0
+          sprints_to_use = sprints
+          max_sprints_count = sprints_to_use.count
+          last_sprints_count = Scrum::Setting.product_burndown_sprints
+          last_sprints_count = sprints_to_use.count if last_sprints_count > sprints_to_use.count
+          sprints_to_use.each_with_index { |sprint, i|
+            value = sprint.send(sprint_method)
+            results[sprint.name] = value
+            if i >= max_sprints_count - last_sprints_count
+              media += value
+            end
+          }
+          media = (media / last_sprints_count).round(2) if last_sprints_count > 0
+          results[l(:label_media_last_n_sprints, :n => last_sprints_count)] = media
+          return {l(label_value) => results}
         end
 
       end

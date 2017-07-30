@@ -67,6 +67,10 @@ class Sprint < ActiveRecord::Base
     pbis.collect{|pbi| pbi.story_points.to_f}.compact.sum
   end
 
+  def closed_story_points
+    pbis.collect{|pbi| pbi.closed? ? pbi.story_points.to_f : 0.0}.compact.sum
+  end
+
   def scheduled_story_points
     pbis.select{|pbi| pbi.scheduled?}.collect{|pbi| pbi.story_points.to_f}.compact.sum
   end

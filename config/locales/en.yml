@@ -33,6 +33,7 @@ en:
   label_burndown: "%{name} burndown"
   label_check_dependencies: "Check dependencies"
   label_closed_sps: "Closed SPs"
+  label_closed_story_points: "Closed story points"
   label_count_of_pbis: "Count of PBIs"
   label_create_subtask: "Create subtask"
   label_date_previous_to: "Previous to %{date}"
