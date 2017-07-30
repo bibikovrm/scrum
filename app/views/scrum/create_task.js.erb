@@ -9,7 +9,7 @@
 		<%- message = l(:notice_task_created)
 				message_class = "notice" -%>
 	<%- end -%>
-	$("#messages").html("<div class=\"flash <%= message_class %>\"><%= message %></div>");
+	$("#popup-messages").html("<div class=\"flash <%= message_class %>\"><%= message %></div>");
 <%- else -%>
 	$("#ajax-modal").dialog("close");
 <%- end -%>

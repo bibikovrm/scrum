@@ -1,6 +1,6 @@
 <h3 class="title"><%= @pbi.tracker.name %></h3>
 
-<div id="messages" />
+<div id="popup-messages"></div>
 
 <%= labelled_form_for @pbi, :url => create_pbi_path(@sprint), :remote => true do |f| %>
   <%= back_url_hidden_field_tag %>

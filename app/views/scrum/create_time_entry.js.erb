@@ -1,7 +1,7 @@
 <%- if defined?(@exception) -%>
   <%- message = l(:error_creating_time_entry, :message => @exception.message)
       message_class = "error" -%>
-  $("#messages").html("<div class=\"flash <%= message_class %>\"><%= message %></div>");
+  $("#time-entry-messages").html("<div class=\"flash <%= message_class %>\"><%= message %></div>");
 <%- else -%>
   $("#ajax-modal").dialog("close");
 <%- end -%>

@@ -4,7 +4,7 @@
   <%= l(:label_sprint_board) %>
 </h2>
 
-<div id="messages" />
+<div id="messages"></div>
 
 <%= render :partial => 'post_its/sprint_board/head',
            :locals => {:project => @project, :sprint => @sprint, :path => method(:sprint_path)} %>

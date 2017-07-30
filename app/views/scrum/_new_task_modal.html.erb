@@ -1,6 +1,6 @@
 <h3 class="title"><%= @task.tracker.name %></h3>
 
-<div id="messages" />
+<div id="popup-messages"></div>
 
 <%= labelled_form_for @task, :url => create_task_path(@pbi), :remote => true do |f| %>
   <%= back_url_hidden_field_tag %>

@@ -1,6 +1,6 @@
 <h3 class="title"><%= l(:field_time_entries) %></h3>
 
-<div id="messages" />
+<div id="time-entry-messages" />
 
 <%= form_for :time_entry, :url => create_scrum_time_entry_path(@issue), :remote => true do |f| %>
   <%= back_url_hidden_field_tag %>

@@ -1,7 +1,7 @@
 <%- if defined?(@exception) -%>
   <%- message = l(:error_updating_pbi, :message => @exception.message) -%>
   <%- message_class = "error" -%>
-  $("#messages").html("<div class=\"flash <%= message_class %>\"><%= message %></div>");
+  $("#popup-messages").html("<div class=\"flash <%= message_class %>\"><%= message %></div>");
 <%- else -%>
   $("#ajax-modal").dialog("close");
   <%- if @pbi.sprint.is_product_backlog? -%>
