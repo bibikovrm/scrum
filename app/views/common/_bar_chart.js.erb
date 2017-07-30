@@ -7,21 +7,27 @@ var <%= graph[:id] %>_data = [
   },
   <%- end -%>
 ];
-nv.addGraph(function() {
-  var chart = nv.models.multiBarChart()
-    .color(d3.scale.category10().range())
-    .reduceXTicks(false)
-    .staggerLabels(true)
-    .showControls(false);
-  chart.tooltip.contentGenerator(function(data) {
-    return '<h3>' + data.value + '</h3><p>' + data.series[0]['key'] + ': ' + data.series[0]['value'] + '</p>';
+if (<%= graph[:id] %>_data.length > 0)
+{
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart()
+      .color(d3.scale.category10().range())
+      .reduceXTicks(false)
+      .showControls(false);
+    chart.tooltip.contentGenerator(function(data) {
+      return '<h3>' + data.value + ' (' + data.series.length + ')</h3><p>' + data.series[0]['key'] + ': ' + data.series[0]['value'] + '</p>';
+    });
+    chart.yAxis.tickFormat(d3.format('.2f'));
+    chart.yAxis.ticks(10);
+    if (<%= graph[:id] %>_data[0].values.length > 10)
+    {
+      chart.xAxis.rotateLabels(-45);
+    }
+    d3.select("#<%= graph[:id] %> svg")
+      .datum(<%= graph[:id] %>_data)
+      .call(chart);
+    nv.utils.windowResize(chart.update);
+    return chart;
   });
-  chart.yAxis.tickFormat(d3.format('.2f'));
-  chart.yAxis.ticks(10);
-  d3.select("#<%= graph[:id] %> svg")
-    .datum(<%= graph[:id] %>_data)
-    .call(chart);
-  nv.utils.windowResize(chart.update);
-  return chart;
-});
+}
 <% end %>
