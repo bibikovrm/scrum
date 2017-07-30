@@ -54,7 +54,7 @@ es:
   label_invalid_dependencies_for_pbi: "%{pbi} bloquea pero es posterior a:"
   label_issue_deviation: "Esta petición tiene una desviación del %{deviation}%"
   label_issue_speed: "La velocidad de esta petición es %{speed}%"
-  label_media_last_n_sprints: "Media de los últimos %{n} Sprints"
+  label_media_last_n_sprints: "Media últimos %{n} Sprints"
   label_menu_product_backlog: "Pila"
   label_menu_sprint: "Sprint"
   label_move_not_closed_pbis_to_last_sprint: "Mover EPPs no cerrados al último Sprint"

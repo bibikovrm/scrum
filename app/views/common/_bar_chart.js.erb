@@ -19,9 +19,10 @@ if (<%= graph[:id] %>_data.length > 0)
     });
     chart.yAxis.tickFormat(d3.format('.2f'));
     chart.yAxis.ticks(10);
-    if (<%= graph[:id] %>_data[0].values.length > 10)
+    if (<%= graph[:id] %>_data[0].values.length > 1)
     {
-      chart.xAxis.rotateLabels(-45);
+      chart.margin({bottom: 100});
+      chart.xAxis.rotateLabels(-30);
     }
     d3.select("#<%= graph[:id] %> svg")
       .datum(<%= graph[:id] %>_data)
