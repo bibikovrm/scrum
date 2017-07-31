@@ -13,6 +13,7 @@ module Scrum
        clear_new_tasks_assignee
        create_journal_on_pbi_position_change
        inherit_pbi_attributes
+       pbi_is_closed_if_tasks_are_closed
        random_posit_rotation
        render_author_on_pbi
        render_category_on_pbi

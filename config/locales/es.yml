@@ -95,6 +95,8 @@ es:
   label_setting_inherit_pbi_attributes: "Al crear una nueva tarea heredar atributos del elemento de la pila de producto padre"
   label_setting_low_speed: "Porcentaje para velocidad baja"
   label_setting_lowest_speed: "Porcentaje para velocidad muy baja"
+  label_setting_pbi_is_closed_if_tasks_are_closed: "EPP cerrado si los hijos están cerrados"
+  label_setting_pbi_is_closed_if_tasks_are_closed_explanation: "Esto no cambia el estado del EPP pero afecta  a todo basado en esta estado."
   label_setting_pbi_statuses: "Estado de los EPPs para la Pila de producto y el tablero del Sprint"
   label_setting_product_burndown_sprints: "Calcularlo con este número de Sprints"
   label_setting_random_postit_rotation: "Rotación aleatoria de los post-its"

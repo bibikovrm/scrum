@@ -36,6 +36,18 @@ module Scrum
           issue.is_task? and !issue.parent_id.nil?
         }
 
+        def closed_with_scrum?
+          closed = closed_without_scrum?
+          if not closed and
+             self.is_pbi? and
+             Scrum::Setting.pbi_is_closed_if_tasks_are_closed and
+             not self.children.empty?
+            closed = self.children.all? {|task| task.closed?}
+          end
+          return closed
+        end
+        alias_method_chain :closed?, :scrum
+
         def has_story_points?
           ((!((custom_field_id = Scrum::Setting.story_points_custom_field_id).nil?)) and
            visible_custom_field_values.collect{|value| value.custom_field.id.to_s}.include?(custom_field_id))

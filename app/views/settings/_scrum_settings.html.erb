@@ -62,6 +62,13 @@
                       Scrum::Setting.auto_update_pbi_status) %>
     <em><%= l(:label_setting_auto_update_pbi_status_explanation) %></em>
   </p>
+  <p>
+    <label><%= l(:label_setting_pbi_is_closed_if_tasks_are_closed) %>:</label>
+    <%= hidden_field_tag('settings[pbi_is_closed_if_tasks_are_closed]', 0) %>
+    <%= check_box_tag('settings[pbi_is_closed_if_tasks_are_closed]', 1,
+                      Scrum::Setting.pbi_is_closed_if_tasks_are_closed) %>
+    <em><%= l(:label_setting_pbi_is_closed_if_tasks_are_closed_explanation) %></em>
+  </p>
 </fieldset>
 
 <fieldset>
