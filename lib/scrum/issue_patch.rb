@@ -36,17 +36,29 @@ module Scrum
           issue.is_task? and !issue.parent_id.nil?
         }
 
-        def closed_with_scrum?
-          closed = closed_without_scrum?
-          if not closed and
-             self.is_pbi? and
+        def closed_on_for_burndown
+          completed_date = self.closed_on
+          if completed_date.nil? and
              Scrum::Setting.pbi_is_closed_if_tasks_are_closed and
-             not self.children.empty?
-            closed = self.children.all? {|task| task.closed?}
+             self.children.any?
+            all_tasks_closed = true
+            last_closed_task_date = nil
+            self.children.each do |task|
+              if task.closed? and task.closed_on
+                if last_closed_task_date.nil? or
+                   last_closed_task_date > task.closed_on
+                  last_closed_task_date = task.closed_on
+                end
+              else
+                all_tasks_closed = false
+              end
+            end
+            if all_tasks_closed and last_closed_task_date
+              completed_date = last_closed_task_date
+            end
           end
-          return closed
+          return completed_date
         end
-        alias_method_chain :closed?, :scrum
 
         def has_story_points?
           ((!((custom_field_id = Scrum::Setting.story_points_custom_field_id).nil?)) and

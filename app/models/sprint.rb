@@ -256,22 +256,12 @@ class Sprint < ActiveRecord::Base
     end
     closed_statuses = IssueStatus::closed_status_ids
     pbis.each do |pbi|
-      if pbi.closed?
-        completed_date = nil
-        pbi.journals.order("created_on DESC").each do |journal|
-          if completed_date.nil?
-            journal.details.where(:prop_key => 'status_id',
-                                  :value => closed_statuses).each do |detail|
-              completed_date = journal.created_on
-            end
-          end
-        end
-        unless completed_date.nil?
-          sps = pbi.story_points
-          days.each_key do |day|
-            if day >= completed_date
-              days[day] -= sps.to_f
-            end
+      closed_on = pbi.closed_on_for_burndown
+      if closed_on
+        sps = pbi.story_points
+        days.each_key do |day|
+          if day >= closed_on
+            days[day] -= sps.to_f
           end
         end
       end
