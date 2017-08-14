@@ -108,6 +108,7 @@ es:
   label_setting_render_tasks_speed: "Mostrar velocidad de las tareas"
   label_setting_render_updated_on_pbi: "Mostrar fecha de actualización"
   label_setting_render_version_on_pbi: "Mostrar versión"
+  label_setting_show_project_totals: "Mostrar totales de proyecto"
   label_setting_simple_pbi_custom_field: "Campo personalizado para EPPs simples"
   label_setting_sprint_board_fields_on_tracker: "Campos a mostrar con %{tracker}"
   label_setting_sprint_burndown_day_zero: "Día 0"

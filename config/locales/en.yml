@@ -108,6 +108,7 @@ en:
   label_setting_render_tasks_speed: "Render tasks speed"
   label_setting_render_updated_on_pbi: "Render update timestamp"
   label_setting_render_version_on_pbi: "Render version"
+  label_setting_show_project_totals: "Show project totals"
   label_setting_simple_pbi_custom_field: "Simple PBI custom field"
   label_setting_sprint_board_fields_on_tracker: "Fields to render with %{tracker}"
   label_setting_sprint_burndown_day_zero: "Day 0"

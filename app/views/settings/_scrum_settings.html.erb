@@ -219,6 +219,12 @@
       <%= select_tag("settings[tracker_#{tracker.id}_sprint_board_custom_fields]", options, :multiple => true) %>
     </p>
   <%- end -%>
+  <p>
+    <label><%= l(:label_setting_show_project_totals) %>:</label>
+    <%= hidden_field_tag('settings[show_project_totals_on_sprint]', 0) %>
+    <%= check_box_tag('settings[show_project_totals_on_sprint]', 1,
+                      Scrum::Setting.show_project_totals_on_sprint) %>
+  </p>
 </fieldset>
 
 <fieldset>
@@ -282,6 +288,12 @@
     <%= hidden_field_tag('settings[render_updated_on_pbi]', 0) %>
     <%= check_box_tag('settings[render_updated_on_pbi]', 1,
                       Scrum::Setting.render_updated_on_pbi) %>
+  </p>
+  <p>
+    <label><%= l(:label_setting_show_project_totals) %>:</label>
+    <%= hidden_field_tag('settings[show_project_totals_on_backlog]', 0) %>
+    <%= check_box_tag('settings[show_project_totals_on_backlog]', 1,
+                      Scrum::Setting.show_project_totals_on_backlog) %>
   </p>
 </fieldset>
 

@@ -26,10 +26,14 @@
         <%- end -%>
       </div>
     </td>
-    <%- if !(sprint.description.blank?) -%>
-      <td>
+    <td>
+      <%- if !(sprint.description.blank?) -%>
         <%= textilizable(sprint.description) %>
-      </td>
+      <%- end -%>
+    </td>
+    <%- if Scrum::Setting.show_project_totals_on_sprint -%>
+      <%= render :partial => 'post_its/project_totals',
+                 :locals => {:project => @project} %>
     <%- end -%>
   </tr>
 </table>

@@ -113,7 +113,9 @@ Redmine::Plugin.register :scrum do
                                  :low_speed => 80,
                                  :high_speed => 140,
                                  :render_plugin_tips => '1',
-                                 :sprint_burndown_day_zero => '1'},
+                                 :sprint_burndown_day_zero => '1',
                                  :pbi_is_closed_if_tasks_are_closed => false,
+                                 :show_project_totals_on_sprint => false,
+                                 :show_project_totals_on_backlog => false},
                     :partial => 'settings/scrum_settings'
 end

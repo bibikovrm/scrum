@@ -16,22 +16,8 @@
       <%= textilizable(product_backlog.description) %>
     <%- end -%>
   </td>
-  <td width="250px">
-    <div class="tabular">
-      <%- pbis_count = @project.pbis_count
-          total_sps = @project.total_sps
-          closed_sps = @project.closed_sps
-          percentage_closed_sps = (total_sps == 0.0) ? 0.0 : ((closed_sps * 100.0) / total_sps) -%>
-      <p>
-        <label><%= l(:label_count_of_pbis) %>:</label>
-        <%= pbis_count %><br />
-        <label><%= l(:label_total_sps) %>:</label>
-        <%= total_sps %><br />
-        <label><%= l(:label_closed_sps) %>:</label>
-        <%= closed_sps %><br />
-        <label><%= l(:label_percentage_closed_sps) %>:</label>
-        <%= number_to_percentage(percentage_closed_sps , :precision => 1, separator: '.') %>
-      </p>
-    </div>
-  </td>
+  <%- if Scrum::Setting.show_project_totals_on_backlog -%>
+    <%= render :partial => 'post_its/project_totals',
+               :locals => {:project => @project} %>
+  <%- end -%>
 </tr>
