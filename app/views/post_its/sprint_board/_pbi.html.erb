@@ -23,7 +23,8 @@
       <%= render :partial => "post_its/sprint_board/fields", :formats => [:html],
                  :locals => {:project => project, :issue => pbi} %>
       <div>
-        <%= link_to_issue(pbi, :tracker => false, :truncate => 150, :class => "warning") %>
+        <%= link_to_issue(pbi, :tracker => false, :truncate => 150,
+                          :project => project != pbi.project) %>
       </div>
       <%= render :partial => "post_its/sprint_board/custom_fields", :formats => [:html],
                  :locals => {:project => project, :issue => pbi} %>

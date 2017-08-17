@@ -47,7 +47,7 @@
     </tr>
     <tr>
       <td class="content" colspan="2">
-        <%= link_to_issue(pbi) %>
+        <%= link_to_issue(pbi, :tracker => false, :project => project != pbi.project) %>
       </td>
     </tr>
   </table>
