@@ -1,4 +1,5 @@
-<%- if User.current.allowed_to?(:edit_product_backlog, project) -%>
+<%- if User.current.allowed_to?(:edit_product_backlog, project) &&
+	  params[:filter_by_project].blank? -%>
 	<%= javascript_tag do %>
 		$(document).ready(function() {
 			$("#pbis").sortable({

@@ -19,6 +19,10 @@ class ProductBacklogController < ApplicationController
   before_filter :find_project_by_project_id,
                 :only => [:index, :new, :create, :change_task_status, :burndown_index,
                           :stats_index]
+  before_filter :find_subprojects,
+                :only => [:show, :burndown, :release_plan]
+  before_filter :filter_by_project,
+                :only => [:show, :burndown, :release_plan]
   before_filter :check_issue_positions, :only => [:show]
   before_filter :authorize
 
@@ -191,6 +195,29 @@ private
       end
     else
       raise "Invalid type: #{issue.inspect}"
+    end
+  end
+
+  def find_subprojects
+    if @project and @product_backlog
+      @subprojects = [[l(:label_all), product_backlog_path(@product_backlog, :filter_by_project => nil)]]
+      @subprojects += find_recursive_subprojects(@project, @product_backlog)
+    end
+  end
+
+  def find_recursive_subprojects(project, product_backlog, tabs = '')
+    options = []
+    project.children.visible.to_a.each do |child|
+      options << [tabs + child.name, product_backlog_path(product_backlog, :filter_by_project => child.id)]
+      options += find_recursive_subprojects(child, product_backlog, tabs + '» ')
+    end
+    return options
+  end
+
+  def filter_by_project
+    @pbi_filter = {}
+    if params[:filter_by_project]
+      @pbi_filter = {:filter_by_project => params[:filter_by_project]}
     end
   end
 

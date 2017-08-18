@@ -48,6 +48,7 @@ es:
   label_estimated_vs_done_effort: "Esfuerzo estimado vs esfuerzo hecho"
   label_exit_fullscreen: "Pantalla normal"
   label_filter_by_assignee: "Filtrar por asignado"
+  label_filter_by_project: "Filtrar por proyecto"
   label_fullscreen: "Pantalla completa"
   label_hours_per_story_point: "Horas por punto de historia"
   label_invalid_dependencies: "Hay dependencias inválidas para los siguientes EPPs:"

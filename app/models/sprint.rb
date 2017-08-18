@@ -56,6 +56,9 @@ class Sprint < ActiveRecord::Base
       end
       conditions[:position] = first_position..last_position
     end
+    if options[:filter_by_project]
+      conditions[:project_id] = options[:filter_by_project]
+    end
     issues.where(conditions).order(order).select{|issue| issue.visible?}
   end
 
