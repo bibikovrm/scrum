@@ -9,7 +9,7 @@
         <%= select_tag('selected_sprint_id', options,
                        :onchange => "if (this.value != '') { window.location = this.value; }") %>
       </p>
-      <%- if product_backlog.shared and ['show', 'burndown'].include?(action_name) -%>
+      <%- if product_backlog.shared -%>
         <p>
           <label><%= l(:label_filter_by_project) %>:</label>
           <%- options = options_for_select(@subprojects, @selected_subproject) -%>

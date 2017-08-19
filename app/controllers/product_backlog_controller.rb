@@ -130,7 +130,7 @@ class ProductBacklogController < ApplicationController
 
   def release_plan
     @sprints = []
-    velocity_all_pbis, velocity_scheduled_pbis, @sprints_count = @project.story_points_per_sprint
+    velocity_all_pbis, velocity_scheduled_pbis, @sprints_count = @project.story_points_per_sprint(@pbi_filter)
     @velocity_type = params[:velocity_type] || 'only_scheduled'
     case @velocity_type
       when 'all'
@@ -147,7 +147,7 @@ class ProductBacklogController < ApplicationController
     versions = {}
     accumulated_story_points = @velocity
     current_sprint = {:pbis => [], :story_points => 0.0, :versions => []}
-    @product_backlog.pbis.each do |pbi|
+    @product_backlog.pbis(@pbi_filter).each do |pbi|
       if pbi.story_points
         @pbis_with_estimation += 1
         story_points = pbi.story_points.to_f
@@ -224,11 +224,15 @@ private
   def calculate_path(product_backlog, project = nil)
     options = {}
     if 'burndown' == action_name
-      options[:velocity_type] = params[:velocity_type] unless params[:velocity_type].blank?
-      options[:custom_velocity] = params[:custom_velocity] unless params[:custom_velocity].blank?
       path_method = :burndown_product_backlog_path
+    elsif 'release_plan' == action_name
+      path_method = :release_plan_product_backlog_path
     else
       path_method = :product_backlog_path
+    end
+    if ['burndown', 'release_plan'].include?(action_name)
+      options[:velocity_type] = params[:velocity_type] unless params[:velocity_type].blank?
+      options[:custom_velocity] = params[:custom_velocity] unless params[:custom_velocity].blank?
     end
     options[:filter_by_project] = project.id unless project.nil?
     result = send(path_method, product_backlog, options)
