@@ -90,43 +90,13 @@ class ProductBacklogController < ApplicationController
   end
 
   def burndown
-    @data = []
     @x_axis_labels = []
-    @project.sprints.each do |sprint|
-      @x_axis_labels << sprint.name
-      @data << {:story_points => sprint.story_points(@pbi_filter).round(2),
-                :pending_story_points => 0}
-    end
-    velocity_all_pbis, velocity_scheduled_pbis, @sprints_count = @project.story_points_per_sprint(@pbi_filter)
-    @velocity_type = params[:velocity_type] || 'only_scheduled'
-    case @velocity_type
-      when 'all'
-        @velocity = velocity_all_pbis
-      when 'only_scheduled'
-        @velocity = velocity_scheduled_pbis
-      else
-        @velocity = params[:custom_velocity].to_f unless params[:custom_velocity].blank?
-    end
-    @velocity = 1.0 if @velocity.blank? or @velocity < 1.0
-    pending_story_points = @product_backlog.story_points(@pbi_filter)
-    new_sprints = 1
-    while pending_story_points > 0
-      @x_axis_labels << "#{l(:field_sprint)} +#{new_sprints}"
-      @data << {:story_points => ((@velocity <= pending_story_points) ?
-                    @velocity : pending_story_points).round(2),
-                :pending_story_points => 0}
-      pending_story_points -= @velocity
-      new_sprints += 1
-    end
-    for i in 0..(@data.length - 1)
-      others = @data[(i + 1)..(@data.length - 1)]
-      @data[i][:pending_story_points] = (@data[i][:story_points] +
-        (others.blank? ? 0 : others.collect{|other| other[:story_points]}.sum)).round(2)
-      @data[i][:story_points_tooltip] = l(:label_pending_story_points,
-                                          :pending_story_points => @data[i][:pending_story_points],
-                                          :sprint => @data[i][:axis_label],
-                                          :story_points => @data[i][:story_points])
-    end
+    all_projects_serie = burndown_for_project(@product_backlog, @project, @pbi_filter, @x_axis_labels)
+    @sprints_count = all_projects_serie[:sprints_count]
+    @velocity = all_projects_serie[:velocity]
+    @velocity_type = all_projects_serie[:velocity_type]
+    @series = [all_projects_serie]
+    @series += recursive_burndown(@product_backlog, @project) if @pbi_filter.empty?
   end
 
   def release_plan
@@ -241,6 +211,55 @@ private
       @selected_subproject = result
     end
     return result
+  end
+
+  def burndown_for_project(product_backlog, project, pbi_filter = {}, x_axis_labels = nil)
+    serie = {:data => []}
+    project.sprints.each do |sprint|
+      x_axis_labels << sprint.name unless x_axis_labels.nil?
+      serie[:data] << {:story_points => sprint.story_points(pbi_filter).round(2),
+                       :pending_story_points => 0}
+    end
+    velocity_all_pbis, velocity_scheduled_pbis, serie[:sprints_count] = project.story_points_per_sprint(pbi_filter)
+    serie[:velocity_type] = params[:velocity_type] || 'only_scheduled'
+    case serie[:velocity_type]
+      when 'all'
+        serie[:velocity] = velocity_all_pbis
+      when 'only_scheduled'
+        serie[:velocity] = velocity_scheduled_pbis
+      else
+        serie[:velocity] = params[:custom_velocity].to_f unless params[:custom_velocity].blank?
+    end
+    serie[:velocity] = 1.0 if serie[:velocity].blank? or serie[:velocity] < 1.0
+    pending_story_points = product_backlog.story_points(pbi_filter)
+    new_sprints = 1
+    while pending_story_points > 0
+      x_axis_labels << "#{l(:field_sprint)} +#{new_sprints}" unless x_axis_labels.nil?
+      serie[:data] << {:story_points => ((serie[:velocity] <= pending_story_points) ?
+                                         serie[:velocity] : pending_story_points).round(2),
+                      :pending_story_points => 0}
+      pending_story_points -= serie[:velocity]
+      new_sprints += 1
+    end
+    for i in 0..(serie[:data].length - 1)
+      others = serie[:data][(i + 1)..(serie[:data].length - 1)]
+      serie[:data][i][:pending_story_points] = (serie[:data][i][:story_points] +
+        (others.blank? ? 0 : others.collect{|other| other[:story_points]}.sum)).round(2)
+      serie[:data][i][:story_points_tooltip] = l(:label_pending_story_points,
+                                                 :pending_story_points => serie[:data][i][:pending_story_points],
+                                                 :sprint => serie[:data][i][:axis_label],
+                                                 :story_points => serie[:data][i][:story_points])
+    end
+    return serie
+  end
+
+  def recursive_burndown(product_backlog, project)
+    series = [burndown_for_project(@product_backlog, @project,
+                                   {:filter_by_project => project.id})]
+    project.children.visible.to_a.each do |child|
+      series += recursive_burndown(product_backlog, child)
+    end
+    return series
   end
 
 end

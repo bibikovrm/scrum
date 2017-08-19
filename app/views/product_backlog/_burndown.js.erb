@@ -11,19 +11,23 @@
 		"xScale": "ordinal",
 		"yScale": "linear",
 		"main": [
-			{
-				// Sprint story points serie.
-				"className": ".story-points",
-				"data": [
-				<%- data.each_with_index do |value, i| -%>
-					{
-						"x": <%= i %>,
-						"y": <%= value[:pending_story_points] %>,
-						"tooltip": "<%= value[:story_points_tooltip] %>"
-					},
-				<%- end -%>
-				]
-			}
+			<%- i = 0
+					series.each do |serie|
+						i += 1 -%>
+				{
+					// Sprint story points serie.
+					"className": ".story-points-<%= i %>",
+					"data": [
+						<%- serie[:data].each_with_index do |value, i| -%>
+							{
+								"x": <%= i %>,
+								"y": <%= value[:pending_story_points] %>,
+								"tooltip": "<%= value[:story_points_tooltip] %>"
+							},
+						<%- end -%>
+					]
+				},
+			<%- end -%>
 		]
 	};
 	// X axis labels.
@@ -32,7 +36,6 @@
 			'<%= label %>',
 		<%- end -%>
 	];
-	console.log(x_axis_labels);
 	// Chart options.
 	var options = {
 		// Fill axis labels.
