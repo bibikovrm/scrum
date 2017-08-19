@@ -96,7 +96,9 @@ class ProductBacklogController < ApplicationController
     @velocity = all_projects_serie[:velocity]
     @velocity_type = all_projects_serie[:velocity_type]
     @series = [all_projects_serie]
-    @series += recursive_burndown(@product_backlog, @project) if @pbi_filter.empty?
+    if @pbi_filter.empty? and @subprojects.count > 2
+      @series += recursive_burndown(@product_backlog, @project)
+    end
   end
 
   def release_plan
