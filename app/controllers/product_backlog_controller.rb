@@ -91,9 +91,10 @@ class ProductBacklogController < ApplicationController
 
   def burndown
     @data = []
+    @x_axis_labels = []
     @project.sprints.each do |sprint|
-      @data << {:axis_label => sprint.name,
-                :story_points => sprint.story_points(@pbi_filter).round(2),
+      @x_axis_labels << sprint.name
+      @data << {:story_points => sprint.story_points(@pbi_filter).round(2),
                 :pending_story_points => 0}
     end
     velocity_all_pbis, velocity_scheduled_pbis, @sprints_count = @project.story_points_per_sprint(@pbi_filter)
@@ -110,8 +111,8 @@ class ProductBacklogController < ApplicationController
     pending_story_points = @product_backlog.story_points(@pbi_filter)
     new_sprints = 1
     while pending_story_points > 0
-      @data << {:axis_label => "#{l(:field_sprint)} +#{new_sprints}",
-                :story_points => ((@velocity <= pending_story_points) ?
+      @x_axis_labels << "#{l(:field_sprint)} +#{new_sprints}"
+      @data << {:story_points => ((@velocity <= pending_story_points) ?
                     @velocity : pending_story_points).round(2),
                 :pending_story_points => 0}
       pending_story_points -= @velocity
@@ -206,9 +207,8 @@ private
   end
 
   def find_recursive_subprojects(project, product_backlog, tabs = '')
-    options = []
+    options = [[tabs + project.name, calculate_path(product_backlog, project)]]
     project.children.visible.to_a.each do |child|
-      options << [tabs + child.name, calculate_path(product_backlog, child)]
       options += find_recursive_subprojects(child, product_backlog, tabs + '» ')
     end
     return options

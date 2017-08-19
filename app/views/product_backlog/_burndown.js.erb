@@ -19,7 +19,6 @@
 					{
 						"x": <%= i %>,
 						"y": <%= value[:pending_story_points] %>,
-						"axis_label": "<%= value[:axis_label] %>",
 						"tooltip": "<%= value[:story_points_tooltip] %>"
 					},
 				<%- end -%>
@@ -27,10 +26,17 @@
 			}
 		]
 	};
+	// X axis labels.
+	var x_axis_labels = [
+		<%- x_axis_labels.each do |label| -%>
+			'<%= label %>',
+		<%- end -%>
+	];
+	console.log(x_axis_labels);
 	// Chart options.
 	var options = {
-		// Use data label as horizontal axis labels.
-		"tickFormatX": function (x) { return data["main"][0]["data"][x]["axis_label"]; },
+		// Fill axis labels.
+		"tickFormatX": function (x) { return x_axis_labels[x]; },
 		// Render a tooltip when mouse goes over the values.
 		"mouseover": function (d, i) {
 			var pos = $(this).offset();

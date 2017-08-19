@@ -16,6 +16,7 @@
 
 <figure style="left-margin: auto; right-margin:auto; width: 90%; height: 500px;" id="burndown-chart" />
 
-<%= render :partial => 'product_backlog/burndown', :formats => [:js], :locals => {:data => @data} %>
+<%= render :partial => 'product_backlog/burndown', :formats => [:js],
+           :locals => {:data => @data, :x_axis_labels => @x_axis_labels} %>
 
 <%= render :partial => 'common/scrum_footer' %>
