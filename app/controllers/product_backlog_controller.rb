@@ -93,10 +93,10 @@ class ProductBacklogController < ApplicationController
     @data = []
     @project.sprints.each do |sprint|
       @data << {:axis_label => sprint.name,
-                :story_points => sprint.story_points.round(2),
+                :story_points => sprint.story_points(@pbi_filter).round(2),
                 :pending_story_points => 0}
     end
-    velocity_all_pbis, velocity_scheduled_pbis, @sprints_count = @project.story_points_per_sprint
+    velocity_all_pbis, velocity_scheduled_pbis, @sprints_count = @project.story_points_per_sprint(@pbi_filter)
     @velocity_type = params[:velocity_type] || 'only_scheduled'
     case @velocity_type
       when 'all'
@@ -107,7 +107,7 @@ class ProductBacklogController < ApplicationController
         @velocity = params[:custom_velocity].to_f unless params[:custom_velocity].blank?
     end
     @velocity = 1.0 if @velocity.blank? or @velocity < 1.0
-    pending_story_points = @product_backlog.story_points
+    pending_story_points = @product_backlog.story_points(@pbi_filter)
     new_sprints = 1
     while pending_story_points > 0
       @data << {:axis_label => "#{l(:field_sprint)} +#{new_sprints}",
@@ -200,7 +200,7 @@ private
 
   def find_subprojects
     if @project and @product_backlog
-      @subprojects = [[l(:label_all), product_backlog_path(@product_backlog, :filter_by_project => nil)]]
+      @subprojects = [[l(:label_all), calculate_path(@product_backlog)]]
       @subprojects += find_recursive_subprojects(@project, @product_backlog)
     end
   end
@@ -208,7 +208,7 @@ private
   def find_recursive_subprojects(project, product_backlog, tabs = '')
     options = []
     project.children.visible.to_a.each do |child|
-      options << [tabs + child.name, product_backlog_path(product_backlog, :filter_by_project => child.id)]
+      options << [tabs + child.name, calculate_path(product_backlog, child)]
       options += find_recursive_subprojects(child, product_backlog, tabs + '» ')
     end
     return options
@@ -216,9 +216,27 @@ private
 
   def filter_by_project
     @pbi_filter = {}
-    if params[:filter_by_project]
+    unless params[:filter_by_project].blank?
       @pbi_filter = {:filter_by_project => params[:filter_by_project]}
     end
+  end
+
+  def calculate_path(product_backlog, project = nil)
+    options = {}
+    if 'burndown' == action_name
+      options[:velocity_type] = params[:velocity_type] unless params[:velocity_type].blank?
+      options[:custom_velocity] = params[:custom_velocity] unless params[:custom_velocity].blank?
+      path_method = :burndown_product_backlog_path
+    else
+      path_method = :product_backlog_path
+    end
+    options[:filter_by_project] = project.id unless project.nil?
+    result = send(path_method, product_backlog, options)
+    if (project.nil? and params[:filter_by_project].blank?) or
+       (project and project.id.to_s == params[:filter_by_project])
+      @selected_subproject = result
+    end
+    return result
   end
 
 end

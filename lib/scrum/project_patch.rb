@@ -32,15 +32,15 @@ module Scrum
           current_sprint ? current_sprint : last_sprint
         end
 
-        def story_points_per_sprint
+        def story_points_per_sprint(options = {})
           i = self.sprints.length - 1
           sprints_count = 0
           story_points_per_sprint = 0.0
           scheduled_story_points_per_sprint = 0.0
           today = Date.today
           while (sprints_count < Scrum::Setting.product_burndown_sprints and i >= 0)
-            story_points = self.sprints[i].story_points
-            scheduled_story_points = self.sprints[i].scheduled_story_points
+            story_points = self.sprints[i].story_points(options)
+            scheduled_story_points = self.sprints[i].scheduled_story_points(options)
             sprint_end_date = self.sprints[i].sprint_end_date
             unless story_points.nil? or scheduled_story_points.nil? or (sprint_end_date >= today)
               story_points_per_sprint += story_points

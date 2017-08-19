@@ -56,32 +56,30 @@ class Sprint < ActiveRecord::Base
       end
       conditions[:position] = first_position..last_position
     end
-    if options[:filter_by_project]
-      conditions[:project_id] = options[:filter_by_project]
-    end
+    conditions[:project_id] = options[:filter_by_project] if options[:filter_by_project]
     issues.where(conditions).order(order).select{|issue| issue.visible?}
   end
 
-  def not_closed_pbis
-    pbis.delete_if {|pbi| pbi.closed?}
+  def not_closed_pbis(options = {})
+    pbis(options).delete_if {|pbi| pbi.closed?}
   end
 
-  def story_points
-    pbis.collect{|pbi| pbi.story_points.to_f}.compact.sum
+  def story_points(options = {})
+    pbis(options).collect{|pbi| pbi.story_points.to_f}.compact.sum
   end
 
-  def closed_story_points
-    pbis.collect{|pbi| pbi.closed? ? pbi.story_points.to_f : 0.0}.compact.sum
+  def closed_story_points(options = {})
+    pbis(options).collect{|pbi| pbi.closed? ? pbi.story_points.to_f : 0.0}.compact.sum
   end
 
-  def scheduled_story_points
-    pbis.select{|pbi| pbi.scheduled?}.collect{|pbi| pbi.story_points.to_f}.compact.sum
+  def scheduled_story_points(options = {})
+    pbis(options).select{|pbi| pbi.scheduled?}.collect{|pbi| pbi.story_points.to_f}.compact.sum
   end
 
-  def tasks(conditions = nil)
-    the_conditions = {:tracker_id => Scrum::Setting.task_tracker_ids}
-    the_conditions.merge!(conditions) if conditions
-    issues.where(the_conditions).select{|issue| issue.visible?}
+  def tasks(options = {})
+    conditions = {:tracker_id => Scrum::Setting.task_tracker_ids}
+    conditions.merge!(options)
+    issues.where(conditions).select{|issue| issue.visible?}
   end
 
   def orphan_tasks

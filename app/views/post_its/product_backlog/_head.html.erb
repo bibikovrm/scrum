@@ -3,18 +3,16 @@
     <div class="tabular">
       <p>
         <label><%= l(:label_product_backlog) %>:</label>
-        <%- options = project.product_backlogs.collect{ |other_product_backlog|
-              [other_product_backlog.name, path.call(other_product_backlog, :type => @type)] }
-            options = options_for_select(options, path.call(product_backlog, :type => @type)) -%>
+        <%- options = product_backlog.project.product_backlogs.collect{ |other_product_backlog|
+              [other_product_backlog.name, path.call(other_product_backlog, params.symbolize_keys)] }
+            options = options_for_select(options, path.call(product_backlog, params.symbolize_keys)) -%>
         <%= select_tag('selected_sprint_id', options,
                        :onchange => "if (this.value != '') { window.location = this.value; }") %>
       </p>
-      <%- if product_backlog.shared and action_name == 'show' -%>
+      <%- if product_backlog.shared and ['show', 'burndown'].include?(action_name) -%>
         <p>
           <label><%= l(:label_filter_by_project) %>:</label>
-          <%- options = options_for_select(@subprojects,
-                                           path.call(product_backlog,
-                                                     :filter_by_project => params[:filter_by_project])) -%>
+          <%- options = options_for_select(@subprojects, @selected_subproject) -%>
           <%= select_tag('select_project_id', options,
                          :onchange => "if (this.value != '') { window.location = this.value; }") %>
         </p>
@@ -28,6 +26,6 @@
   </td>
   <%- if Scrum::Setting.show_project_totals_on_backlog -%>
     <%= render :partial => 'post_its/project_totals',
-               :locals => {:project => @project} %>
+               :locals => {:project => product_backlog.project} %>
   <%- end -%>
 </tr>

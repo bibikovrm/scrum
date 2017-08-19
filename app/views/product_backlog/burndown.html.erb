@@ -9,10 +9,10 @@
 <% end %>
 
 <%= render :partial => 'burndown_head',
-           :locals => {:count => @sprints_count,
-                       :sps => @velocity,
-                       :default_sps => @default_velocity,
-                       :use_not_scheduled_pbis_for_velocity => @use_not_scheduled_pbis_for_velocity} %>
+           :locals => {:product_backlog => @product_backlog,
+                       :sprints_count => @sprints_count,
+                       :velocity => @velocity,
+                       :velocity_type => @velocity_type} %>
 
 <figure style="left-margin: auto; right-margin:auto; width: 90%; height: 500px;" id="burndown-chart" />
 
