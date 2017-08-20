@@ -91,7 +91,7 @@ class ProductBacklogController < ApplicationController
 
   def burndown
     @x_axis_labels = []
-    all_projects_serie = burndown_for_project(@product_backlog, @project, @pbi_filter, @x_axis_labels)
+    all_projects_serie = burndown_for_project(@product_backlog, @project, l(:label_all), @pbi_filter, @x_axis_labels)
     @sprints_count = all_projects_serie[:sprints_count]
     @velocity = all_projects_serie[:velocity]
     @velocity_type = all_projects_serie[:velocity_type]
@@ -215,8 +215,8 @@ private
     return result
   end
 
-  def burndown_for_project(product_backlog, project, pbi_filter = {}, x_axis_labels = nil)
-    serie = {:data => []}
+  def burndown_for_project(product_backlog, project, label, pbi_filter = {}, x_axis_labels = nil)
+    serie = {:data => [], :label => label}
     project.sprints.each do |sprint|
       x_axis_labels << sprint.name unless x_axis_labels.nil?
       serie[:data] << {:story_points => sprint.story_points(pbi_filter).round(2),
@@ -256,7 +256,7 @@ private
   end
 
   def recursive_burndown(product_backlog, project)
-    series = [burndown_for_project(@product_backlog, @project,
+    series = [burndown_for_project(@product_backlog, @project, project.name,
                                    {:filter_by_project => project.id})]
     project.children.visible.to_a.each do |child|
       series += recursive_burndown(product_backlog, child)
