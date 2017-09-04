@@ -90,14 +90,20 @@ class ProductBacklogController < ApplicationController
   end
 
   def burndown
+    if @pbi_filter and @pbi_filter[:filter_by_project] == 'without-total'
+      @pbi_filter.delete(:filter_by_project)
+      without_total = true
+    end
     @x_axis_labels = []
     all_projects_serie = burndown_for_project(@product_backlog, @project, l(:label_all), @pbi_filter, @x_axis_labels)
     @sprints_count = all_projects_serie[:sprints_count]
     @velocity = all_projects_serie[:velocity]
     @velocity_type = all_projects_serie[:velocity_type]
-    @series = [all_projects_serie]
+    @series = []
+    @series << all_projects_serie unless without_total
     if @pbi_filter.empty? and @subprojects.count > 2
-      @series += recursive_burndown(@product_backlog, @project)
+      sub_series = recursive_burndown(@product_backlog, @project)
+      @series += sub_series
     end
   end
 
@@ -174,6 +180,7 @@ private
   def find_subprojects
     if @project and @product_backlog
       @subprojects = [[l(:label_all), calculate_path(@product_backlog)]]
+      @subprojects << [l(:label_all_but_total), calculate_path(@product_backlog, 'without-total')] if action_name == 'burndown'
       @subprojects += find_recursive_subprojects(@project, @product_backlog)
     end
   end
@@ -206,10 +213,18 @@ private
       options[:velocity_type] = params[:velocity_type] unless params[:velocity_type].blank?
       options[:custom_velocity] = params[:custom_velocity] unless params[:custom_velocity].blank?
     end
-    options[:filter_by_project] = project.id unless project.nil?
+    if project.nil?
+      project_id = nil
+    elsif project == 'without-total'
+      options[:filter_by_project] = 'without-total'
+      project_id = 'without-total'
+    else
+      options[:filter_by_project] = project.id
+      project_id = project.id.to_s
+    end
     result = send(path_method, product_backlog, options)
     if (project.nil? and params[:filter_by_project].blank?) or
-       (project and project.id.to_s == params[:filter_by_project])
+       (project_id == params[:filter_by_project])
       @selected_subproject = result
     end
     return result
@@ -234,19 +249,25 @@ private
     end
     serie[:velocity] = 1.0 if serie[:velocity].blank? or serie[:velocity] < 1.0
     pending_story_points = product_backlog.story_points(pbi_filter)
-    new_sprints = 1
-    while pending_story_points > 0
-      x_axis_labels << "#{l(:field_sprint)} +#{new_sprints}" unless x_axis_labels.nil?
-      serie[:data] << {:story_points => ((serie[:velocity] <= pending_story_points) ?
-                                         serie[:velocity] : pending_story_points).round(2),
-                      :pending_story_points => 0}
-      pending_story_points -= serie[:velocity]
-      new_sprints += 1
+    if pbi_filter.any?
+      serie[:pending_story_points] = pending_story_points
+    else
+      serie[:pending_story_points] = 0.0
+      new_sprints = 1
+      while pending_story_points > 0
+        x_axis_labels << "#{l(:field_sprint)} +#{new_sprints}" unless x_axis_labels.nil?
+        serie[:data] << {:story_points => ((serie[:velocity] <= pending_story_points) ?
+                                           serie[:velocity] : pending_story_points).round(2),
+                        :pending_story_points => 0}
+        pending_story_points -= serie[:velocity]
+        new_sprints += 1
+      end
     end
     for i in 0..(serie[:data].length - 1)
       others = serie[:data][(i + 1)..(serie[:data].length - 1)]
-      serie[:data][i][:pending_story_points] = (serie[:data][i][:story_points] +
-        (others.blank? ? 0 : others.collect{|other| other[:story_points]}.sum)).round(2)
+      serie[:data][i][:pending_story_points] = serie[:data][i][:story_points] +
+          (others.blank? ? 0.0 : others.collect{|other| other[:story_points]}.sum.round(2)) +
+          serie[:pending_story_points]
       serie[:data][i][:story_points_tooltip] = l(:label_pending_story_points,
                                                  :pending_story_points => serie[:data][i][:pending_story_points],
                                                  :sprint => serie[:data][i][:axis_label],
@@ -262,6 +283,10 @@ private
       series += recursive_burndown(product_backlog, child)
     end
     return series
+  end
+
+  def serie_sps(serie, index)
+    (serie[:data].count <= index) ? 0.0 : serie[:data][index][:story_points]
   end
 
 end
