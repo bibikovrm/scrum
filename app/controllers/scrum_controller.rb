@@ -11,7 +11,8 @@ class ScrumController < ApplicationController
   menu_item :overview, :only => [:stats]
 
   before_filter :find_issue,
-                :only => [:change_story_points, :change_pending_effort,
+                :only => [:change_story_points, :change_remaining_story_points,
+                          :change_pending_effort,
                           :change_assigned_to, :new_time_entry,
                           :create_time_entry, :edit_task, :update_task,
                           :change_pending_efforts]
@@ -27,14 +28,18 @@ class ScrumController < ApplicationController
 
   before_filter :authorize,
                 :except => [:new_pbi, :create_pbi, :new_task, :create_task,
-                            :new_time_entry, :create_time_entry,
+                            :change_story_points,
+                            :change_remaining_story_points,
                             :move_to_last_sprint,
                             :move_not_closed_pbis_to_last_sprint,
-                            :move_to_product_backlog]
+                            :move_to_product_backlog,
+                            :new_time_entry, :create_time_entry]
   before_filter :authorize_add_issues,
                 :only => [:new_pbi, :create_pbi, :new_task, :create_task]
   before_filter :authorize_edit_issues,
-                :only => [:move_to_last_sprint,
+                :only => [:change_story_points,
+                          :change_remaining_story_points,
+                          :move_to_last_sprint,
                           :move_not_closed_pbis_to_last_sprint,
                           :move_to_product_backlog]
   before_filter :authorize_log_time,
@@ -52,6 +57,11 @@ class ScrumController < ApplicationController
     rescue
       status = 503
     end
+    render :nothing => true, :status => status
+  end
+
+  def change_remaining_story_points
+    @issue.remaining_story_points = params[:value]
     render :nothing => true, :status => status
   end
 

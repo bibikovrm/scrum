@@ -18,8 +18,12 @@ module Scrum
       private
 
         def save_pending_effort
-          if @issue.is_task? and @issue.id and params[:issue] and params[:issue][:pending_effort]
-            @issue.pending_effort = params[:issue][:pending_effort]
+          if @issue.scrum? and @issue.id and params[:issue] and params[:issue][:pending_effort]
+            if @issue.is_task?
+              @issue.pending_effort = params[:issue][:pending_effort]
+            elsif @issue.is_pbi?
+              @issue.remaining_story_points = params[:issue][:pending_effort]
+            end
           end
         end
 

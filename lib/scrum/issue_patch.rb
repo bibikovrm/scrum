@@ -190,17 +190,24 @@ module Scrum
         end
 
         def pending_effort=(new_effort)
-          if is_task? and id and new_effort
-            effort = PendingEffort.where(:issue_id => id, :date => Date.today).first
-            # Replace invalid float number separator (i.e. 0,5) with valid separator (i.e. 0.5)
-            new_effort.gsub!(',', '.') if new_effort.is_a?(String)
-            if effort.nil?
-              date = (pending_efforts.empty? and sprint and sprint.sprint_start_date) ? sprint.sprint_start_date : Date.today
-              effort = PendingEffort.new(:issue_id => id, :date => date, :effort => new_effort)
-            else
-              effort.effort = new_effort
-            end
-            effort.save!
+          if is_task?
+            self.any_pending_effort = new_effort
+          end
+        end
+
+        def has_remaining_story_points?
+          Scrum::Setting.use_remaining_story_points? and is_pbi? and pending_efforts.any?
+        end
+
+        def remaining_story_points
+          if has_remaining_story_points?
+            return pending_efforts.last.effort
+          end
+        end
+
+        def remaining_story_points=(new_sps_value)
+          if is_pbi?
+            self.any_pending_effort = new_sps_value
           end
         end
 
@@ -301,21 +308,23 @@ module Scrum
         end
 
         def assignable_sprints
-          return @assignable_sprints if @assignable_sprints
-
-          sprints = project.all_open_sprints_and_product_backlogs.to_a
-          if sprint
-            if sprint_id_changed?
-              # nothing to do
-            else
-              sprints << sprint
-            end
+          unless @assignable_sprints
+            sprints = project.all_open_sprints_and_product_backlogs.to_a
+            sprints << sprint unless sprint.nil? or sprint_id_changed?
+            @assignable_sprints = sprints.uniq.sort
           end
-          @assignable_sprints = sprints.uniq.sort
+          return @assignable_sprints if @assignable_sprints
         end
 
         def scrum?
-          return project.nil? ? false : project.scrum?
+          enabled = false
+          if project
+            enabled = true if project.scrum?
+          end
+          if sprint and sprint.project
+            enabled = true if sprint.project.scrum?
+          end
+          return enabled
         end
 
         def get_dependencies
@@ -519,6 +528,21 @@ module Scrum
             @@doing_activities_ids = doing_activities.collect{|a| a.id}
           end
           @@doing_activities_ids
+        end
+
+        def any_pending_effort=(new_effort)
+          if id and new_effort
+            effort = PendingEffort.where(:issue_id => id, :date => Date.today).first
+            # Replace invalid float number separator (i.e. 0,5) with valid separator (i.e. 0.5)
+            new_effort.gsub!(',', '.') if new_effort.is_a?(String)
+            if effort.nil?
+              date = (pending_efforts.empty? and sprint and sprint.sprint_start_date) ? sprint.sprint_start_date : Date.today
+              effort = PendingEffort.new(:issue_id => id, :date => date, :effort => new_effort)
+            else
+              effort.effort = new_effort
+            end
+            effort.save!
+          end
         end
 
       end

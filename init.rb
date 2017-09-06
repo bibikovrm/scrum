@@ -45,7 +45,8 @@ Redmine::Plugin.register :scrum do
                     {:sprints => [:index, :show]}
     permission      :edit_sprint_board,
                     {:sprints => [:change_task_status, :sort],
-                     :scrum => [:change_story_points, :change_pending_effort, :change_assigned_to,
+                     :scrum => [:change_story_points, :change_remaining_story_points,
+                                :change_pending_effort, :change_assigned_to,
                                 :new_pbi, :create_pbi, :edit_pbi, :update_pbi,
                                 :new_task, :create_task, :edit_task, :update_task]},
                     :require => :member
@@ -76,7 +77,12 @@ Redmine::Plugin.register :scrum do
                     {}
     permission      :edit_pending_effort,
                     {:scrum => [:change_pending_effort, :change_pending_efforts]},
-                    :require => :memeber
+                    :require => :member
+    permission      :view_remaining_story_points,
+                    {}
+    permission      :edit_remaining_story_points,
+                    {:scrum => [:change_remaining_story_points]},
+                    :require => :member
   end
 
   menu              :project_menu, :product_backlog, {:controller => :product_backlog, :action => :index},
@@ -116,6 +122,7 @@ Redmine::Plugin.register :scrum do
                                  :sprint_burndown_day_zero => '1',
                                  :pbi_is_closed_if_tasks_are_closed => false,
                                  :show_project_totals_on_sprint => false,
-                                 :show_project_totals_on_backlog => false},
+                                 :show_project_totals_on_backlog => false,
+                                 :use_remaining_story_points => false},
                     :partial => 'settings/scrum_settings'
 end

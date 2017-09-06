@@ -25,9 +25,13 @@ module Scrum
        render_version_on_pbi
        show_project_totals_on_sprint
        show_project_totals_on_backlog
-       sprint_burndown_day_zero).each do |setting|
+       sprint_burndown_day_zero
+       use_remaining_story_points).each do |setting|
       src = <<-END_SRC
       def self.#{setting}
+        setting_or_default_boolean(:#{setting})
+      end
+      def self.#{setting}?
         setting_or_default_boolean(:#{setting})
       end
       END_SRC

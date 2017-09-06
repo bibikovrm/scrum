@@ -50,6 +50,9 @@ end
 post "issues/:id/story_points",
      :controller => :scrum, :action => :change_story_points,
      :as => :change_story_points
+post "issues/:id/remaining_story_points",
+     :controller => :scrum, :action => :change_remaining_story_points,
+     :as => :change_remaining_story_points
 post "issues/:id/pending_effort",
      :controller => :scrum, :action => :change_pending_effort,
      :as => :change_pending_effort

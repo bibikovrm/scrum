@@ -283,8 +283,8 @@ ul.pbis li table tr td.header-2 {
 }
 
 ul.pbis li table tr td.story-points {
-    width: 8em;
-    min-width: 8em;
+    width: 6em;
+    min-width: 6em;
     font-style: italic;
     color: darkgrey;
 }
@@ -293,7 +293,7 @@ ul.pbis li table tr td.story-points input {
     font-size: 2em;
     font-style: bold;
     text-align: right;
-    min-width: 3em;
+    min-width: 2em;
 }
 
 ul.pbis li table tr td.story-points-legend {

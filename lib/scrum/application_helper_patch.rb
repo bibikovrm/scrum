@@ -200,6 +200,35 @@ module Scrum
           return tips
         end
 
+        def render_time(time, unit, options = {})
+          if time.nil?
+            ''
+          else
+            if time.is_a?(Integer)
+              text = ("%d" % time) unless options[:ignore_zero] and time == 0
+            elsif time.is_a?(Float)
+              text = ("%g" % time) unless options[:ignore_zero] and time == 0.0
+            else
+              text = time unless options[:ignore_zero] and (time.blank? or (time == '0'))
+            end
+            unless text.blank?
+              text = "#{text}#{options[:space_unit] ? ' ' : ''}#{unit}"
+              unless options[:link].nil?
+                text = link_to(text, options[:link])
+              end
+              render :inline => "<span title=\"#{options[:title]}\">#{text}</span>"
+            end
+          end
+        end
+
+        def render_hours(hours, options = {})
+          render_time(hours, 'h', options)
+        end
+
+        def render_sps(sps, options = {})
+          render_time(sps, l(:label_story_point_unit), options)
+        end
+
       end
     end
   end

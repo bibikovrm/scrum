@@ -62,6 +62,13 @@
                       Scrum::Setting.auto_update_pbi_status) %>
     <em><%= l(:label_setting_auto_update_pbi_status_explanation) %></em>
   </p>
+  <p>
+    <label><%= l(:label_setting_use_remaining_story_points) %>:</label>
+    <%= hidden_field_tag('settings[use_remaining_story_points]', 0) %>
+    <%= check_box_tag('settings[use_remaining_story_points]', 1,
+                      Scrum::Setting.use_remaining_story_points) %>
+    <em><%= l(:label_setting_use_remaining_story_points_explanation) %></em>
+  </p>
 </fieldset>
 
 <fieldset>
