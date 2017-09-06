@@ -24,6 +24,7 @@ class ProductBacklogController < ApplicationController
   before_filter :filter_by_project,
                 :only => [:show, :burndown, :release_plan]
   before_filter :check_issue_positions, :only => [:show]
+  before_filter :calculate_stats, :only => [:show, :burndown, :release_plan]
   before_filter :authorize
 
   helper :scrum
@@ -287,6 +288,19 @@ private
 
   def serie_sps(serie, index)
     (serie[:data].count <= index) ? 0.0 : serie[:data][index][:story_points]
+  end
+
+  def calculate_stats
+    if Scrum::Setting.show_project_totals_on_backlog
+      pbis_count = @project.pbis_count(@pbi_filter)
+      total_sps = @project.total_sps(@pbi_filter)
+      closed_sps = @project.closed_sps(@pbi_filter)
+      percentage_closed_sps = (total_sps == 0.0) ? 0.0 : ((closed_sps * 100.0) / total_sps)
+      @stats = {:pbis_count => pbis_count,
+                :total_sps => total_sps,
+                :closed_sps => closed_sps,
+                :percentage_closed_sps => percentage_closed_sps}
+    end
   end
 
 end

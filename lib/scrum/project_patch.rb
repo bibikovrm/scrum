@@ -94,27 +94,31 @@ module Scrum
           return is_scrum
         end
 
-        def pbis_count
-          return pbis.count
+        def pbis_count(filters)
+          return pbis(filters).count
         end
 
-        def total_sps
-          return pbis.collect {|pbi| pbi.story_points.to_f || 0.0}.sum
+        def total_sps(filters)
+          return pbis(filters).collect {|pbi| pbi.story_points.to_f || 0.0}.sum
         end
 
-        def closed_sps
-          return pbis.collect {|pbi| pbi.closed? ? (pbi.story_points.to_f || 0.0) : 0.0}.sum
+        def closed_sps(filters)
+          return pbis(filters).collect {|pbi| pbi.closed? ? (pbi.story_points.to_f || 0.0) : 0.0}.sum
         end
 
       private
 
-        def pbis
-          return Issue.visible.includes(:custom_values).where(pbis_conditons)
+        def pbis(filters)
+          the_filters = filters.clone
+          the_filters[:filter_by_project] = Integer(the_filters[:filter_by_project]) rescue nil
+          filter_conditions = {}
+          filter_conditions[:project_id] = the_filters[:filter_by_project] if the_filters[:filter_by_project]
+          Issue.visible.includes(:custom_values).where(pbis_conditons(the_filters)).where(filter_conditions)
         end
 
-        def pbis_conditons(initial_conditions=[])
-          conditions = initial_conditions
-          conditions << self.project_condition(::Setting.display_subprojects_issues?)
+        def pbis_conditons(filters)
+          conditions = []
+          conditions << self.project_condition(::Setting.display_subprojects_issues?) unless filters[:filter_by_project]
           conditions << "(tracker_id IN (#{Tracker.pbi_trackers(self).collect {|tracker| tracker.id}.join(', ')}))"
           return conditions.join(' AND ')
         end
