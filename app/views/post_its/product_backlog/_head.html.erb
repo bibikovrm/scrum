@@ -25,7 +25,6 @@
     <%- end -%>
   </td>
   <%- if Scrum::Setting.show_project_totals_on_backlog -%>
-    <%= render :partial => 'post_its/product_backlog/stats',
-               :locals => {:project => product_backlog.project} %>
+    <%= render :partial => 'post_its/stats', :locals => {:stats => @stats} %>
   <%- end -%>
 </tr>

@@ -60,8 +60,12 @@ class Sprint < ActiveRecord::Base
     issues.where(conditions).order(order).select{|issue| issue.visible?}
   end
 
+  def closed_pbis(options = {})
+    pbis(options).select {|pbi| pbi.closed?}
+  end
+
   def not_closed_pbis(options = {})
-    pbis(options).delete_if {|pbi| pbi.closed?}
+    pbis(options).select {|pbi| !pbi.closed?}
   end
 
   def story_points(options = {})

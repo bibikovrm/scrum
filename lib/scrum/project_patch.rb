@@ -98,6 +98,10 @@ module Scrum
           return pbis(filters).count
         end
 
+        def closed_pbis_count(filters)
+          return pbis(filters).select {|pbi| pbi.closed?}.count
+        end
+
         def total_sps(filters)
           return pbis(filters).collect {|pbi| pbi.story_points.to_f || 0.0}.sum
         end
@@ -109,7 +113,7 @@ module Scrum
       private
 
         def pbis(filters)
-          the_filters = filters.clone
+          the_filters = filters ? filters.clone : {}
           the_filters[:filter_by_project] = Integer(the_filters[:filter_by_project]) rescue nil
           filter_conditions = {}
           filter_conditions[:project_id] = the_filters[:filter_by_project] if the_filters[:filter_by_project]

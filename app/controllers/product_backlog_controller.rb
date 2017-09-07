@@ -292,14 +292,16 @@ private
 
   def calculate_stats
     if Scrum::Setting.show_project_totals_on_backlog
-      pbis_count = @project.pbis_count(@pbi_filter)
-      total_sps = @project.total_sps(@pbi_filter)
-      closed_sps = @project.closed_sps(@pbi_filter)
-      percentage_closed_sps = (total_sps == 0.0) ? 0.0 : ((closed_sps * 100.0) / total_sps)
-      @stats = {:pbis_count => pbis_count,
-                :total_sps => total_sps,
-                :closed_sps => closed_sps,
-                :percentage_closed_sps => percentage_closed_sps}
+      total_pbis_count = @project.pbis_count(@pbi_filter)
+      closed_pbis_count = @project.closed_pbis_count(@pbi_filter)
+      total_sps_count = @project.total_sps(@pbi_filter)
+      closed_sps_count = @project.closed_sps(@pbi_filter)
+      closed_total_percentage = (total_sps_count == 0.0) ? 0.0 : ((closed_sps_count * 100.0) / total_sps_count)
+      @stats = {:total_pbis_count => total_pbis_count,
+                :closed_pbis_count => closed_pbis_count,
+                :total_sps_count => total_sps_count,
+                :closed_sps_count => closed_sps_count,
+                :closed_total_percentage => closed_total_percentage}
     end
   end
 

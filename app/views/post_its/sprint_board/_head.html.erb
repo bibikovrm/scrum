@@ -31,5 +31,8 @@
         <%= textilizable(sprint.description) %>
       <%- end -%>
     </td>
+    <%- if Scrum::Setting.show_project_totals_on_sprint -%>
+      <%= render :partial => 'post_its/stats', :locals => {:stats => @stats} %>
+    <%- end -%>
   </tr>
 </table>

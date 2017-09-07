@@ -20,6 +20,7 @@ class SprintsController < ApplicationController
                 :only => [:index, :new, :create, :change_task_status, :burndown_index,
                           :stats_index]
   before_filter :find_pbis, :only => [:sort]
+  before_filter :calculate_stats, :only => [:show, :burndown, :stats]
   before_filter :authorize
 
   helper :custom_fields
@@ -334,6 +335,21 @@ private
     @pbis = @sprint.pbis
   rescue
     render_404
+  end
+
+  def calculate_stats
+    if Scrum::Setting.show_project_totals_on_sprint
+      total_pbis_count = @sprint.pbis().count
+      closed_pbis_count = @sprint.closed_pbis().count
+      total_sps_count = @sprint.story_points()
+      closed_sps_count = @sprint.closed_story_points()
+      closed_total_percentage = (total_sps_count == 0.0) ? 0.0 : ((closed_sps_count * 100.0) / total_sps_count)
+      @stats = {:total_pbis_count => total_pbis_count,
+                :closed_pbis_count => closed_pbis_count,
+                :total_sps_count => total_sps_count,
+                :closed_sps_count => closed_sps_count,
+                :closed_total_percentage => closed_total_percentage}
+    end
   end
 
 end
