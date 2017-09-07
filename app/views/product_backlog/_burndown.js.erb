@@ -11,12 +11,12 @@
 		"xScale": "ordinal",
 		"yScale": "linear",
 		"main": [
-			<%- i = 0
+			<%- serieIndex = 0
 					series.each do |serie|
-						i += 1 -%>
+						serieIndex += 1 -%>
 				{
 					// Sprint story points serie.
-					"className": ".story-points-<%= i %>",
+					"className": ".story-points-<%= serieIndex %>",
 					"data": [
 						<%- serie[:data].each_with_index do |value, i| -%>
 							{

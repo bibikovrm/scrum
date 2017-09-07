@@ -106,6 +106,7 @@ class ProductBacklogController < ApplicationController
       sub_series = recursive_burndown(@product_backlog, @project)
       @series += sub_series
     end
+    #@series.sort!{|serie_1, serie_2| serie_1}
   end
 
   def release_plan
@@ -250,25 +251,20 @@ private
     end
     serie[:velocity] = 1.0 if serie[:velocity].blank? or serie[:velocity] < 1.0
     pending_story_points = product_backlog.story_points(pbi_filter)
-    if pbi_filter.any?
-      serie[:pending_story_points] = pending_story_points
-    else
-      serie[:pending_story_points] = 0.0
-      new_sprints = 1
-      while pending_story_points > 0
-        x_axis_labels << "#{l(:field_sprint)} +#{new_sprints}" unless x_axis_labels.nil?
-        serie[:data] << {:story_points => ((serie[:velocity] <= pending_story_points) ?
-                                           serie[:velocity] : pending_story_points).round(2),
-                        :pending_story_points => 0}
-        pending_story_points -= serie[:velocity]
-        new_sprints += 1
-      end
+    serie[:pending_story_points] = pending_story_points
+    new_sprints = 1
+    while pending_story_points > 0
+      x_axis_labels << "#{l(:field_sprint)} +#{new_sprints}" unless x_axis_labels.nil?
+      serie[:data] << {:story_points => ((serie[:velocity] <= pending_story_points) ?
+                                         serie[:velocity] : pending_story_points).round(2),
+                      :pending_story_points => 0}
+      pending_story_points -= serie[:velocity]
+      new_sprints += 1
     end
     for i in 0..(serie[:data].length - 1)
       others = serie[:data][(i + 1)..(serie[:data].length - 1)]
       serie[:data][i][:pending_story_points] = serie[:data][i][:story_points] +
-          (others.blank? ? 0.0 : others.collect{|other| other[:story_points]}.sum.round(2)) +
-          serie[:pending_story_points]
+          (others.blank? ? 0.0 : others.collect{|other| other[:story_points]}.sum.round(2))
       serie[:data][i][:story_points_tooltip] = l(:label_pending_story_points,
                                                  :pending_story_points => serie[:data][i][:pending_story_points],
                                                  :sprint => serie[:data][i][:axis_label],
