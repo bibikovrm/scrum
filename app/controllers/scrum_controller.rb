@@ -131,15 +131,19 @@ class ScrumController < ApplicationController
       @continue = !(params[:create_and_continue].nil?)
       @top = !(params[:top].nil?)
       @pbi = Issue.new
-      @pbi.project = @project
+      if params[:issue][:project_id]
+        @pbi.project_id = params[:issue][:project_id]
+      else
+        @pbi.project = @project
+      end
       @pbi.author = User.current
       @pbi.tracker_id = params[:issue][:tracker_id]
-      update_attributes(@pbi, params)
       if @top
         @pbi.set_on_top
         @pbi.save!
       end
       @pbi.sprint = @sprint
+      update_attributes(@pbi, params)
       @pbi.save!
     rescue Exception => @exception
       logger.error("Exception: #{@exception.inspect}")
@@ -262,7 +266,11 @@ class ScrumController < ApplicationController
     begin
       @continue = !(params[:create_and_continue].nil?)
       @task = Issue.new
-      @task.project = @pbi.project
+      if params[:issue][:project_id]
+        @task.project_id = params[:issue][:project_id]
+      else
+        @task.project = @pbi.project
+      end
       @task.parent_issue_id = @pbi.id
       @task.author = User.current
       @task.sprint = @sprint

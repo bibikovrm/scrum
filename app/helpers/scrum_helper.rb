@@ -51,6 +51,14 @@ module ScrumHelper
     render :inline => icons.join('\n')
   end
 
+  def project_selector_tree(project, indent = '')
+    options = [["#{indent}#{project.name}", project.id]]
+    project.children.visible.each do |child_project|
+      options += project_selector_tree(child_project, indent + '» ')
+    end
+    return options
+  end
+
   DEVIATION_ICONS = [LOWEST_SPEED_ICON = "icon-major-deviation",
                      LOW_SPEED_ICON = "icon-minor-deviation",
                      HIGH_SPEED_ICON = "icon-below-deviation"]
