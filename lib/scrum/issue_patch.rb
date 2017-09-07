@@ -37,17 +37,30 @@ module Scrum
         }
 
         def closed_on_for_burndown
-          completed_date = self.closed_on
-          if completed_date.nil? and
-             Scrum::Setting.pbi_is_closed_if_tasks_are_closed and
-             self.children.any?
+          completed_date = nil
+          closed_statuses = IssueStatus::closed_status_ids
+          if self.closed?
+            self.journals.order('created_on DESC').each do |journal|
+              if completed_date.nil?
+                journal.details.where(:prop_key => 'status_id',
+                                      :value => closed_statuses).each do |detail|
+                  completed_date = journal.created_on
+                end
+              end
+            end
+          end
+          if self.is_pbi? and self.children.any? and
+             Scrum::Setting.pbi_is_closed_if_tasks_are_closed
             all_tasks_closed = true
-            last_closed_task_date = nil
+            last_closed_task_date = completed_date
             self.children.each do |task|
-              if task.closed? and task.closed_on
-                if last_closed_task_date.nil? or
-                   last_closed_task_date > task.closed_on
-                  last_closed_task_date = task.closed_on
+              if all_tasks_closed and task.closed?
+                task_closed_on = task.closed_on_for_burndown
+                if task_closed_on
+                  if last_closed_task_date.nil? or
+                     last_closed_task_date > task_closed_on
+                    last_closed_task_date = task_closed_on
+                  end
                 end
               else
                 all_tasks_closed = false
