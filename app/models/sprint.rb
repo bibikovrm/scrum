@@ -116,6 +116,7 @@ class Sprint < ActiveRecord::Base
     if User.current.allowed_to?(:view_sprint_stats, project)
       time_entries.each do |time_entry|
         if time_entry.activity and time_entry.hours > 0.0 and
+           time_entry.spent_on and sprint_start_date and sprint_end_date and
            time_entry.spent_on >= sprint_start_date and time_entry.spent_on <= sprint_end_date
           if !results.key?(time_entry.activity_id)
             results[time_entry.activity_id] = {:activity => time_entry.activity, :total => 0.0}
