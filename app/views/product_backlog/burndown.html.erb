@@ -8,6 +8,8 @@
   <%= stylesheet_link_tag 'xcharts.min.css', :plugin => 'scrum' %>
 <% end %>
 
+<div id="messages"></div>
+
 <%= render :partial => 'burndown_head',
            :locals => {:product_backlog => @product_backlog,
                        :sprints_count => @sprints_count,

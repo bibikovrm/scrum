@@ -90,6 +90,8 @@ class ProductBacklogController < ApplicationController
     end
   end
 
+  MAX_SERIES = 10
+
   def burndown
     if @pbi_filter and @pbi_filter[:filter_by_project] == 'without-total'
       @pbi_filter.delete(:filter_by_project)
@@ -106,7 +108,20 @@ class ProductBacklogController < ApplicationController
       sub_series = recursive_burndown(@product_backlog, @project)
       @series += sub_series
     end
-    #@series.sort!{|serie_1, serie_2| serie_1}
+    @series.sort! { |serie_1, serie_2|
+      closed = (serie_1[:project].closed? ? 1 : 0) - (serie_2[:project].closed? ? 1 : 0)
+      if 0 != closed
+        closed
+      else
+        serie_2[:pending_story_points] <=> serie_1[:pending_story_points]
+      end
+    }
+    if @series.count > MAX_SERIES
+      flash[:warning] = l(:label_limited_to_n_series, :n => MAX_SERIES)
+      @series = @series.first(MAX_SERIES)
+    else
+      flash.clear
+    end
   end
 
   def release_plan
@@ -233,7 +248,11 @@ private
   end
 
   def burndown_for_project(product_backlog, project, label, pbi_filter = {}, x_axis_labels = nil)
-    serie = {:data => [], :label => label}
+    serie = {:data => [],
+             :label => label,
+             :project => pbi_filter.include?(:filter_by_project) ?
+                         Project.find(pbi_filter[:filter_by_project]) :
+                         project}
     project.sprints.each do |sprint|
       x_axis_labels << sprint.name unless x_axis_labels.nil?
       serie[:data] << {:story_points => sprint.story_points(pbi_filter).round(2),
