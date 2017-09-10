@@ -75,7 +75,8 @@ module Scrum
 
         def has_story_points?
           ((!((custom_field_id = Scrum::Setting.story_points_custom_field_id).nil?)) and
-           visible_custom_field_values.collect{|value| value.custom_field.id.to_s}.include?(custom_field_id))
+           visible_custom_field_values.collect{|value| value.custom_field.id.to_s}.include?(custom_field_id) and
+           self.is_pbi?)
         end
 
         def story_points
@@ -84,7 +85,7 @@ module Scrum
              !((custom_value = self.custom_value_for(custom_field_id)).nil?) and
              !((value = custom_value.value).blank?)
             # Replace invalid float number separator (i.e. 0,5) with valid separator (i.e. 0.5)
-            value.gsub(',', '.')
+            value.gsub(',', '.').to_f
           end
         end
 
@@ -222,6 +223,19 @@ module Scrum
           if is_pbi?
             self.any_pending_effort = new_sps_value
           end
+        end
+
+        def story_points_for_burdown(day)
+          value = nil
+          if self.has_remaining_story_points?
+            values = self.pending_efforts.where(['date <= ?', day])
+            value = values.last.effort if values.any?
+          end
+          if value.nil?
+            closed_on = self.closed_on_for_burndown
+            value = (closed_on.nil? or closed_on > day) ? self.story_points : 0.0
+          end
+          return value
         end
 
         def init_from_params(params)

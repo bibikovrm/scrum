@@ -251,25 +251,13 @@ class Sprint < ActiveRecord::Base
   end
 
   def completed_sps_by_day
-    total_sps = story_points
-    non_working_days = Setting.non_working_week_days.collect{|day| (day == '7') ? 0 : day.to_i}
     days = {}
+    non_working_days = Setting.non_working_week_days.collect{|day| (day == '7') ? 0 : day.to_i}
     end_date = sprint_end_date + 1
     (sprint_start_date..end_date).each do |day|
       if (day == end_date) or (!(non_working_days.include?(day.wday)))
-        days[day] = total_sps
-      end
-    end
-    closed_statuses = IssueStatus::closed_status_ids
-    pbis.each do |pbi|
-      closed_on = pbi.closed_on_for_burndown
-      if closed_on
-        sps = pbi.story_points
-        days.each_key do |day|
-          if day >= closed_on
-            days[day] -= sps.to_f
-          end
-        end
+        days[day] = pbis.collect { |pbi| pbi.story_points_for_burdown(day) }.compact.sum
+        days[day] = 0.0 unless days[day]
       end
     end
     return days
