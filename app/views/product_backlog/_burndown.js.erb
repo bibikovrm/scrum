@@ -10,10 +10,10 @@
 		// Horizontal set of values (ordinal), vertical values (linear).
 		"xScale": "ordinal",
 		"yScale": "linear",
+		"yMin": 0,
 		"main": [
 			<%- serieIndex = 0
-					series.each do |serie|
-						serieIndex += 1 -%>
+					series.each do |serie| -%>
 				{
 					// Sprint story points serie.
 					"className": ".story-points-<%= serieIndex %>",
@@ -27,6 +27,7 @@
 						<%- end -%>
 					]
 				},
+				<%- serieIndex += 1 -%>
 			<%- end -%>
 		]
 	};
@@ -39,16 +40,16 @@
 	// Chart options.
 	var options = {
 		// Fill axis labels.
-		"tickFormatX": function (x) { return x_axis_labels[x]; },
+		"tickFormatX": function(x) { return x_axis_labels[x]; },
 		// Render a tooltip when mouse goes over the values.
-		"mouseover": function (d, i) {
+		"mouseover": function(d, i) {
 			var pos = $(this).offset();
 			$(toolTip).text(d.tooltip)
 			.css({top: topOffset + pos.top, left: pos.left + leftOffset})
 			.show();
 		},
 		// Hide the tooltip when mouse exists the values.
-		"mouseout": function (x) {
+		"mouseout": function(x) {
 			$(toolTip).hide();
 		}
 	};

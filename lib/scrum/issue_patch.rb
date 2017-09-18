@@ -115,7 +115,7 @@ module Scrum
 
         def use_in_burndown?
           is_task? and IssueStatus.task_statuses.include?(status) and
-              parent and parent.is_pbi? and IssueStatus.pbi_statuses.include?(parent.status)
+          parent and parent.is_pbi? and IssueStatus.pbi_statuses.include?(parent.status)
         end
 
         def is_pbi?
@@ -233,7 +233,7 @@ module Scrum
           end
           if value.nil?
             closed_on = self.closed_on_for_burndown
-            value = (closed_on.nil? or closed_on > day) ? self.story_points : 0.0
+            value = (closed_on.nil? or closed_on.beginning_of_day > day) ? self.story_points : 0.0
           end
           return value
         end

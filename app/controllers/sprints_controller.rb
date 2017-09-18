@@ -20,6 +20,10 @@ class SprintsController < ApplicationController
                 :only => [:index, :new, :create, :change_task_status, :burndown_index,
                           :stats_index]
   before_filter :find_pbis, :only => [:sort]
+  before_filter :find_subprojects,
+                :only => [:burndown]
+  before_filter :filter_by_project,
+                :only => [:burndown]
   before_filter :calculate_stats, :only => [:show, :burndown, :stats]
   before_filter :authorize
 
@@ -147,72 +151,40 @@ class SprintsController < ApplicationController
     render_404
   end
 
+  MAX_SERIES = 10
+
   def burndown
-    if params[:type] == 'sps'
-      @data = []
-      @sprint.completed_sps_by_day.each do |date, sps|
-        date_label = "#{I18n.l(date, :format => :scrum_day)} #{date.day}"
-        @data << {:day => date,
-                  :axis_label => date_label,
-                  :pending_sps => sps,
-                  :pending_sps_tooltip => l(:label_pending_sps_tooltip,
-                                            :date => date_label,
-                                            :sps => sps)}
-      end
-      if @data.any?
-        @data.last[:axis_label] = l(:label_end)
-        @data.last[:pending_sps_tooltip] = l(:label_pending_sps_tooltip,
-                                             :date => l(:label_end),
-                                             :sps => @data.last[:pending_sps])
-      end
-      @type = :sps
+    if @pbi_filter and @pbi_filter[:filter_by_project] == 'without-total'
+      @pbi_filter.delete(:filter_by_project)
+      without_total = true
     else
-      @data = []
-      last_pending_effort = @sprint.estimated_hours
-      last_day = nil
-      last_label = l(:label_begin) if Scrum::Setting.sprint_burndown_day_zero
-      ((@sprint.sprint_start_date)..(@sprint.sprint_end_date)).each do |date|
-        if @sprint.efforts.where(['date = ?', date]).count > 0
-          efforts = @sprint.efforts.where(['date >= ?', date])
-          estimated_effort = efforts.collect{|effort| effort.effort}.compact.sum
-          if date <= Date.today
-            efforts = []
-            @sprint.issues.each do |issue|
-              if issue.use_in_burndown?
-                efforts << issue.pending_efforts.where(['date <= ?', date]).last
-              end
-            end
-            pending_effort = efforts.compact.collect{|effort| effort.effort}.compact.sum
-          end
-          date_label = "#{I18n.l(date, :format => :scrum_day)} #{date.day}"
-          last_label = date_label unless Scrum::Setting.sprint_burndown_day_zero
-          @data << {:day => date,
-                    :axis_label => last_label,
-                    :estimated_effort => estimated_effort,
-                    :estimated_effort_tooltip => l(:label_estimated_effort_tooltip,
-                                                   :date => last_label,
-                                                   :hours => estimated_effort),
-                    :pending_effort => last_pending_effort,
-                    :pending_effort_tooltip => l(:label_pending_effort_tooltip,
-                                                 :date => last_label,
-                                                 :hours => last_pending_effort)}
-          last_pending_effort = pending_effort
-          last_day = date.day
-          last_label = date_label if Scrum::Setting.sprint_burndown_day_zero
-        end
+      without_total = false
+    end
+    @x_axis_labels = []
+    serie_label = "#{l(:field_pending_effort)} (#{l(:label_all)})"
+    all_projects_serie = burndown_for_project(@sprint, @project, serie_label, @pbi_filter, @x_axis_labels)
+    @series = []
+    @series << all_projects_serie unless without_total
+    if @pbi_filter.empty? and @subprojects.count > 2
+      sub_series = recursive_burndown(@sprint, @project)
+      @series += sub_series
+    end
+    @series.sort! { |serie_1, serie_2|
+      closed = (serie_1[:project].closed? ? 1 : 0) - (serie_2[:project].closed? ? 1 : 0)
+      if 0 != closed
+        closed
+      else
+        serie_2[:pending_story_points] <=> serie_1[:pending_story_points]
       end
-      last_label = l(:label_end) unless Scrum::Setting.sprint_burndown_day_zero
-      @data << {:day => last_day,
-                :axis_label => last_label,
-                :estimated_effort => 0,
-                :estimated_effort_tooltip => l(:label_estimated_effort_tooltip,
-                                               :date => last_label,
-                                               :hours => 0),
-                :pending_effort => last_pending_effort,
-                :pending_effort_tooltip => l(:label_pending_effort_tooltip,
-                                             :date => last_label,
-                                             :hours => last_pending_effort)}
-      @type = :effort
+    }
+    if params[:type] == 'effort'
+      @series = [estimated_effort_serie(@sprint)] + @series
+    end
+    if @series.count > MAX_SERIES
+      flash[:warning] = l(:label_limited_to_n_series, :n => MAX_SERIES)
+      @series = @series.first(MAX_SERIES)
+    else
+      flash.clear
     end
   end
 
@@ -350,6 +322,170 @@ private
                 :closed_sps_count => closed_sps_count,
                 :closed_total_percentage => closed_total_percentage}
     end
+  end
+
+  def find_subprojects
+    if @project and @sprint
+      @subprojects = [[l(:label_all), calculate_path(@sprint)]]
+      @subprojects << [l(:label_all_but_total), calculate_path(@sprint, 'without-total')] if action_name == 'burndown'
+      @subprojects += find_recursive_subprojects(@project, @sprint)
+    end
+  end
+
+  def find_recursive_subprojects(project, sprint, tabs = '')
+    options = [[tabs + project.name, calculate_path(sprint, project)]]
+    project.children.visible.to_a.each do |child|
+      options += find_recursive_subprojects(child, sprint, tabs + '» ')
+    end
+    return options
+  end
+
+  def filter_by_project
+    @pbi_filter = {}
+    unless params[:filter_by_project].blank?
+      @pbi_filter = {:filter_by_project => params[:filter_by_project]}
+    end
+  end
+
+  def calculate_path(sprint, project = nil)
+    options = {}
+    path_method = :burndown_sprint_path
+    if ['burndown'].include?(action_name)
+      options[:type] = params[:type] unless params[:type].blank?
+    end
+    if project.nil?
+      project_id = nil
+    elsif project == 'without-total'
+      options[:filter_by_project] = 'without-total'
+      project_id = 'without-total'
+    else
+      options[:filter_by_project] = project.id
+      project_id = project.id.to_s
+    end
+    result = send(path_method, sprint, options)
+    if (project.nil? and params[:filter_by_project].blank?) or
+       (project_id == params[:filter_by_project])
+      @selected_subproject = result
+    end
+    return result
+  end
+
+  def burndown_for_project(sprint, project, label, pbi_filter = {}, x_axis_labels = nil)
+    serie = {:data => [],
+             :label => label,
+             :project => pbi_filter.include?(:filter_by_project) ?
+                         Project.find(pbi_filter[:filter_by_project]) :
+                         project}
+
+    if params[:type] == 'sps'
+      last_sps = sprint.story_points(pbi_filter)
+      last_day = nil
+      last_label = l(:label_begin) if Scrum::Setting.sprint_burndown_day_zero?
+      sprint.completed_sps_by_day(pbi_filter).each do |date, sps|
+        date_label = "#{I18n.l(date, :format => :scrum_day)} #{date.day}"
+        last_label = date_label unless Scrum::Setting.sprint_burndown_day_zero?
+        x_axis_labels << last_label unless x_axis_labels.nil?
+        serie[:data] << {:day => date,
+                         :pending_sps => last_sps,
+                         :pending_sps_tooltip => l(:label_pending_sps_tooltip,
+                                                   :date => last_label,
+                                                   :sps => last_sps)}
+        last_sps = sps
+        last_day = date.day
+        last_label = date_label if Scrum::Setting.sprint_burndown_day_zero?
+      end
+      if serie[:data].any?
+        unless x_axis_labels.nil?
+          if Scrum::Setting.sprint_burndown_day_zero?
+            x_axis_labels << last_label
+          else
+            x_axis_labels[x_axis_labels.length - 1] = l(:label_end)
+          end
+        end
+        serie[:data].last[:pending_sps_tooltip] = l(:label_pending_sps_tooltip,
+                                                    :date => last_label,
+                                                    :sps => last_sps)#serie[:data].last[:pending_sps])
+      end
+      @type = :sps
+    else
+      last_pending_effort = sprint.estimated_hours(pbi_filter)
+      last_day = nil
+      last_label = l(:label_begin) if Scrum::Setting.sprint_burndown_day_zero?
+      sprint_tasks = sprint.tasks(pbi_filter)
+      ((sprint.sprint_start_date)..(sprint.sprint_end_date)).each do |date|
+        sprint_efforts = sprint.efforts.where(['date >= ?', date])
+        if sprint_efforts.any?
+          if date <= Date.today
+            efforts = []
+            sprint_tasks.each do |task|
+              if task.use_in_burndown?
+                efforts << task.pending_efforts.where(['date <= ?', date]).last
+              end
+            end
+            pending_effort = efforts.compact.collect{|effort| effort.effort}.compact.sum
+          end
+          date_label = "#{I18n.l(date, :format => :scrum_day)} #{date.day}"
+          last_label = date_label unless Scrum::Setting.sprint_burndown_day_zero?
+          x_axis_labels << last_label unless x_axis_labels.nil?
+          serie[:data] << {:day => date,
+                           :effort => last_pending_effort,
+                           :tooltip => l(:label_pending_effort_tooltip,
+                                         :date => last_label,
+                                         :hours => last_pending_effort)}
+          last_pending_effort = pending_effort
+          last_day = date.day
+          last_label = date_label if Scrum::Setting.sprint_burndown_day_zero?
+        end
+      end
+      last_label = l(:label_end) unless Scrum::Setting.sprint_burndown_day_zero?
+      x_axis_labels << last_label unless x_axis_labels.nil?
+      serie[:data] << {:day => last_day,
+                       :effort => last_pending_effort,
+                       :tooltip => l(:label_pending_effort_tooltip,
+                                     :date => last_label,
+                                     :hours => last_pending_effort)}
+      @type = :effort
+    end
+    return serie
+  end
+
+  def estimated_effort_serie(sprint)
+    serie = {:data => [],
+             :label => l(:label_estimated_effort)}
+    last_day = nil
+    last_label = l(:label_begin) if Scrum::Setting.sprint_burndown_day_zero
+    ((sprint.sprint_start_date)..(sprint.sprint_end_date)).each do |date|
+      sprint_efforts = sprint.efforts.where(['date >= ?', date])
+      if sprint_efforts.any?
+        estimated_effort = sprint_efforts.collect{|effort| effort.effort}.compact.sum
+        date_label = "#{I18n.l(date, :format => :scrum_day)} #{date.day}"
+        last_label = date_label unless Scrum::Setting.sprint_burndown_day_zero
+        serie[:data] << {:day => date,
+                         :effort => estimated_effort,
+                         :tooltip => l(:label_estimated_effort_tooltip,
+                                       :date => last_label,
+                                       :hours => estimated_effort)}
+        last_day = date.day
+        last_label = date_label if Scrum::Setting.sprint_burndown_day_zero
+      end
+    end
+    last_label = l(:label_end) unless Scrum::Setting.sprint_burndown_day_zero
+    serie[:data] << {:day => last_day,
+                     :effort => 0,
+                     :tooltip => l(:label_estimated_effort_tooltip,
+                                   :date => last_label,
+                                   :hours => 0)}
+    return serie
+  end
+
+  def recursive_burndown(sprint, project)
+    serie_name = "#{l(:field_pending_effort)} (#{project.name})"
+    series = [burndown_for_project(@sprint, @project, serie_name,
+                                   {:filter_by_project => project.id})]
+    project.children.visible.to_a.each do |child|
+      series += recursive_burndown(sprint, child)
+    end
+    return series
   end
 
 end

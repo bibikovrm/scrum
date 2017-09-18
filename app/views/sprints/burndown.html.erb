@@ -4,45 +4,41 @@
   <%= l((@type == :sps) ? :label_sprint_burndown_chart_sps : :label_sprint_burndown_chart_hours) %>
 </h2>
 
-<%= render :partial => "post_its/sprint_board/head",
-           :locals => {:project => @project,
-                       :sprint => @sprint,
-                       :path => method(:burndown_sprint_path)} %>
-
 <% content_for :header_tags do %>
   <%= javascript_include_tag "d3.min.js", :plugin => "scrum" %>
   <%= javascript_include_tag "xcharts.min.js", :plugin => "scrum" %>
   <%= stylesheet_link_tag "xcharts.min.css", :plugin => "scrum" %>
 <% end %>
 
-<%- if @type == :sps -%>
-  <div style="position: relative;">
-    <svg height="80" width="300" class="xchart"
-         style="position: absolute; top: 0px; right: 0px;">
-      <g class="line color0"><path class="line" stroke-width="10" d="M5 15 H70" /></g>
-      <g class="axis"><text x="80" y="18"><%= l(:label_pending_sps) %></text></g>
-    </svg>
-    <figure id="burndown-chart"
-            style="left-margin: auto; right-margin:auto; width: 90%; height: 500px;" />
-  </div>
-  <%= render :partial => "sprints/burndown_by_sps",
-             :formats => [:js],
-             :locals => {:data => @data} %>
-<%- else -%>
-  <div style="position: relative;">
-    <svg height="80" width="300" class="xchart"
-         style="position: absolute; top: 0px; right: 0px;">
-      <g class="line color0"><path class="line" stroke-width="10" d="M5 15 H70" /></g>
-      <g class="axis"><text x="80" y="18"><%= l(:label_estimated_effort) %></text></g>
-      <g class="line color1"><path class="line" stroke-width="10" d="M5 35 H70" /></g>
-      <g class="axis"><text x="80" y="38"><%= l(:field_pending_effort) %></text></g>
-    </svg>
-    <figure id="burndown-chart"
-            style="left-margin: auto; right-margin:auto; width: 90%; height: 500px;" />
-  </div>
-  <%= render :partial => "sprints/burndown",
-             :formats => [:js],
-             :locals => {:data => @data} %>
-<%- end -%>
+<div id="messages"></div>
+
+<%= render :partial => "post_its/sprint_board/head",
+           :locals => {:project => @project,
+                       :sprint => @sprint,
+                       :path => method(:burndown_sprint_path)} %>
+
+<div style="position: relative;">
+  <svg height="500" width="<%= @series.count <= 2 ? 300 : 400 %>" class="xchart"
+       style="position: absolute; top: 0px; right: 0px;">
+    <%- i = 0 -%>
+    <%- row_space = 20 -%>
+    <%- @series.each do |serie| -%>
+      <g class="line color<%= i %>">
+        <path class="line" stroke-width="10" d="M5 <%= 15 + (i * row_space) %> H70" />
+      </g>
+      <g class="axis">
+        <text x="80" y="<%= 18 + (i * row_space) %>"><%= serie[:label] %></text>
+      </g>
+      <%- i += 1 -%>
+    <%- end -%>
+  </svg>
+  <figure id="burndown-chart"
+          style="left-margin: auto; right-margin:auto; width: 90%; height: 500px;" />
+</div>
+
+<%= render :partial => (@type == :sps) ? 'sprints/burndown_by_sps' : 'sprints/burndown',
+           :formats => [:js],
+           :locals => {:series => @series,
+                       :x_axis_labels => @x_axis_labels} %>
 
 <%= render :partial => "common/scrum_footer" %>

@@ -24,6 +24,14 @@
             <select id="tasks-assignees"></select>
           </p>
         <%- end -%>
+        <%- if sprint.shared and @subprojects and @subprojects.count > 2 -%>
+          <p>
+            <label><%= l(:label_filter_by_project) %>:</label>
+            <%- options = options_for_select(@subprojects, @selected_subproject) -%>
+            <%= select_tag('select_project_id', options,
+                           :onchange => "if (this.value != '') { window.location = this.value; }") %>
+          </p>
+        <%- end -%>
       </div>
     </td>
     <td>

@@ -81,8 +81,13 @@ class Sprint < ActiveRecord::Base
   end
 
   def tasks(options = {})
+    modified_options = options.clone
     conditions = {:tracker_id => Scrum::Setting.task_tracker_ids}
-    conditions.merge!(options)
+    if modified_options[:filter_by_project]
+      conditions[:project_id] = modified_options[:filter_by_project]
+      modified_options.delete(:filter_by_project)
+    end
+    conditions.merge!(modified_options)
     issues.where(conditions).select{|issue| issue.visible?}
   end
 
@@ -90,9 +95,9 @@ class Sprint < ActiveRecord::Base
     tasks(:parent_id => nil)
   end
 
-  def estimated_hours
+  def estimated_hours(filter = {})
     sum = 0.0
-    tasks.each do |task|
+    tasks(filter).each do |task|
       if task.use_in_burndown?
         pending_effort = task.pending_efforts.where(['date < ?', self.sprint_start_date]).order('date ASC').last
         pending_effort = pending_effort.effort unless pending_effort.nil?
@@ -250,13 +255,13 @@ class Sprint < ActiveRecord::Base
     return dependencies
   end
 
-  def completed_sps_by_day
+  def completed_sps_by_day(filter = {})
     days = {}
     non_working_days = Setting.non_working_week_days.collect{|day| (day == '7') ? 0 : day.to_i}
-    end_date = sprint_end_date + 1
-    (sprint_start_date..end_date).each do |day|
+    end_date = self.sprint_end_date + 1
+    (self.sprint_start_date..end_date).each do |day|
       if (day == end_date) or (!(non_working_days.include?(day.wday)))
-        days[day] = pbis.collect { |pbi| pbi.story_points_for_burdown(day) }.compact.sum
+        days[day] = self.pbis(filter).collect { |pbi| pbi.story_points_for_burdown(day) }.compact.sum
         days[day] = 0.0 unless days[day]
       end
     end

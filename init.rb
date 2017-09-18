@@ -76,7 +76,8 @@ Redmine::Plugin.register :scrum do
     permission      :view_pending_effort,
                     {}
     permission      :edit_pending_effort,
-                    {:scrum => [:change_pending_effort, :change_pending_efforts]},
+                    {:scrum => [:change_pending_effort, :change_pending_efforts,
+                                :change_story_points, :change_remaining_story_points]},
                     :require => :member
     permission      :view_remaining_story_points,
                     {}

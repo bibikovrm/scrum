@@ -28,8 +28,6 @@ class ScrumController < ApplicationController
 
   before_filter :authorize,
                 :except => [:new_pbi, :create_pbi, :new_task, :create_task,
-                            :change_story_points,
-                            :change_remaining_story_points,
                             :move_to_last_sprint,
                             :move_not_closed_pbis_to_last_sprint,
                             :move_to_product_backlog,
@@ -37,9 +35,7 @@ class ScrumController < ApplicationController
   before_filter :authorize_add_issues,
                 :only => [:new_pbi, :create_pbi, :new_task, :create_task]
   before_filter :authorize_edit_issues,
-                :only => [:change_story_points,
-                          :change_remaining_story_points,
-                          :move_to_last_sprint,
+                :only => [:move_to_last_sprint,
                           :move_not_closed_pbis_to_last_sprint,
                           :move_to_product_backlog]
   before_filter :authorize_log_time,
