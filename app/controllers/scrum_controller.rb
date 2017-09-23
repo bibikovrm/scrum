@@ -134,10 +134,7 @@ class ScrumController < ApplicationController
       end
       @pbi.author = User.current
       @pbi.tracker_id = params[:issue][:tracker_id]
-      if @top
-        @pbi.set_on_top
-        @pbi.save!
-      end
+      @pbi.set_on_top if @top
       @pbi.sprint = @sprint
       update_attributes(@pbi, params)
       @pbi.save!
@@ -373,6 +370,7 @@ private
   def update_attributes(issue, params)
     issue.status_id = params[:issue][:status_id] unless params[:issue][:status_id].nil?
     raise 'New status is not allowed' unless issue.new_statuses_allowed_to.include?(issue.status)
+    issue.project_id = params[:issue][:project_id] unless params[:issue][:project_id].nil?
     issue.assigned_to_id = params[:issue][:assigned_to_id] unless params[:issue][:assigned_to_id].nil?
     issue.subject = params[:issue][:subject] unless params[:issue][:subject].nil?
     issue.priority_id = params[:issue][:priority_id] unless params[:issue][:priority_id].nil?
