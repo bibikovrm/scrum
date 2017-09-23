@@ -109,8 +109,8 @@ class ProductBacklogController < ApplicationController
       @series += sub_series
     end
     @series.sort! { |serie_1, serie_2|
-      closed = (serie_1[:project].respond_to?('closed?') and serie_1[:project].closed? ? 1 : 0) -
-               (serie_2[:project].respond_to?('closed?') and serie_2[:project].closed? ? 1 : 0)
+      closed = ((serie_1[:project].respond_to?('closed?') and serie_1[:project].closed?) ? 1 : 0) -
+               ((serie_2[:project].respond_to?('closed?') and serie_2[:project].closed?) ? 1 : 0)
       if 0 != closed
         closed
       else
