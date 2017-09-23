@@ -61,23 +61,23 @@ class Sprint < ActiveRecord::Base
   end
 
   def closed_pbis(options = {})
-    pbis(options).select {|pbi| pbi.closed?}
+    pbis(options).select {|pbi| pbi.scrum_closed?}
   end
 
   def not_closed_pbis(options = {})
-    pbis(options).select {|pbi| !pbi.closed?}
+    pbis(options).select {|pbi| !pbi.scrum_closed?}
   end
 
   def story_points(options = {})
-    pbis(options).collect{|pbi| pbi.story_points.to_f}.compact.sum
+    pbis(options).collect{|pbi| pbi.story_points.to_f}.sum
   end
 
   def closed_story_points(options = {})
-    pbis(options).collect{|pbi| pbi.closed? ? pbi.story_points.to_f : 0.0}.compact.sum
+    pbis(options).collect{|pbi| pbi.closed_story_points}.sum
   end
 
   def scheduled_story_points(options = {})
-    pbis(options).select{|pbi| pbi.scheduled?}.collect{|pbi| pbi.story_points.to_f}.compact.sum
+    pbis(options).select{|pbi| pbi.scheduled?}.collect{|pbi| pbi.story_points.to_f}.sum
   end
 
   def tasks(options = {})

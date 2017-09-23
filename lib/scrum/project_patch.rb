@@ -99,7 +99,7 @@ module Scrum
         end
 
         def closed_pbis_count(filters)
-          return pbis(filters).select {|pbi| pbi.closed?}.count
+          return pbis(filters).select {|pbi| pbi.scrum_closed?}.count
         end
 
         def total_sps(filters)
@@ -107,7 +107,7 @@ module Scrum
         end
 
         def closed_sps(filters)
-          return pbis(filters).collect {|pbi| pbi.closed? ? (pbi.story_points.to_f || 0.0) : 0.0}.sum
+          return pbis(filters).collect {|pbi| pbi.closed_story_points}.sum
         end
 
       private

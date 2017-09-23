@@ -7,7 +7,7 @@
       <label><%= l(:label_sps_count) %>:</label>
       <%= stats[:closed_sps_count] %>/<%= stats[:total_sps_count] %><br />
 
-      <label><%= l(:label_percentage_closed) %>:</label>
+      <label><%= l(:label_percentage_closed_sps) %>:</label>
       <%= number_to_percentage(stats[:closed_total_percentage],
                                :precision => 1, :separator => '.') %>
     </p>

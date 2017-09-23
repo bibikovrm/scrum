@@ -36,6 +36,20 @@ module Scrum
           issue.is_task? and !issue.parent_id.nil?
         }
 
+        def scrum_closed?
+          closed = self.closed?
+          if !closed and is_pbi? and self.children.any? and
+             Scrum::Setting.pbi_is_closed_if_tasks_are_closed?
+            closed = true
+            self.children.each do |task|
+              if !task.closed?
+                closed = false
+              end
+            end
+          end
+          return closed
+        end
+
         def closed_on_for_burndown
           completed_date = nil
           closed_statuses = IssueStatus::closed_status_ids
@@ -99,6 +113,18 @@ module Scrum
           else
             raise
           end
+        end
+
+        def closed_story_points
+          if self.scrum_closed? and self.has_story_points?
+            value = self.story_points.to_f
+          elsif self.has_story_points? and self.has_remaining_story_points?
+            value = (self.story_points - self.remaining_story_points).to_f
+            value = 0.0 if value < 0
+          else
+            value = 0.0
+          end
+          return value
         end
 
         def scheduled?
