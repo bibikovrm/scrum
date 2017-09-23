@@ -5,9 +5,9 @@
     </p>
   <%- end -%>
 
-  <%- if issue.safe_attribute?(:project_id) and issue.sprint.shared? and @project.children.any? -%>
+  <%- if issue.safe_attribute?(:project_id) and issue.sprint.shared? and issue.sprint.project.children.any? -%>
     <p>
-      <%= f.select :project_id, project_selector_tree(@project), {:required => true} %>
+      <%= f.select :project_id, project_selector_tree(issue.sprint.project), {:required => true} %>
     </p>
   <%- end -%>
 

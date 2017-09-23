@@ -88,7 +88,7 @@ module Scrum
       tracker_fields(tracker, type).include?(field.to_s)
     end
 
-    def self.sprint_board_fields_for_tracker(tracker)
+    def self.sprint_board_fields
       [:status_id, :category_id, :fixed_version_id]
     end
 

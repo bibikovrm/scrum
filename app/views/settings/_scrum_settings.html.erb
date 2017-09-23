@@ -221,16 +221,14 @@
     <p id="sprint_board_fields_tracker_<%= tracker.id %>"
        style="display: <%= included ? 'block' : 'none' %>;">
       <label><%= l(:label_setting_sprint_board_fields_on_tracker, :tracker => tracker.name) %></label>
-      <%- fields = Scrum::Setting.sprint_board_fields_for_tracker(tracker)
-          fields.collect!{|f| [l("field_#{f}".sub(/_id$/, '')), f]}
+      <%- fields = tracker.core_fields.select{|f| Scrum::Setting::sprint_board_fields.include?(f.to_sym)}.collect{|f| [l("field_#{f}".sub(/_id$/, '')), f]}
           values = Scrum::Setting.tracker_fields(tracker.id, Scrum::Setting::TrackerFields::SPRINT_BOARD_FIELDS)
           options = options_for_select(fields, values) -%>
-      <%= select_tag("settings[tracker_#{tracker.id}_sprint_board_fields]", options, :multiple => true) %>
-      <%- custom_fields = Scrum::Setting.tracker_fields(tracker.id, Scrum::Setting::TrackerFields::CUSTOM_FIELDS).collect{|f| [CustomField.find(f).name, CustomField.find(f).id]}
-          custom_fields = tracker.custom_fields.collect{|f| [f.name, f.id]}
+      <%= select_tag "settings[tracker_#{tracker.id}_sprint_board_fields]", options, :multiple => true %>
+      <%- custom_fields = tracker.custom_fields.collect{|f| [f.name, f.id]}
           values = Scrum::Setting.tracker_fields(tracker.id, Scrum::Setting::TrackerFields::SPRINT_BOARD_CUSTOM_FIELDS)
           options = options_for_select(custom_fields, values) -%>
-      <%= select_tag("settings[tracker_#{tracker.id}_sprint_board_custom_fields]", options, :multiple => true) %>
+      <%= select_tag "settings[tracker_#{tracker.id}_sprint_board_custom_fields]", options, :multiple => true %>
     </p>
   <%- end -%>
   <p>
