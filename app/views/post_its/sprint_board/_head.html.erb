@@ -24,7 +24,7 @@
             <select id="tasks-assignees"></select>
           </p>
         <%- end -%>
-        <%- if sprint.shared and @subprojects and @subprojects.count > 2 -%>
+        <%- if sprint.shared and @subprojects and !@only_one -%>
           <p>
             <label><%= l(:label_filter_by_project) %>:</label>
             <%- options = options_for_select(@subprojects, @selected_subproject) -%>

@@ -17,20 +17,22 @@
                        :velocity_type => @velocity_type} %>
 
 <div style="position: relative;">
-  <svg height="500" width="350" class="xchart"
-       style="position: absolute; top: 0px; right: 0px;">
-    <%- i = 0 -%>
-    <%- row_space = 20 -%>
-    <%- @series.each do |serie| -%>
-      <g class="line color<%= i %>">
-        <path class="line" stroke-width="10" d="M5 <%= 15 + (i * row_space) %> H70" />
-      </g>
-      <g class="axis">
-        <text x="80" y="<%= 18 + (i * row_space) %>"><%= serie[:label] %></text>
-      </g>
-      <%- i += 1 -%>
-    <%- end -%>
-  </svg>
+  <%- unless @only_one -%>
+    <svg height="500" width="350" class="xchart"
+         style="position: absolute; top: 0px; right: 0px;">
+      <%- i = 0 -%>
+      <%- row_space = 20 -%>
+      <%- @series.each do |serie| -%>
+        <g class="line color<%= i %>">
+          <path class="line" stroke-width="10" d="M5 <%= 15 + (i * row_space) %> H70" />
+        </g>
+        <g class="axis">
+          <text x="80" y="<%= 18 + (i * row_space) %>"><%= serie[:label] %></text>
+        </g>
+        <%- i += 1 -%>
+      <%- end -%>
+    </svg>
+  <%- end -%>
   <figure id="burndown-chart"
           style="left-margin: auto; right-margin:auto; width: 90%; height: 500px;" />
 </div>

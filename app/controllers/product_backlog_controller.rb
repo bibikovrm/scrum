@@ -97,6 +97,7 @@ class ProductBacklogController < ApplicationController
       @pbi_filter.delete(:filter_by_project)
       without_total = true
     end
+    @only_one = @project.children.visible.empty?
     @x_axis_labels = []
     all_projects_serie = burndown_for_project(@product_backlog, @project, l(:label_all), @pbi_filter, @x_axis_labels)
     @sprints_count = all_projects_serie[:sprints_count]
@@ -104,19 +105,21 @@ class ProductBacklogController < ApplicationController
     @velocity_type = all_projects_serie[:velocity_type]
     @series = []
     @series << all_projects_serie unless without_total
-    if @pbi_filter.empty? and @subprojects.count > 2
-      sub_series = recursive_burndown(@product_backlog, @project)
-      @series += sub_series
-    end
-    @series.sort! { |serie_1, serie_2|
-      closed = ((serie_1[:project].respond_to?('closed?') and serie_1[:project].closed?) ? 1 : 0) -
-               ((serie_2[:project].respond_to?('closed?') and serie_2[:project].closed?) ? 1 : 0)
-      if 0 != closed
-        closed
-      else
-        serie_2[:pending_story_points] <=> serie_1[:pending_story_points]
+    unless @only_one
+      if @pbi_filter.empty? and @subprojects.count > 2
+        sub_series = recursive_burndown(@product_backlog, @project)
+        @series += sub_series
       end
-    }
+      @series.sort! { |serie_1, serie_2|
+        closed = ((serie_1[:project].respond_to?('closed?') and serie_1[:project].closed?) ? 1 : 0) -
+                 ((serie_2[:project].respond_to?('closed?') and serie_2[:project].closed?) ? 1 : 0)
+        if 0 != closed
+          closed
+        else
+          serie_2[:pending_story_points] <=> serie_1[:pending_story_points]
+        end
+      }
+    end
     if @series.count > MAX_SERIES
       flash[:warning] = l(:label_limited_to_n_series, :n => MAX_SERIES)
       @series = @series.first(MAX_SERIES)

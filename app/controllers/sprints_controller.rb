@@ -160,24 +160,27 @@ class SprintsController < ApplicationController
     else
       without_total = false
     end
+    @only_one = @project.children.visible.empty?
     @x_axis_labels = []
-    serie_label = "#{l(:field_pending_effort)} (#{l(:label_all)})"
+    serie_label = @only_one ? l(:field_pending_effort) : "#{l(:field_pending_effort)} (#{l(:label_all)})"
     all_projects_serie = burndown_for_project(@sprint, @project, serie_label, @pbi_filter, @x_axis_labels)
     @series = []
     @series << all_projects_serie unless without_total
-    if @pbi_filter.empty? and @subprojects.count > 2
-      sub_series = recursive_burndown(@sprint, @project)
-      @series += sub_series
-    end
-    @series.sort! { |serie_1, serie_2|
-      closed = ((serie_1[:project].respond_to?('closed?') and serie_1[:project].closed?) ? 1 : 0) -
-               ((serie_2[:project].respond_to?('closed?') and serie_2[:project].closed?) ? 1 : 0)
-      if 0 != closed
-        closed
-      else
-        serie_2[:pending_story_points] <=> serie_1[:pending_story_points]
+    unless @only_one
+      if @pbi_filter.empty? and @subprojects.count > 2
+        sub_series = recursive_burndown(@sprint, @project)
+        @series += sub_series
       end
-    }
+      @series.sort! { |serie_1, serie_2|
+        closed = ((serie_1[:project].respond_to?('closed?') and serie_1[:project].closed?) ? 1 : 0) -
+                 ((serie_2[:project].respond_to?('closed?') and serie_2[:project].closed?) ? 1 : 0)
+        if 0 != closed
+          closed
+        else
+          serie_2[:pending_story_points] <=> serie_1[:pending_story_points]
+        end
+      }
+    end
     if params[:type] == 'effort'
       @series = [estimated_effort_serie(@sprint)] + @series
     end
