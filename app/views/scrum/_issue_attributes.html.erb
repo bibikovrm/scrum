@@ -62,8 +62,8 @@
     </p>
   <%- end -%>
 
-  <%- if (issue.is_task? or (issue.is_pbi? and Scrum::Setting::use_remaining_story_points?)) and
-         User.current.allowed_to?(:edit_pending_effort, issue.project) -%>
+  <%- if User.current.allowed_to?(:edit_pending_effort, issue.project) and
+         issue.is_task? -%>
     <p>
       <%= f.text_field :pending_effort, :size => 4, :maxlength => 10, :label => l(:field_pending_effort) %>
     </p>
@@ -76,11 +76,19 @@
   <%- end -%>
 
   <%- issue.editable_custom_field_values.each do |value| -%>
-    <%- if issue.custom_field?(value.custom_field) -%>
+    <%- if issue.custom_field?(value.custom_field.id) -%>
       <p>
         <%= custom_field_tag_with_label :issue, value, :required => value.custom_field.is_required %>
       </p>
     <%- end -%>
+  <%- end -%>
+
+  <%- if User.current.allowed_to?(:edit_pending_effort, issue.project) and
+         issue.is_pbi? and Scrum::Setting::use_remaining_story_points? -%>
+    <p>
+      <%= f.text_field :remaining_story_points, :size => 4, :maxlength => 10,
+                       :label => l(:label_pending_sps) %>
+    </p>
   <%- end -%>
 
   <%- has_description = (Redmine::VERSION::STRING >= '3.4.0') ?

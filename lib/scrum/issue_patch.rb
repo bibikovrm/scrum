@@ -116,13 +116,17 @@ module Scrum
         end
 
         def closed_story_points
+          value = 0.0
           if self.scrum_closed? and self.has_story_points?
             value = self.story_points.to_f
-          elsif self.has_story_points? and self.has_remaining_story_points?
-            value = (self.story_points - self.remaining_story_points).to_f
-            value = 0.0 if value < 0
-          else
-            value = 0.0
+          elsif self.has_story_points? and
+                self.has_remaining_story_points? and
+            sps = self.story_points
+            remaining_sps = self.remaining_story_points
+            unless sps.nil? or remaining_sps.nil?
+              value = (sps - remaining_sps).to_f
+              value = 0.0 if value < 0
+            end
           end
           return value
         end

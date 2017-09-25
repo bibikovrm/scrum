@@ -154,41 +154,45 @@ class SprintsController < ApplicationController
   MAX_SERIES = 10
 
   def burndown
-    if @pbi_filter and @pbi_filter[:filter_by_project] == 'without-total'
-      @pbi_filter.delete(:filter_by_project)
-      without_total = true
+    if @sprint.is_product_backlog
+      redirect_to(burndown_product_backlog_path(@sprint))
     else
-      without_total = false
-    end
-    @only_one = @project.children.visible.empty?
-    @x_axis_labels = []
-    serie_label = @only_one ? l(:field_pending_effort) : "#{l(:field_pending_effort)} (#{l(:label_all)})"
-    all_projects_serie = burndown_for_project(@sprint, @project, serie_label, @pbi_filter, @x_axis_labels)
-    @series = []
-    @series << all_projects_serie unless without_total
-    unless @only_one
-      if @pbi_filter.empty? and @subprojects.count > 2
-        sub_series = recursive_burndown(@sprint, @project)
-        @series += sub_series
+      if @pbi_filter and @pbi_filter[:filter_by_project] == 'without-total'
+        @pbi_filter.delete(:filter_by_project)
+        without_total = true
+      else
+        without_total = false
       end
-      @series.sort! { |serie_1, serie_2|
-        closed = ((serie_1[:project].respond_to?('closed?') and serie_1[:project].closed?) ? 1 : 0) -
-                 ((serie_2[:project].respond_to?('closed?') and serie_2[:project].closed?) ? 1 : 0)
-        if 0 != closed
-          closed
-        else
-          serie_2[:pending_story_points] <=> serie_1[:pending_story_points]
+      @only_one = @project.children.visible.empty?
+      @x_axis_labels = []
+      serie_label = @only_one ? l(:field_pending_effort) : "#{l(:field_pending_effort)} (#{l(:label_all)})"
+      all_projects_serie = burndown_for_project(@sprint, @project, serie_label, @pbi_filter, @x_axis_labels)
+      @series = []
+      @series << all_projects_serie unless without_total
+      unless @only_one
+        if @pbi_filter.empty? and @subprojects.count > 2
+          sub_series = recursive_burndown(@sprint, @project)
+          @series += sub_series
         end
-      }
-    end
-    if params[:type] == 'effort'
-      @series = [estimated_effort_serie(@sprint)] + @series
-    end
-    if @series.count > MAX_SERIES
-      flash[:warning] = l(:label_limited_to_n_series, :n => MAX_SERIES)
-      @series = @series.first(MAX_SERIES)
-    else
-      flash.clear
+        @series.sort! { |serie_1, serie_2|
+          closed = ((serie_1[:project].respond_to?('closed?') and serie_1[:project].closed?) ? 1 : 0) -
+                   ((serie_2[:project].respond_to?('closed?') and serie_2[:project].closed?) ? 1 : 0)
+          if 0 != closed
+            closed
+          else
+            serie_2[:pending_story_points] <=> serie_1[:pending_story_points]
+          end
+        }
+      end
+      if params[:type] == 'effort'
+        @series = [estimated_effort_serie(@sprint)] + @series
+      end
+      if @series.count > MAX_SERIES
+        flash[:warning] = l(:label_limited_to_n_series, :n => MAX_SERIES)
+        @series = @series.first(MAX_SERIES)
+      else
+        flash.clear
+      end
     end
   end
 
