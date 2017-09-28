@@ -280,7 +280,7 @@ private
       x_axis_labels << "#{l(:field_sprint)} +#{new_sprints}" unless x_axis_labels.nil?
       serie[:data] << {:story_points => ((serie[:velocity] <= pending_story_points) ?
                                          serie[:velocity] : pending_story_points).round(2),
-                      :pending_story_points => 0}
+                       :pending_story_points => 0}
       pending_story_points -= serie[:velocity]
       new_sprints += 1
     end

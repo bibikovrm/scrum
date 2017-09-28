@@ -180,7 +180,7 @@ class SprintsController < ApplicationController
           if 0 != closed
             closed
           else
-            serie_2[:pending_story_points] <=> serie_1[:pending_story_points]
+            serie_2[:max_value] <=> serie_1[:max_value]
           end
         }
       end
@@ -383,7 +383,8 @@ private
              :label => label,
              :project => pbi_filter.include?(:filter_by_project) ?
                          Project.find(pbi_filter[:filter_by_project]) :
-                         project}
+                         project,
+             :max_value => 0.0}
 
     if params[:type] == 'sps'
       last_sps = sprint.story_points(pbi_filter)
@@ -393,6 +394,7 @@ private
         date_label = "#{I18n.l(date, :format => :scrum_day)} #{date.day}"
         last_label = date_label unless Scrum::Setting.sprint_burndown_day_zero?
         x_axis_labels << last_label unless x_axis_labels.nil?
+        serie[:max_value] = last_sps if last_sps > serie[:max_value]
         serie[:data] << {:day => date,
                          :pending_sps => last_sps,
                          :pending_sps_tooltip => l(:label_pending_sps_tooltip,
@@ -410,9 +412,10 @@ private
             x_axis_labels[x_axis_labels.length - 1] = l(:label_end)
           end
         end
+        serie[:max_value] = last_sps if last_sps > serie[:max_value]
         serie[:data].last[:pending_sps_tooltip] = l(:label_pending_sps_tooltip,
                                                     :date => last_label,
-                                                    :sps => last_sps)#serie[:data].last[:pending_sps])
+                                                    :sps => last_sps)
       end
       @type = :sps
     else
@@ -435,6 +438,7 @@ private
           date_label = "#{I18n.l(date, :format => :scrum_day)} #{date.day}"
           last_label = date_label unless Scrum::Setting.sprint_burndown_day_zero?
           x_axis_labels << last_label unless x_axis_labels.nil?
+          serie[:max_value] = last_pending_effort if last_pending_effort > serie[:max_value]
           serie[:data] << {:day => date,
                            :effort => last_pending_effort,
                            :tooltip => l(:label_pending_effort_tooltip,
@@ -447,6 +451,7 @@ private
       end
       last_label = l(:label_end) unless Scrum::Setting.sprint_burndown_day_zero?
       x_axis_labels << last_label unless x_axis_labels.nil?
+      serie[:max_value] = last_pending_effort if last_pending_effort > serie[:max_value]
       serie[:data] << {:day => last_day,
                        :effort => last_pending_effort,
                        :tooltip => l(:label_pending_effort_tooltip,
