@@ -10,7 +10,7 @@
       end
       content = link_to(h(@issue.sprint.name), object)
     end
-    rows.left l(:label_sprint), content, :class => 'sprint'
+    rows.left l(:label_sprint), raw(content), :class => 'sprint'
 
     if @issue.is_pbi?
       content = ''
@@ -31,7 +31,7 @@
       if Scrum::Setting.use_remaining_story_points? and
          User.current.allowed_to?(:view_pending_effort, @issue.project) or
          User.current.allowed_to?(:edit_pending_effort, @issue.project)
-        rows.right l(:label_remaining_story_point_plural), content, :class => 'pending_effort'
+        rows.right l(:label_remaining_story_point_plural), raw(content), :class => 'pending_effort'
       end
     elsif @issue.is_task?
       content = ''
@@ -51,7 +51,7 @@
       end
       if User.current.allowed_to?(:view_pending_effort, @issue.project) or
          User.current.allowed_to?(:edit_pending_effort, @issue.project)
-        rows.right l(:field_pending_effort), content, :class => 'pending_effort'
+        rows.right l(:field_pending_effort), raw(content), :class => 'pending_effort'
       end
     end
   end %>
