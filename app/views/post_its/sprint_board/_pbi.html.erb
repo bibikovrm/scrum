@@ -56,7 +56,7 @@
     </td>
     <td class="pending">
       <%- if User.current.allowed_to?(:view_pending_effort, project) -%>
-        <%= render_hours(pbi.pending_effort, :title => l(:field_pending_effort),
+        <%= render_hours(pbi.pending_effort_children, :title => l(:field_pending_effort),
                          :ignore_zero => pbi.children.empty?) %>
       <%- end -%>
     </td>

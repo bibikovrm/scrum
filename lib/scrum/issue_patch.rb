@@ -226,15 +226,33 @@ module Scrum
         end
 
         def pending_effort
+          value = nil
           if self.is_task? and self.has_pending_effort?
-            return pending_efforts.last.effort
+            value = pending_efforts.last.effort
           elsif self.is_pbi?
-            return self.children.collect{|task| task.pending_effort}.compact.sum
+            if Scrum::Setting.use_remaining_story_points?
+              if self.has_remaining_story_points?
+                value = pending_efforts.last.effort
+              end
+            else
+              value = self.children.collect{|task| task.pending_effort}.compact.sum
+            end
           end
+          return value
+        end
+
+        def pending_effort_children
+          value = nil
+          if self.is_pbi? and self.children.any?
+            value = self.children.collect{|task| task.pending_effort}.compact.sum
+          end
+          return value
         end
 
         def pending_effort=(new_effort)
           if is_task?
+            self.any_pending_effort = new_effort
+          elsif self.is_pbi? and Scrum::Setting.use_remaining_story_points?
             self.any_pending_effort = new_effort
           end
         end
@@ -295,12 +313,14 @@ module Scrum
         end
 
         def total_time
-          the_pending_effort = self.pending_effort.nil? ? 0.0 : self.pending_effort
           if self.is_pbi?
+            the_pending_effort = self.pending_effort_children
             the_spent_hours = self.children.collect{|task| task.spent_hours}.compact.sum
           elsif self.is_task?
+            the_pending_effort = self.pending_effort
             the_spent_hours = self.spent_hours
           end
+          the_pending_effort = the_pending_effort.nil? ? 0.0 : the_pending_effort
           the_spent_hours = the_spent_hours.nil? ? 0.0 : the_spent_hours
           return (the_pending_effort + the_spent_hours)
         end
@@ -597,7 +617,7 @@ module Scrum
             # Replace invalid float number separator (i.e. 0,5) with valid separator (i.e. 0.5)
             new_effort.gsub!(',', '.') if new_effort.is_a?(String)
             if effort.nil?
-              date = (pending_efforts.empty? and sprint and sprint.sprint_start_date) ? sprint.sprint_start_date : Date.today
+              date = (pending_efforts.empty? and sprint and sprint.sprint_start_date and sprint.sprint_start_date < Date.today) ? sprint.sprint_start_date : Date.today
               effort = PendingEffort.new(:issue_id => id, :date => date, :effort => new_effort)
             else
               effort.effort = new_effort

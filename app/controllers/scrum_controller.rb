@@ -71,8 +71,12 @@ class ScrumController < ApplicationController
       pending_effort = PendingEffort.find(id)
       raise "Invalid pending effort ID #{id}" if pending_effort.nil?
       raise "Pending effort ID #{id} is not owned by this issue" if pending_effort.issue_id != @issue.id
-      pending_effort.effort = value.to_f
-      pending_effort.save!
+      if value.blank?
+        pending_effort.delete
+      else
+        pending_effort.effort = value.to_f
+        pending_effort.save!
+      end
     end
     redirect_to issue_path(@issue)
   end
