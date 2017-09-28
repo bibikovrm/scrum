@@ -5,7 +5,9 @@
     </p>
   <%- end -%>
 
-  <%- if issue.safe_attribute?(:project_id) and issue.sprint.shared? and issue.sprint.project.children.any? -%>
+  <%- if issue.safe_attribute?(:project_id) and
+         issue.sprint and issue.sprint.project and
+         issue.sprint.shared? and issue.sprint.project.children.any? -%>
     <p>
       <%= f.select :project_id, project_selector_tree(issue.sprint.project), {:required => true} %>
     </p>
@@ -76,7 +78,7 @@
   <%- end -%>
 
   <%- issue.editable_custom_field_values.each do |value| -%>
-    <%- if issue.custom_field?(value.custom_field.id) -%>
+    <%- if issue.custom_field?(value.custom_field) -%>
       <p>
         <%= custom_field_tag_with_label :issue, value, :required => value.custom_field.is_required %>
       </p>
@@ -91,10 +93,7 @@
     </p>
   <%- end -%>
 
-  <%- has_description = (Redmine::VERSION::STRING >= '3.4.0') ?
-                        issue.field?(:description) :
-                        issue.safe_attribute?(:description) -%>
-  <%- if has_description -%>
+  <%- if issue.field?(:description) -%>
     <p>
       <%= f.label_for_field :description, :required => issue.required_attribute?(:description) %>
       <%= content_tag :span, :id => "issue_description_and_toolbar" do %>

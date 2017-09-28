@@ -113,6 +113,7 @@ class ScrumController < ApplicationController
     @pbi = Issue.new
     @pbi.project = @project
     @pbi.tracker = @project.trackers.find(params[:tracker_id])
+    @pbi.status = @pbi.default_status
     @pbi.author = User.current
     @pbi.sprint = @sprint
     @top = true unless params[:top].nil? or (params[:top] == 'false')
@@ -240,6 +241,7 @@ class ScrumController < ApplicationController
     @task = Issue.new
     @task.project = @pbi.project
     @task.tracker = Tracker.find(params[:tracker_id])
+    @task.status = @task.default_status
     @task.parent = @pbi
     @task.author = User.current
     @task.sprint = @sprint

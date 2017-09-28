@@ -279,7 +279,11 @@ module Scrum
         end
 
         def field?(field)
-          self.safe_attribute?(field) and (self.tracker.field?(field) or self.required_attribute?(field))
+          included = self.tracker.field?(field)
+          if (Redmine::VERSION::STRING < '3.4.0') and (field.to_sym == :description)
+            included = true
+          end
+          self.safe_attribute?(field) and (included or self.required_attribute?(field))
         end
 
         def custom_field?(custom_field)
