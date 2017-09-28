@@ -24,6 +24,11 @@
                 :class => 'icon icon-add', :title => l(:button_add)) %>
     <%= link_to('', edit_sprint_path(@sprint, :back_url => url_for(params)),
                 :class => 'icon icon-edit', :title => l(:button_edit)) %>
+    <%= link_to('', sprint_path(@sprint),
+                {:method => :delete,
+                 :data => {:confirm => l(:text_are_you_sure)},
+                 :class => 'icon icon-del',
+                 :title => l(:button_delete)}) %>
     <%= link_to('', edit_effort_sprint_path(@sprint, :back_url => url_for(params)),
                 :class => 'icon icon-time-add', :title => l(:label_edit_effort)) %>
   <%- end -%>

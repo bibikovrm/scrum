@@ -16,5 +16,10 @@
                 :class => 'icon icon-add', :title => l(:button_add)) %>
     <%= link_to('', edit_sprint_path(@product_backlog, :back_url => url_for(params)),
                 :class => 'icon icon-edit', :title => l(:button_edit)) %>
+    <%= link_to('', sprint_path(@product_backlog),
+                {:method => :delete,
+                 :data => {:confirm => l(:text_are_you_sure)},
+                 :class => 'icon icon-del',
+                 :title => l(:button_delete)}) %>
   <%- end -%>
 </div>
