@@ -1,10 +1,10 @@
 <%- Scrum::Setting.tracker_fields(issue.tracker.id, Scrum::Setting::TrackerFields::SPRINT_BOARD_CUSTOM_FIELDS).each do |custom_field_id| -%>
     <%- custom_field = CustomField.find(custom_field_id)
-        value = issue.custom_value_for(custom_field_id) -%>
-    <%- if value.present? and value.value.present? -%>
+        field_value = issue.custom_field_values.select{|c| c.custom_field == custom_field}.first -%>
+    <%- if field_value.present? and field_value.value.present? -%>
         <%= content_tag("div", :title => custom_field.description) do %>
             <span class="post-it-legend"><%= custom_field.name %>:</span>
-            <%= h(show_value(value)) %>
+            <%= show_value(field_value) %>
         <% end %>
     <%- end -%>
 <%- end -%>

@@ -47,7 +47,7 @@ module Scrum
         end
 
         def custom_field?(custom_field)
-          Scrum::Setting.tracker_field?(self.id, custom_field, Scrum::Setting::TrackerFields::CUSTOM_FIELDS) or custom_field.is_required
+          Scrum::Setting.tracker_field?(self.id, custom_field.id, Scrum::Setting::TrackerFields::CUSTOM_FIELDS) or custom_field.is_required
         end
 
       end
