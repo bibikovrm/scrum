@@ -394,7 +394,7 @@ private
         date_label = "#{I18n.l(date, :format => :scrum_day)} #{date.day}"
         last_label = date_label unless Scrum::Setting.sprint_burndown_day_zero?
         x_axis_labels << last_label unless x_axis_labels.nil?
-        serie[:max_value] = last_sps if last_sps > serie[:max_value]
+        serie[:max_value] = last_sps if last_sps and last_sps > serie[:max_value]
         serie[:data] << {:day => date,
                          :pending_sps => last_sps,
                          :pending_sps_tooltip => l(:label_pending_sps_tooltip,
@@ -412,7 +412,7 @@ private
             x_axis_labels[x_axis_labels.length - 1] = l(:label_end)
           end
         end
-        serie[:max_value] = last_sps if last_sps > serie[:max_value]
+        serie[:max_value] = last_sps if last_sps and last_sps > serie[:max_value]
         serie[:data].last[:pending_sps_tooltip] = l(:label_pending_sps_tooltip,
                                                     :date => last_label,
                                                     :sps => last_sps)
@@ -438,7 +438,7 @@ private
           date_label = "#{I18n.l(date, :format => :scrum_day)} #{date.day}"
           last_label = date_label unless Scrum::Setting.sprint_burndown_day_zero?
           x_axis_labels << last_label unless x_axis_labels.nil?
-          serie[:max_value] = last_pending_effort if last_pending_effort > serie[:max_value]
+          serie[:max_value] = last_pending_effort if last_pending_effort and last_pending_effort > serie[:max_value]
           serie[:data] << {:day => date,
                            :effort => last_pending_effort,
                            :tooltip => l(:label_pending_effort_tooltip,
@@ -451,7 +451,7 @@ private
       end
       last_label = l(:label_end) unless Scrum::Setting.sprint_burndown_day_zero?
       x_axis_labels << last_label unless x_axis_labels.nil?
-      serie[:max_value] = last_pending_effort if last_pending_effort > serie[:max_value]
+      serie[:max_value] = last_pending_effort if last_pending_effort and last_pending_effort > serie[:max_value]
       serie[:data] << {:day => last_day,
                        :effort => last_pending_effort,
                        :tooltip => l(:label_pending_effort_tooltip,
