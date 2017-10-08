@@ -35,6 +35,11 @@ module Scrum
           (issue.status_id_changed? or issue.new_record?) and
           issue.is_task? and !issue.parent_id.nil?
         }
+        before_save :update_parent_pbi_on_closed_tasks, :if => lambda { |issue|
+          issue.project and issue.project.scrum? and Scrum::Setting.closed_pbi_status_id and
+          (issue.status_id_changed? or issue.new_record?) and
+          issue.is_task? and !issue.parent_id.nil?
+        }
 
         def scrum_closed?
           closed = self.closed?
@@ -508,6 +513,19 @@ module Scrum
                 pbi.status = new_status
                 pbi.save!
               end
+            end
+          end
+        end
+
+        def update_parent_pbi_on_closed_tasks
+          statuses = IssueStatus.where(:id => Scrum::Setting.closed_pbi_status_id).order("position ASC")
+          pbi = self.parent
+          if statuses.length == 1 and pbi and pbi.is_pbi?
+            pbi_status_to_set = statuses.first
+            if self.parent.children.collect{ |task| task.closed? }.all? and
+               pbi.status != pbi_status_to_set
+              pbi.status = pbi_status_to_set
+              pbi.save!
             end
           end
         end
