@@ -63,6 +63,7 @@ module Scrum
     end
 
     %w(blocked_custom_field_id
+       closed_pbi_status_id
        simple_pbi_custom_field_id
        story_points_custom_field_id).each do |setting|
       src = <<-END_SRC

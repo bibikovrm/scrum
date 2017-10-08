@@ -103,6 +103,7 @@ Redmine::Plugin.register :scrum do
                                  :task_status_ids => [],
                                  :task_tracker_ids => [],
                                  :auto_update_pbi_status => '1',
+                                 :closed_pbi_status_id => nil,
                                  :clear_new_tasks_assignee => '1',
                                  :verification_activity_ids => [],
                                  :inherit_pbi_attributes => '1',

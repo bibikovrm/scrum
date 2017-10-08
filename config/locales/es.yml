@@ -121,6 +121,7 @@ es:
   label_setting_sprint_burndown_day_zero_explanation: "Usa 'Inicio' como fecha especial al principio del Sprint en vez de 'Fin'"
   label_setting_story_points_custom_field: "Campo personalizado para puntos de historia"
   label_setting_task_statuses: "Estados de las tareas para el tablero del Sprint"
+  label_setting_update_pbi_status_if_all_tasks_are_closed: "Si todas las tareas están cerradas cambiar estado del EPP a"
   label_setting_use_remaining_story_points: "Usar PHs pendientes para los EPPs"
   label_setting_use_remaining_story_points_explanation: "Actualiza los PHs pendientes para los EPPs día a día calculará un burndown de Sprint por PHs más preciso"
   label_setting_verification_activities: "Actividades de verificación"

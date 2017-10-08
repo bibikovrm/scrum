@@ -63,6 +63,12 @@
     <em><%= l(:label_setting_auto_update_pbi_status_explanation) %></em>
   </p>
   <p>
+    <label><%= l(:label_setting_update_pbi_status_if_all_tasks_are_closed) %>:</label>
+    <%- statuses = IssueStatus.all.collect{|s| [s.name, s.id]} -%>
+    <%- options = options_for_select(statuses, Scrum::Setting.closed_pbi_status_id) -%>
+    <%= select_tag 'settings[closed_pbi_status_id]', options, :include_blank => true %>
+  </p>
+  <p>
     <label><%= l(:label_setting_pbi_is_closed_if_tasks_are_closed) %>:</label>
     <%= hidden_field_tag('settings[pbi_is_closed_if_tasks_are_closed]', 0) %>
     <%= check_box_tag('settings[pbi_is_closed_if_tasks_are_closed]', 1,

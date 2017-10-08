@@ -121,6 +121,7 @@ en:
   label_setting_sprint_burndown_day_zero_explanation: "Use 'Begin' as an special date at the beginning of the Sprint burndown instead of 'End'"
   label_setting_story_points_custom_field: "Story points custom field"
   label_setting_task_statuses: "Task statuses for Sprint board"
+  label_setting_update_pbi_status_if_all_tasks_are_closed: "If all tasks are closed update PBI status to"
   label_setting_use_remaining_story_points: "Use remaining SPs in PBIs"
   label_setting_use_remaining_story_points_explanation: "Update remaining SPs for PBIs day by day will calculate a more precise Sprint burndown by SPs"
   label_setting_verification_activities: "Verification activities"
