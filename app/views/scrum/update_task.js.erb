@@ -14,7 +14,7 @@
   $("#<%= "pbi_#{@issue.parent_id}_row" %>").replaceWith("<%=
     escape_javascript(render :partial => "post_its/sprint_board/pbi_row",
                              :formats => [:html],
-                             :locals => {:project => @issue.project, :sprint_board_id => 'sprint_board',
+                             :locals => {:project => @issue.sprint.project, :sprint_board_id => 'sprint_board',
                                          :pbi => @issue.parent, :task_statuses => IssueStatus.task_statuses}).html_safe
   %>");
   <%- if @old_status != @issue.status -%>
