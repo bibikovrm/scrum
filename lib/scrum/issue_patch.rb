@@ -38,7 +38,7 @@ module Scrum
         before_save :update_parent_pbi_on_closed_tasks, :if => lambda { |issue|
           issue.project and issue.project.scrum? and Scrum::Setting.closed_pbi_status_id and
           (issue.status_id_changed? or issue.new_record?) and
-          issue.is_task? and !issue.parent_id.nil?
+          issue.is_task? and !issue.parent_id.nil? and !issue.parent.closed?
         }
 
         def scrum_closed?
@@ -507,9 +507,17 @@ module Scrum
                 end
               end
               if pbi.status == new_status and !all_tasks_new
+                pbi.init_journal(User.current,
+                                 l(:label_pbi_status_auto_updated_one_task_no_new,
+                                   :pbi_status => in_progress_status.name,
+                                   :task_status => new_status.name))
                 pbi.status = in_progress_status
                 pbi.save!
               elsif pbi.status != new_status and all_tasks_new
+                pbi.init_journal(User.current,
+                                 l(:label_pbi_status_auto_updated_all_tasks_new,
+                                   :pbi_status => new_status.name,
+                                   :task_status => new_status.name))
                 pbi.status = new_status
                 pbi.save!
               end
@@ -522,8 +530,17 @@ module Scrum
           pbi = self.parent
           if statuses.length == 1 and pbi and pbi.is_pbi?
             pbi_status_to_set = statuses.first
-            if self.parent.children.collect{ |task| task.closed? }.all? and
-               pbi.status != pbi_status_to_set
+            all_tasks_closed = self.closed?
+            pbi.children.each do |task|
+              if task.is_task?
+                task = self if task.id == self.id
+                all_tasks_closed = false unless task.closed?
+              end
+            end
+            if all_tasks_closed and pbi.status != pbi_status_to_set
+              pbi.init_journal(User.current,
+                               l(:label_pbi_status_auto_updated_all_tasks_closed,
+                                 :pbi_status => pbi_status_to_set.name))
               pbi.status = pbi_status_to_set
               pbi.save!
             end
