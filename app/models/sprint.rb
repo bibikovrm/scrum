@@ -261,11 +261,16 @@ class Sprint < ActiveRecord::Base
     end_date = self.sprint_end_date + 1
     (self.sprint_start_date..end_date).each do |day|
       if (day == end_date) or (!(non_working_days.include?(day.wday)))
-        days[day] = self.pbis(filter).collect { |pbi| pbi.story_points_for_burdown(day) }.compact.sum
-        days[day] = 0.0 unless days[day]
+        days[day] = self.completed_sps_at_day(day, filter)
       end
     end
     return days
+  end
+
+  def completed_sps_at_day(day, filter = {})
+    sps = self.pbis(filter).collect { |pbi| pbi.story_points_for_burdown(day) }.compact.sum
+    sps = 0.0 unless sps
+    return sps
   end
 
 private

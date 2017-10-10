@@ -387,7 +387,7 @@ private
              :max_value => 0.0}
 
     if params[:type] == 'sps'
-      last_sps = sprint.story_points(pbi_filter)
+      last_sps = sprint.completed_sps_at_day(sprint.sprint_start_date - 1, pbi_filter)
       last_day = nil
       last_label = l(:label_begin) if Scrum::Setting.sprint_burndown_day_zero?
       sprint.completed_sps_by_day(pbi_filter).each do |date, sps|
@@ -419,21 +419,16 @@ private
       end
       @type = :sps
     else
-      last_pending_effort = sprint.estimated_hours(pbi_filter)
+      sprint_tasks = sprint.tasks(pbi_filter)
+      last_pending_effort = pending_effort_at_day(sprint_tasks, sprint.sprint_start_date - 1,
+                                                  sprint.estimated_hours(pbi_filter))
       last_day = nil
       last_label = l(:label_begin) if Scrum::Setting.sprint_burndown_day_zero?
-      sprint_tasks = sprint.tasks(pbi_filter)
       ((sprint.sprint_start_date)..(sprint.sprint_end_date)).each do |date|
         sprint_efforts = sprint.efforts.where(['date >= ?', date])
         if sprint_efforts.any?
           if date <= Date.today
-            efforts = []
-            sprint_tasks.each do |task|
-              if task.use_in_burndown?
-                efforts << task.pending_efforts.where(['date <= ?', date]).last
-              end
-            end
-            pending_effort = efforts.compact.collect{|effort| effort.effort}.compact.sum
+            pending_effort = pending_effort_at_day(sprint_tasks, date)
           end
           date_label = "#{I18n.l(date, :format => :scrum_day)} #{date.day}"
           last_label = date_label unless Scrum::Setting.sprint_burndown_day_zero?
@@ -499,6 +494,17 @@ private
       series += recursive_burndown(sprint, child)
     end
     return series
+  end
+
+  def pending_effort_at_day(tasks, date, sprint_estimated_hours = nil)
+    efforts = []
+    tasks.each do |task|
+      if task.use_in_burndown?
+        task_efforts = task.pending_efforts.where(['date <= ?', date])
+        efforts << (task_efforts.any? ? task_efforts.last.effort : sprint_estimated_hours)
+      end
+    end
+    return efforts.compact.sum
   end
 
 end
