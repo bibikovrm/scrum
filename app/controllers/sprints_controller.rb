@@ -420,8 +420,7 @@ private
       @type = :sps
     else
       sprint_tasks = sprint.tasks(pbi_filter)
-      last_pending_effort = pending_effort_at_day(sprint_tasks, sprint.sprint_start_date - 1,
-                                                  sprint.estimated_hours(pbi_filter))
+      last_pending_effort = pending_effort_at_day(sprint_tasks, sprint.sprint_start_date - 1)
       last_day = nil
       last_label = l(:label_begin) if Scrum::Setting.sprint_burndown_day_zero?
       ((sprint.sprint_start_date)..(sprint.sprint_end_date)).each do |date|
@@ -496,12 +495,12 @@ private
     return series
   end
 
-  def pending_effort_at_day(tasks, date, sprint_estimated_hours = nil)
+  def pending_effort_at_day(tasks, date)
     efforts = []
     tasks.each do |task|
       if task.use_in_burndown?
         task_efforts = task.pending_efforts.where(['date <= ?', date])
-        efforts << (task_efforts.any? ? task_efforts.last.effort : sprint_estimated_hours)
+        efforts << (task_efforts.any? ? task_efforts.last.effort : task.estimated_hours)
       end
     end
     return efforts.compact.sum
