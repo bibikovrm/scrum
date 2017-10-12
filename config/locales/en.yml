@@ -66,6 +66,7 @@ en:
   label_move_pbi_to_name: "Move to %{name}"
   label_no_invalid_dependencies: "There're not invalid dependencies."
   label_nothing_to_move: "Nothing to move."
+  label_only_total: "only total"
   label_pbi_plural: "Product backlog items"
   label_pbi_post_it: "Product backlog item post-it"
   label_pbi_status_auto_updated_all_tasks_closed: "PBI status auto updated to %{pbi_status} because all tasks were closed"

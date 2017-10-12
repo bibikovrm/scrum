@@ -66,6 +66,7 @@ es:
   label_move_pbi_to_name: "Mover a %{name}"
   label_no_invalid_dependencies: "No hay dependencias inválidas."
   label_nothing_to_move: "Nada que mover."
+  label_only_total: "sólo el total"
   label_pbi_plural: "Elementos de la pila de producto"
   label_pbi_post_it: "Post-it del elemento de la pila de producto"
   label_pbi_status_auto_updated_all_tasks_closed: "Estado del EPP auto actualizado a %{pbi_status} porque todas las tareas estaban cerradas"

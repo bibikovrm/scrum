@@ -98,6 +98,10 @@ class ProductBacklogController < ApplicationController
       without_total = true
     end
     @only_one = @project.children.visible.empty?
+    if @pbi_filter and @pbi_filter[:filter_by_project] == 'only-total'
+      @pbi_filter.delete(:filter_by_project)
+      @only_one = true
+    end
     @x_axis_labels = []
     all_projects_serie = burndown_for_project(@product_backlog, @project, l(:label_all), @pbi_filter, @x_axis_labels)
     @sprints_count = all_projects_serie[:sprints_count]
@@ -201,6 +205,7 @@ private
   def find_subprojects
     if @project and @product_backlog
       @subprojects = [[l(:label_all), calculate_path(@product_backlog)]]
+      @subprojects << [l(:label_only_total), calculate_path(@product_backlog, 'only-total')] if action_name == 'burndown'
       @subprojects << [l(:label_all_but_total), calculate_path(@product_backlog, 'without-total')] if action_name == 'burndown'
       @subprojects += find_recursive_subprojects(@project, @product_backlog)
     end
@@ -239,6 +244,9 @@ private
     elsif project == 'without-total'
       options[:filter_by_project] = 'without-total'
       project_id = 'without-total'
+    elsif project == 'only-total'
+      options[:filter_by_project] = 'only-total'
+      project_id = 'only-total'
     else
       options[:filter_by_project] = project.id
       project_id = project.id.to_s
