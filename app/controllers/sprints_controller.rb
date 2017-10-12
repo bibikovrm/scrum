@@ -188,10 +188,8 @@ class SprintsController < ApplicationController
         @series = [estimated_effort_serie(@sprint)] + @series
       end
       if @series.count > MAX_SERIES
-        flash[:warning] = l(:label_limited_to_n_series, :n => MAX_SERIES)
+        @warning = l(:label_limited_to_n_series, :n => MAX_SERIES)
         @series = @series.first(MAX_SERIES)
-      else
-        flash.clear
       end
     end
   end

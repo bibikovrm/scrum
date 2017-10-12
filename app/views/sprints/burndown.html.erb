@@ -17,6 +17,10 @@
                        :sprint => @sprint,
                        :path => method(:burndown_sprint_path)} %>
 
+<%- if @warning -%>
+  <p class="warning"><%= @warning %></p>
+<%- end -%>
+
 <div style="position: relative;">
   <svg height="500" width="<%= @series.count <= 2 ? 300 : 400 %>" class="xchart"
        style="position: absolute; top: 0px; right: 0px;">

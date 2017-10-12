@@ -16,6 +16,10 @@
                        :velocity => @velocity,
                        :velocity_type => @velocity_type} %>
 
+<%- if @warning -%>
+  <p class="warning"><%= @warning %></p>
+<%- end -%>
+
 <div style="position: relative;">
   <%- unless @only_one -%>
     <svg height="500" width="350" class="xchart"
