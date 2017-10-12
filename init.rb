@@ -125,6 +125,7 @@ Redmine::Plugin.register :scrum do
                                  :pbi_is_closed_if_tasks_are_closed => false,
                                  :show_project_totals_on_sprint => false,
                                  :show_project_totals_on_backlog => false,
-                                 :use_remaining_story_points => false},
+                                 :use_remaining_story_points => false,
+                                 :product_burndown_extra_sprints => 3},
                     :partial => 'settings/scrum_settings'
 end

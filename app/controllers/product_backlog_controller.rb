@@ -103,15 +103,21 @@ class ProductBacklogController < ApplicationController
       @only_one = true
     end
     @x_axis_labels = []
-    all_projects_serie = burndown_for_project(@product_backlog, @project, l(:label_all), @pbi_filter, @x_axis_labels)
+    all_projects_serie = burndown_for_project(@product_backlog, @project, l(:label_all), @pbi_filter, nil, @x_axis_labels)
     @sprints_count = all_projects_serie[:sprints_count]
     @velocity = all_projects_serie[:velocity]
     @velocity_type = all_projects_serie[:velocity_type]
     @series = []
     @series << all_projects_serie unless without_total
+    if Scrum::Setting.product_burndown_extra_sprints == 0
+      extra_sprints = nil
+    else
+      extra_sprints = all_projects_serie[:data].length - @project.sprints.length
+      extra_sprints += Scrum::Setting.product_burndown_extra_sprints
+    end
     unless @only_one
       if @pbi_filter.empty? and @subprojects.count > 2
-        sub_series = recursive_burndown(@product_backlog, @project)
+        sub_series = recursive_burndown(@product_backlog, @project, extra_sprints)
         @series += sub_series
       end
       @series.sort! { |serie_1, serie_2|
@@ -257,7 +263,7 @@ private
     return result
   end
 
-  def burndown_for_project(product_backlog, project, label, pbi_filter = {}, x_axis_labels = nil)
+  def burndown_for_project(product_backlog, project, label, pbi_filter = {}, extra_sprints = nil, x_axis_labels = nil)
     serie = {:data => [],
              :label => label,
              :project => pbi_filter.include?(:filter_by_project) ?
@@ -282,7 +288,7 @@ private
     pending_story_points = product_backlog.story_points(pbi_filter)
     serie[:pending_story_points] = pending_story_points
     new_sprints = 1
-    while pending_story_points > 0
+    while pending_story_points > 0 and (!extra_sprints or new_sprints <= extra_sprints)
       x_axis_labels << "#{l(:field_sprint)} +#{new_sprints}" unless x_axis_labels.nil?
       serie[:data] << {:story_points => ((serie[:velocity] <= pending_story_points) ?
                                          serie[:velocity] : pending_story_points).round(2),
@@ -302,11 +308,11 @@ private
     return serie
   end
 
-  def recursive_burndown(product_backlog, project)
+  def recursive_burndown(product_backlog, project, extra_sprints)
     series = [burndown_for_project(@product_backlog, @project, project.name,
-                                   {:filter_by_project => project.id})]
+                                   {:filter_by_project => project.id}, extra_sprints)]
     project.children.visible.to_a.each do |child|
-      series += recursive_burndown(product_backlog, child)
+      series += recursive_burndown(product_backlog, child, extra_sprints)
     end
     return series
   end

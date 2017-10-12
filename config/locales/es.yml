@@ -107,6 +107,8 @@ es:
   label_setting_pbi_is_closed_if_tasks_are_closed: "EPP cerrado si los hijos están cerrados"
   label_setting_pbi_is_closed_if_tasks_are_closed_explanation: "Esto no cambia el estado del EPP pero afecta la funcionalidad del plugin de Scrum (tableros, burndowns...)."
   label_setting_pbi_statuses: "Estado de los EPPs para la Pila de producto y el tablero del Sprint"
+  label_setting_product_burndown_extra_sprints: "Mostrar Sprints extra para subproyectos"
+  label_setting_product_burndown_extra_sprints_explanation: "How many Sprints are rendered after tatol serie finishes (0 for unlimit)."
   label_setting_product_burndown_sprints: "Calcularlo con este número de Sprints"
   label_setting_product_burndown_sprints_explanation: "Pon 0 para usar todos los Sprints pasados para calcular la velocidad."
   label_setting_random_postit_rotation: "Rotación aleatoria de los post-its"

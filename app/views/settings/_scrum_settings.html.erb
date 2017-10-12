@@ -317,6 +317,13 @@
                          :min => 0) %>
     <em><%= l(:label_setting_product_burndown_sprints_explanation) %></em>
   </p>
+  <p>
+    <label><%= l(:label_setting_product_burndown_extra_sprints) %>:</label>
+    <%= number_field_tag('settings[product_burndown_extra_sprints]',
+                         Scrum::Setting.product_burndown_extra_sprints,
+                         :min => 0) %>
+    <em><%= l(:label_setting_product_burndown_extra_sprints_explanation) %></em>
+  </p>
 </fieldset>
 
 <%= render :partial => 'common/scrum_footer' %>
