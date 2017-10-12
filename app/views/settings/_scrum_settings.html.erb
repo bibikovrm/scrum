@@ -312,8 +312,10 @@
   <legend><%= l(:label_product_backlog_burndown_chart) %></legend>
   <p>
     <label><%= l(:label_setting_product_burndown_sprints) %>:</label>
-    <%= text_field_tag('settings[product_burndown_sprints]',
-                       Scrum::Setting.product_burndown_sprints) %>
+    <%= number_field_tag('settings[product_burndown_sprints]',
+                         Scrum::Setting.product_burndown_sprints,
+                         :min => 0) %>
+    <em><%= l(:label_setting_product_burndown_sprints_explanation) %></em>
   </p>
 </fieldset>
 

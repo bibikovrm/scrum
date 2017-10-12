@@ -102,7 +102,7 @@ module Scrum
     end
 
     def self.product_burndown_sprints
-      setting_or_default_integer(:product_burndown_sprints, :min => 1)
+      setting_or_default_integer(:product_burndown_sprints, :min => 0)
     end
 
     def self.lowest_speed

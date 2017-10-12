@@ -33,12 +33,15 @@ module Scrum
         end
 
         def story_points_per_sprint(options = {})
-          i = self.sprints.length - 1
+          max_sprints_count = self.sprints.length
+          last_sprints_count = Scrum::Setting.product_burndown_sprints
+          last_sprints_count = max_sprints_count if last_sprints_count == 0
+          i = max_sprints_count - 1
           sprints_count = 0
           story_points_per_sprint = 0.0
           scheduled_story_points_per_sprint = 0.0
           today = Date.today
-          while (sprints_count < Scrum::Setting.product_burndown_sprints and i >= 0)
+          while (sprints_count < last_sprints_count and i >= 0)
             story_points = self.sprints[i].story_points(options)
             scheduled_story_points = self.sprints[i].scheduled_story_points(options)
             sprint_end_date = self.sprints[i].sprint_end_date
@@ -51,7 +54,8 @@ module Scrum
           end
           story_points_per_sprint = filter_story_points(story_points_per_sprint, sprints_count)
           scheduled_story_points_per_sprint = filter_story_points(scheduled_story_points_per_sprint, sprints_count)
-          return [story_points_per_sprint, scheduled_story_points_per_sprint, sprints_count]
+          return [story_points_per_sprint, scheduled_story_points_per_sprint,
+                  (Scrum::Setting.product_burndown_sprints == 0) ? 0 : sprints_count]
         end
 
         def closed_story_points_per_sprint
@@ -163,6 +167,7 @@ module Scrum
           sprints_to_use = sprints
           max_sprints_count = sprints_to_use.count
           last_sprints_count = Scrum::Setting.product_burndown_sprints
+          last_sprints_count = max_sprints_count if last_sprints_count == 0
           last_sprints_count = sprints_to_use.count if last_sprints_count > sprints_to_use.count
           sprints_to_use.each_with_index { |sprint, i|
             value = sprint.send(sprint_method)
