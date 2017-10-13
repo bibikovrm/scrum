@@ -235,7 +235,16 @@ module Scrum
           when :sprints
             case params[:action].to_sym
             when :show
-              template = 'sprint_board'
+              template = 'sprint/board'
+            when :burndown
+              template = (params[:type] and (params[:type] == 'sps')) ?
+                         'sprint/burndown_sps' : 'sprint/burndown_effort'
+            when :stats
+              template = 'sprint/stats'
+            when :new, :edit
+              template = 'sprint/form'
+            when :edit_effort
+              template = 'sprint/edit_effort'
             end
           end
           if template.nil?
@@ -246,6 +255,9 @@ module Scrum
                                               plugin_settings_path(:id => :scrum))
             links[:permissions] = link_to(l(:label_tip_permissions_link),
                                           permissions_roles_path)
+            links[:sprint_effort] = link_to(l(:label_tip_sprint_effort_link),
+                                            edit_effort_sprint_path(@sprint,
+                                                                    :back_url => url_for(params))) if @sprint and not @sprint.new_record?
             render(:partial => 'help/help',
                    :locals => {:template => template, :links => links})
           end
