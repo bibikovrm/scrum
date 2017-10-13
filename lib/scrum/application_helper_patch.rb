@@ -229,6 +229,28 @@ module Scrum
           render_time(sps, l(:label_story_point_unit), options)
         end
 
+        def render_scrum_help()
+          template = nil
+          case params[:controller].to_sym
+          when :sprints
+            case params[:action].to_sym
+            when :show
+              template = 'sprint_board'
+            end
+          end
+          if template.nil?
+            ''
+          else
+            links = {}
+            links[:plugin_settings] = link_to(l(:label_tip_plugin_settings_link),
+                                              plugin_settings_path(:id => :scrum))
+            links[:permissions] = link_to(l(:label_tip_permissions_link),
+                                          permissions_roles_path)
+            render(:partial => 'help/help',
+                   :locals => {:template => template, :links => links})
+          end
+        end
+
       end
     end
   end

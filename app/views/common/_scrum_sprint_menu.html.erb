@@ -32,4 +32,5 @@
     <%= link_to('', edit_effort_sprint_path(@sprint, :back_url => url_for(params)),
                 :class => 'icon icon-time-add', :title => l(:label_edit_effort)) %>
   <%- end -%>
+  <%= render_scrum_help %>
 </div>

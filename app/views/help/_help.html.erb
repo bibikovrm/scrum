@@ -1,0 +1,6 @@
+<%= link_to(l(:label_help), '#', :id => 'helpLink', :class => 'icon icon-help') %>
+<div id="helpDialog">
+  <%= render :partial => "help/#{template}", :locals => {:links => links} %>
+</div>
+
+<%= render :partial => 'help/help', :formats => [:js] %>
