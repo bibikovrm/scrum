@@ -73,6 +73,7 @@ class SprintsController < ApplicationController
   end
 
   def edit
+    @product_backlog = @sprint if @sprint.is_product_backlog
   end
 
   def update

@@ -229,7 +229,7 @@ module Scrum
           render_time(sps, l(:label_story_point_unit), options)
         end
 
-        def render_scrum_help()
+        def render_scrum_help(unique_id = nil)
           template = nil
           case params[:controller].to_sym
           when :sprints
@@ -242,14 +242,43 @@ module Scrum
             when :stats
               template = 'sprint/stats'
             when :new, :edit
-              template = 'sprint/form'
+              template = params[:create_product_backlog] ? 'product_backlog/form' : 'sprint/form'
             when :edit_effort
               template = 'sprint/edit_effort'
             end
+          when :product_backlog
+            case params[:action].to_sym
+            when :show
+              template = 'product_backlog/board'
+            when :burndown
+              template = 'product_backlog/burndown'
+            when :release_plan
+              template = 'product_backlog/release_plan'
+            end
+          when :scrum
+            case params[:action].to_sym
+            when :stats
+              template = 'scrum/stats'
+            end
+          when :projects
+            case params[:action].to_sym
+            when :settings
+              if unique_id == 'sprints'
+                template = 'project_settings/sprints'
+              elsif unique_id == 'product_backlogs'
+                template = 'project_settings/product_backlogs'
+              end
+            end
+          when :settings
+            case params[:action].to_sym
+            when :plugin
+              case params[:id].to_sym
+              when :scrum
+                template = 'scrum/settings'
+              end
+            end
           end
-          if template.nil?
-            ''
-          else
+          unless template.nil?
             links = {}
             links[:plugin_settings] = link_to(l(:label_tip_plugin_settings_link),
                                               plugin_settings_path(:id => :scrum))
@@ -258,9 +287,12 @@ module Scrum
             links[:sprint_effort] = link_to(l(:label_tip_sprint_effort_link),
                                             edit_effort_sprint_path(@sprint,
                                                                     :back_url => url_for(params))) if @sprint and not @sprint.new_record?
-            render(:partial => 'help/help',
-                   :locals => {:template => template, :links => links})
           end
+          return template.nil? ? '' : render(:partial => 'help/help',
+                                             :formats => [:html],
+                                             :locals => {:template => template,
+                                                         :unique_id => unique_id,
+                                                         :links => links})
         end
 
       end

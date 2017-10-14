@@ -1,4 +1,4 @@
-<%= render :partial => 'common/scrum_sprint_menu' %>
+<%= render :partial => @product_backlog ? 'common/scrum_backlog_menu' : 'common/scrum_sprint_menu' %>
 
 <h2><%= l(:label_sprint) %></h2>
 

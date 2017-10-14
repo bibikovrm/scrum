@@ -1,13 +1,13 @@
 <%= javascript_tag do %>
-  $("#helpDialog").dialog({
+  $("#helpDialog_<%= unique_id %>").dialog({
     autoOpen: false,
     modal: true,
     width: 850,
     height: 600,
     title: "<%= l(:label_help) %>"
   });
-  $('#helpLink').click(function() {
-    $('#helpDialog').dialog('open');
+  $('#helpLink_<%= unique_id %>').click(function() {
+    $('#helpDialog_<%= unique_id %>').dialog('open');
     return(false);
   });
 <% end %>
