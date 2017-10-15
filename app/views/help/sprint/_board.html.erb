@@ -3,13 +3,13 @@
 <h3>PBIs &amp; tasks</h3>
 
 <p>An Sprint board includes PBIs &amp; tasks. PBIs (or Product Backlog Items)
-are typically features, bugs, technical debts... and they are composed of
+are typically user stories, bugs, technical debts... and they are composed of
 child tasks. Under <%= links[:plugin_settings] %> you can configure which issue
 trackers are considered PBIs and which are considered tasks.</p>
 
 <p>PBIs are located on the left part of the board, tasks on the right columns.
 There is a column per possible task status (these statuses are configurable
-under <%= links[:plugin_settings] %>)</p>
+under <%= links[:plugin_settings] %>).</p>
 
 <p>A lot of the described features are enabled only with permissions, so take a
 look to <%= links[:permissions] %> to enable/disable permissions for each
@@ -17,9 +17,8 @@ role.</p>
 
 <h3>Working with PBIs</h3>
 
-<p>PBIs can be created in this board or moved here with the
-<i class="icon icon-add">links</i> at the end of the board or moved from the
-product backlog view.</p>
+<p>PBIs can be created in this board with the <i class="icon icon-add">links</i>
+at the end of the board or moved from the product backlog view.</p>
 
 <p>Once you have PBIs on the Sprint board, you can dragged in vertical to
 change their order (so the team will start with the ones at the beginning).
@@ -63,7 +62,7 @@ time to the tasks clicking on
 <i class="icon icon-time-add">log entry icon</i>.</p>
 
 <p>As soon as you assign a task or log time into it, an orange mini-post-it
-(color is configurable on plugin settings) is attached to the task, and a green
-one in case you log review time (review time has also to be configured under
-<%= links[:plugin_settings] %>). This allow to follow up how is doing what
-easily.</p>
+(color is configurable under <%= links[:plugin_settings] %>) is attached to the
+task, and a green one in case you log review time (review time has also to be
+configured under <%= links[:plugin_settings] %>). This allow to follow up how
+is doing what easily.</p>
