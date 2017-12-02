@@ -58,12 +58,17 @@ module Scrum
             # insert the column after estimated_hours or at the end
             @available_columns.insert index, QueryColumn.new(:pending_effort,
               :sortable => "COALESCE((SELECT effort FROM #{PendingEffort.table_name} WHERE #{PendingEffort.table_name}.issue_id = #{Issue.table_name}.id ORDER BY #{PendingEffort.table_name}.date DESC LIMIT 1), 0)",
-              :default_order => 'desc'
+              :default_order => 'desc',
+              :totalable => true
             )
           end
           return @available_columns
         end
         alias_method_chain :available_columns, :scrum
+
+        def total_for_pending_effort(scope)
+          map_total(scope.collect{ |issue| issue.pending_effort }.compact.sum) {|t| t.to_f.round(2)}
+        end
 
       end
     end
