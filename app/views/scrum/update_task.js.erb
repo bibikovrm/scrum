@@ -12,10 +12,12 @@
         |other| "pbi_#{@issue.parent_id}_status_#{other.id}"
       } -%>
   $("#<%= "pbi_#{@issue.parent_id}_row" %>").replaceWith("<%=
-    escape_javascript(render :partial => "post_its/sprint_board/pbi_row",
+    escape_javascript(render(:partial => 'post_its/sprint_board/pbi_row',
                              :formats => [:html],
-                             :locals => {:project => @issue.sprint.project, :sprint_board_id => 'sprint_board',
-                                         :pbi => @issue.parent, :task_statuses => IssueStatus.task_statuses}).html_safe
+                             :locals => {:project => (@issue.sprint.nil? ? @project : @issue.sprint.project),
+                                         :sprint_board_id => 'sprint_board',
+                                         :pbi => @issue.parent,
+                                         :task_statuses => IssueStatus.task_statuses})).html_safe
   %>");
   <%- if @old_status != @issue.status -%>
     var task = $("#<%= "task_#{@issue.id}" %>");
