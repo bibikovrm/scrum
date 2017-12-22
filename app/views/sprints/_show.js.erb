@@ -6,6 +6,13 @@
     $("table.sprint-board a.user").each(function(row_index, user_link) {
       users[$.trim(user_link.text)] = row_index;
     });
+
+    <% # put "Me" in first in the list %>
+    var current_user_name = '<%= User.current.name %>';
+    var label_me = '<< <%= l(:label_me) %> >>';
+    if (users[current_user_name])
+      $assignees.append("<option value='" + current_user_name + "'>" + label_me + "</option>");
+
     $.each(users, function(user, row_index) {
       $assignees.append("<option value='" + user + "'>" + user + "</option>");
     });
