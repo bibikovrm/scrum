@@ -7,10 +7,6 @@
   {
     $("#ajax-modal").dialog("close");
   }
-  <%- pbi_status_id = "pbi_#{@issue.parent_id}_status_#{@issue.status.id}"
-      other_pbi_status_ids = IssueStatus.task_statuses.select{|other| other != @issue.status}.collect{
-        |other| "pbi_#{@issue.parent_id}_status_#{other.id}"
-      } -%>
   $("#<%= "pbi_#{@issue.parent_id}_row" %>").replaceWith("<%=
     escape_javascript(render(:partial => 'post_its/sprint_board/pbi_row',
                              :formats => [:html],
