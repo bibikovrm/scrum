@@ -22,7 +22,7 @@
       <%= render_issue_icons(pbi) %>
       <div>
         <%= link_to_issue(pbi, :tracker => false, :truncate => 150,
-                          :project => project != pbi.project) %>
+                          :project => project != pbi.project, :description => true) %>
       </div>
       <%= render :partial => "post_its/sprint_board/fields", :formats => [:html],
                  :locals => {:project => project, :issue => pbi} %>
