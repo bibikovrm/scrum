@@ -49,6 +49,7 @@ module Scrum
             self.children.each do |task|
               if !task.closed?
                 closed = false
+                break # at least a task opened, no need to go further
               end
             end
           end
@@ -64,6 +65,7 @@ module Scrum
                 journal.details.where(:prop_key => 'status_id',
                                       :value => closed_statuses).each do |detail|
                   completed_date = journal.created_on
+                  break # a date found, no need to go further
                 end
               end
             end
@@ -318,6 +320,9 @@ module Scrum
         end
 
         def total_time
+          # Cache added
+          return @total_time if defined?(@total_time)
+
           if self.is_pbi?
             the_pending_effort = self.pending_effort_children
             the_spent_hours = self.children.collect{|task| task.spent_hours}.compact.sum
@@ -327,7 +332,8 @@ module Scrum
           end
           the_pending_effort = the_pending_effort.nil? ? 0.0 : the_pending_effort
           the_spent_hours = the_spent_hours.nil? ? 0.0 : the_spent_hours
-          return (the_pending_effort + the_spent_hours)
+          @total_time = (the_pending_effort + the_spent_hours)
+          return @total_time
         end
 
         def speed
@@ -503,7 +509,10 @@ module Scrum
               pbi.children.each do |task|
                 if task.is_task?
                   task = self if task.id == self.id
-                  all_tasks_new = false if task.status != new_status
+                  if task.status != new_status
+                    all_tasks_new = false
+                    break # at least a task not new, no need to go further
+                  end
                 end
               end
               if pbi.status == new_status and !all_tasks_new
@@ -534,7 +543,10 @@ module Scrum
             pbi.children.each do |task|
               if task.is_task?
                 task = self if task.id == self.id
-                all_tasks_closed = false unless task.closed?
+                unless task.closed?
+                  all_tasks_closed = false
+                  break # at least a task opened, no need to go further
+                end
               end
             end
             if all_tasks_closed and pbi.status != pbi_status_to_set
