@@ -20,6 +20,12 @@
 							if ($.isFunction($.fn.hideOnLoad)) {
 								hideOnLoad();
 							}
+						},
+						success: function(error_message) {
+							if (error_message && error_message.trim() != '') {
+								alert("<%= l(:error_changing_pbi_order) %>\n" + JSON.parse(error_message) + '.');
+								location.reload(true);
+							}
 						}
 					});
 				}

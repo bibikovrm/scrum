@@ -439,7 +439,7 @@ module Scrum
             dependencies = get_dependencies
             if dependencies.count > 0
               others = dependencies.collect{ |issue| "##{issue.id}" }.join(', ')
-              raise "##{id} depends on other issues (#{others}), it cannot be sorted"
+              raise l(:error_sorting_issue_depends_on_other, :id => id, :others => others)
             end
           end
         end
