@@ -17,6 +17,7 @@ es:
   error_creating_time_entry: "No se pudo crear la imputación de tiempo (%{message})."
   error_no_product_backlog: "No hay pila de producto definida todavía, por favor pide al administrador de este proyecto que la cree en la solapa de configuración."
   error_no_sprints: "No hay Sprints definidos todavía, por favor pide al administrador de este proyecto que los cree en la solapa de configuración."
+  error_sorting_issue_depends_on_other: "#%{id} depende de otros peticiónes (%{others}), no se puede ordenar."
   error_updating_pbi: "Error actualizando el EPP (%{message})"
   error_updating_task: "Error actualizando la tarea (%{message})"
   field_end_date: "Fecha de fin"

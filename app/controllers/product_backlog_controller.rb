@@ -46,13 +46,53 @@ class ProductBacklogController < ApplicationController
   end
 
   def sort
-    @product_backlog.pbis.each do |pbi|
-      pbi.init_journal(User.current)
-      pbi.position = params['pbi'].index(pbi.id.to_s) + 1
-      pbi.check_bad_dependencies
-      pbi.save!
+    the_pbis = @product_backlog.pbis
+
+    # To be able to reuse the pbis array
+    previous_pbis_positions = {}
+    the_pbis.each do |pbi|
+      previous_pbis_positions[pbi.id] = pbi.position
     end
-    render :nothing => true
+
+
+    # First, detect dependent issues
+    the_pbis.each do |pbi|
+      # In this block, we can change pbi position, it will be reset after
+      pbi.position = params['pbi'].index(pbi.id.to_s) + 1
+
+      # Transform exception in an instance error message
+      begin
+        pbi.check_bad_dependencies
+      rescue Exception => e
+        @error_message = e.message
+
+        break # Display only first dependency issue
+      end
+    end
+
+    if @error_message
+      # Return json if error detected
+      respond_to do |format|
+        format.json {render :json => @error_message.to_json}
+      end
+    else
+      # Second, No dependency issue, we can sort
+
+
+      # Set the positions as before the bad dependency check
+      the_pbis.each do |pbi|
+        pbi.position = previous_pbis_positions[pbi.id]
+      end
+
+      the_pbis.each do |pbi|
+        pbi.position = params['pbi'].index(pbi.id.to_s) + 1
+
+        pbi.init_journal(User.current)
+        pbi.save!
+      end
+
+      render :nothing => true
+    end
   end
 
   def check_dependencies

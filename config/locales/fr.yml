@@ -17,6 +17,7 @@ fr:
   error_creating_time_entry: "Erreur à la création d'une saisie de temps (%{message})."
   error_no_product_backlog: "Il n'y a aucun Product Backlog de défini pour le moment, merci de solliciter un administrateur du projet pour en créer dans l'onglet configuration."
   error_no_sprints: "Il n'y a aucun Sprint de défini pour le moment, merci de solliciter un administrateur du projet pour en créer dans l'onglet configuration."
+  error_sorting_issue_depends_on_other: "#%{id} depends d’autres demandes (%{others}), elle ne peut être ordonnée."
   error_updating_pbi: "Erreur à la mise à jour du PBI (%{message})"
   error_updating_task: "Erreur à la mise à jour de la tâche (%{message})"
   field_end_date: "Fin"
