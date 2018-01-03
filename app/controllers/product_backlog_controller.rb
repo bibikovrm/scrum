@@ -48,16 +48,8 @@ class ProductBacklogController < ApplicationController
   def sort
     the_pbis = @product_backlog.pbis
 
-    # To be able to reuse the pbis array
-    previous_pbis_positions = {}
-    the_pbis.each do |pbi|
-      previous_pbis_positions[pbi.id] = pbi.position
-    end
-
-
     # First, detect dependent issues
     the_pbis.each do |pbi|
-      # In this block, we can change pbi position, it will be reset after
       pbi.position = params['pbi'].index(pbi.id.to_s) + 1
 
       # Transform exception in an instance error message
@@ -78,14 +70,8 @@ class ProductBacklogController < ApplicationController
     else
       # Second, No dependency issue, we can sort
 
-
-      # Set the positions as before the bad dependency check
       the_pbis.each do |pbi|
-        pbi.position = previous_pbis_positions[pbi.id]
-      end
-
-      the_pbis.each do |pbi|
-        pbi.position = params['pbi'].index(pbi.id.to_s) + 1
+        # New position already set during the bad dependency check
 
         pbi.init_journal(User.current)
         pbi.save!
