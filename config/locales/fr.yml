@@ -76,6 +76,7 @@ fr:
   label_setting_pbi_statuses: "PBI statuses for Product Backlog & Sprint board"
   label_setting_product_burndown_sprints: "Calculate it with this number of Sprints"
   label_setting_render_author_on_pbi: "Afficher l'auteur"
+  label_setting_render_assigned_to_on_pbi: "Afficher l’assigné à"
   label_setting_render_category_on_pbi: "Afficher la catégorie"
   label_setting_render_pbis_speed: "Afficher la vélocité des PBIs"
   label_setting_render_plugin_tips: "Afficher les alertes du plugin Scrum"

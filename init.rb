@@ -112,6 +112,7 @@ Redmine::Plugin.register :scrum do
                                  :render_category_on_pbi => '1',
                                  :render_version_on_pbi => '1',
                                  :render_author_on_pbi => '1',
+                                 :render_assigned_to_on_pbi => '0',
                                  :render_updated_on_pbi => '0',
                                  :check_dependencies_on_pbi_sorting => '0',
                                  :product_burndown_sprints => '4',
