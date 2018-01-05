@@ -417,14 +417,20 @@ module Scrum
           return enabled
         end
 
-        def get_dependencies
+        def get_dependencies(debug=false)
           dependencies = []
           unless sprint.nil?
-            sprint.pbis(:position_bellow => position).each do |other_pbi|
+            # Do not search dependant issues for each other pbi
+            if self.respond_to?(:all_dependent_issues)
+              pbi_all_dependent_issues = all_dependent_issues
+            end
+
+            # Preload Project relation, + debug option
+            sprint.pbis(:position_bellow => position, :includes => [:project], :debug => debug).each do |other_pbi|
               if self != other_pbi
                 if self.respond_to?(:all_dependent_issues)
                   # Old Redmine API (<3.3.0).
-                  is_dependent = all_dependent_issues.include?(other_pbi)
+                  is_dependent = pbi_all_dependent_issues.include?(other_pbi)
                 elsif self.respond_to?(:would_reschedule?) and self.respond_to?(:blocks?)
                   # New Redmine API (>=3.3.0).
                   is_dependent = (would_reschedule?(other_pbi) or blocks?(other_pbi))
