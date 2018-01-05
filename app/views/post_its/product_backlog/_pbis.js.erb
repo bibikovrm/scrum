@@ -8,7 +8,7 @@
 						setupAjaxIndicator();
 					}
 					$.ajax({
-						url: "<%= sort_product_backlog_path(product_backlog) %>",
+						url: "<%= sort_product_backlog_path(product_backlog, :debug => params[:debug]) %>",
 						type: "POST",
 						data: $("#pbis").sortable("serialize"),
 						dataType: "script",
