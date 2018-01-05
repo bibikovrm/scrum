@@ -26,19 +26,12 @@ class ProductBacklogController < ApplicationController
   # Add includes in query to preload relations
   before_filter :includes_option_for_pbis,
                 :only => [:show, :sort]
-  # Enable debug traces if provided in request parameters
-  before_filter :set_debug, :only => [:sort]
   before_filter :check_issue_positions, :only => [:show]
   before_filter :calculate_stats, :only => [:show, :burndown, :release_plan]
   before_filter :authorize
 
   helper :scrum
 
-
-  # Set debug if provided in parameters
-  def set_debug
-    @debug = true unless params['debug'].nil?
-  end
 
   def index
     unless @project.product_backlogs.empty?
@@ -57,13 +50,8 @@ class ProductBacklogController < ApplicationController
   end
 
   def sort
-    # Execution time trace
-    logger.debug "\\=>scrum sort" if @debug
-
     # Main optimization : add includes to query to preload relations
-    the_pbis = @product_backlog.pbis( @includes_option.merge({:debug => @debug}) )
-    # Execution time trace
-    logger.debug " =>scrum after get product_backlog pbis" if @debug
+    the_pbis = @product_backlog.pbis(@includes_option)
 
     # To check if positions change
     previous_pbis_positions = {}
@@ -88,8 +76,6 @@ class ProductBacklogController < ApplicationController
 
       # Transform exception in an instance error message
       begin
-        # Execution time trace
-        logger.debug " =>scrum   ##{pbi.id} check_bad_dependencies" if @debug
         pbi.check_bad_dependencies
       rescue Exception => e
         @error_message = e.message
@@ -114,20 +100,10 @@ class ProductBacklogController < ApplicationController
 
         # Do not modify issues that don't change of position
         if old_position != pbi.position
-          # Execution time trace
-          logger.debug " =>scrum   ##{pbi.id} position : #{old_position} -> #{pbi.position}" if @debug
-
           pbi.init_journal(User.current)
           pbi.save!
-
-          # Execution time trace
-          logger.debug " =>scrum     saved" if @debug
-        else
-          logger.debug " =>scrum   ##{pbi.id} position unchanged" if @debug
         end
       end
-      # Execution time trace
-      logger.debug "/=>scrum sort" if @debug
 
       render :nothing => true
     end

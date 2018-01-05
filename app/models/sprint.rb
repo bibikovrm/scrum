@@ -41,8 +41,6 @@ class Sprint < ActiveRecord::Base
 
     # Add includes option to preload relations
     option_includes = options.delete(:includes)
-    # Execution time trace
-    logger.debug " =>scrum       \\-- sprint pbis includes=#{option_includes.inspect}" if option_includes && options[:debug]
 
     order = "position ASC"
     if options[:position_bellow]
@@ -64,16 +62,11 @@ class Sprint < ActiveRecord::Base
     end
     conditions[:project_id] = options[:filter_by_project] if options[:filter_by_project]
 
-    # Execution time trace
-    logger.debug " =>scrum           before AR relation conditions=#{conditions}" if options[:debug]
     the_pbis = issues.where(conditions)
     # Insert includes in relation
     the_pbis = the_pbis.includes(option_includes) if option_includes
-    logger.debug " =>scrum           before visible?" if options[:debug]
     the_pbis = the_pbis.order(order).select{|issue| issue.visible?}
 
-    # Execution time trace
-    logger.debug " =>scrum       /-- sprint pbis" if options[:debug]
     the_pbis
   end
 
@@ -263,10 +256,10 @@ class Sprint < ActiveRecord::Base
     status == 'open'
   end
 
-  def get_dependencies(debug=false)
+  def get_dependencies
     dependencies = []
     pbis.each do |pbi|
-      pbi_dependencies = pbi.get_dependencies(debug)
+      pbi_dependencies = pbi.get_dependencies
       dependencies << {:pbi => pbi, :dependencies => pbi_dependencies} if pbi_dependencies.count > 0
     end
     return dependencies
