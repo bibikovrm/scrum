@@ -38,6 +38,12 @@ class Sprint < ActiveRecord::Base
   def pbis(options = {})
     conditions = {:tracker_id => Scrum::Setting.pbi_tracker_ids,
                   :status_id => Scrum::Setting.pbi_status_ids}
+
+    # Add includes option to preload relations
+    option_includes = options.delete(:includes)
+    # Execution time trace
+    logger.debug " =>scrum       \\-- sprint pbis includes=#{option_includes.inspect}" if option_includes && options[:debug]
+
     order = "position ASC"
     if options[:position_bellow]
       first_issue = issues.where(conditions).order(order).first
@@ -57,7 +63,18 @@ class Sprint < ActiveRecord::Base
       conditions[:position] = first_position..last_position
     end
     conditions[:project_id] = options[:filter_by_project] if options[:filter_by_project]
-    issues.where(conditions).order(order).select{|issue| issue.visible?}
+
+    # Execution time trace
+    logger.debug " =>scrum           before AR relation conditions=#{conditions}" if options[:debug]
+    the_pbis = issues.where(conditions)
+    # Insert includes in relation
+    the_pbis = the_pbis.includes(option_includes) if option_includes
+    logger.debug " =>scrum           before visible?" if options[:debug]
+    the_pbis = the_pbis.order(order).select{|issue| issue.visible?}
+
+    # Execution time trace
+    logger.debug " =>scrum       /-- sprint pbis" if options[:debug]
+    the_pbis
   end
 
   def closed_pbis(options = {})
