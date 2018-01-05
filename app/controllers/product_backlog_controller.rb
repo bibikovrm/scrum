@@ -23,11 +23,22 @@ class ProductBacklogController < ApplicationController
                 :only => [:show, :burndown, :release_plan]
   before_filter :filter_by_project,
                 :only => [:show, :burndown, :release_plan]
+  # Add includes in query to preload relations
+  before_filter :includes_option_for_pbis,
+                :only => [:show, :sort]
+  # Enable debug traces if provided in request parameters
+  before_filter :set_debug, :only => [:sort]
   before_filter :check_issue_positions, :only => [:show]
   before_filter :calculate_stats, :only => [:show, :burndown, :release_plan]
   before_filter :authorize
 
   helper :scrum
+
+
+  # Set debug if provided in parameters
+  def set_debug
+    @debug = true unless params['debug'].nil?
+  end
 
   def index
     unless @project.product_backlogs.empty?
@@ -46,14 +57,39 @@ class ProductBacklogController < ApplicationController
   end
 
   def sort
-    the_pbis = @product_backlog.pbis
+    # Execution time trace
+    logger.debug "\\=>scrum sort" if @debug
+
+    # Main optimization : add includes to query to preload relations
+    the_pbis = @product_backlog.pbis( @includes_option.merge({:debug => @debug}) )
+    # Execution time trace
+    logger.debug " =>scrum after get product_backlog pbis" if @debug
+
+    # To check if positions change
+    previous_pbis_positions = {}
+    the_pbis.each do |pbi|
+      previous_pbis_positions[pbi.id] = pbi.position
+    end
+
 
     # First, detect dependent issues
+    pbi_position_changed = false
     the_pbis.each do |pbi|
       pbi.position = params['pbi'].index(pbi.id.to_s) + 1
 
+      old_position = previous_pbis_positions[pbi.id]
+
+      unless pbi_position_changed
+        pbi_position_changed = (old_position != pbi.position)
+      end
+
+      # Check bad dependencies starting when pbis change of position
+      next unless pbi_position_changed
+
       # Transform exception in an instance error message
       begin
+        # Execution time trace
+        logger.debug " =>scrum   ##{pbi.id} check_bad_dependencies" if @debug
         pbi.check_bad_dependencies
       rescue Exception => e
         @error_message = e.message
@@ -73,9 +109,25 @@ class ProductBacklogController < ApplicationController
       the_pbis.each do |pbi|
         # New position already set during the bad dependency check
 
-        pbi.init_journal(User.current)
-        pbi.save!
+        # To check if we have to save the pbi because position has changed
+        old_position = previous_pbis_positions[pbi.id]
+
+        # Do not modify issues that don't change of position
+        if old_position != pbi.position
+          # Execution time trace
+          logger.debug " =>scrum   ##{pbi.id} position : #{old_position} -> #{pbi.position}" if @debug
+
+          pbi.init_journal(User.current)
+          pbi.save!
+
+          # Execution time trace
+          logger.debug " =>scrum     saved" if @debug
+        else
+          logger.debug " =>scrum   ##{pbi.id} position unchanged" if @debug
+        end
       end
+      # Execution time trace
+      logger.debug "/=>scrum sort" if @debug
 
       render :nothing => true
     end
@@ -254,6 +306,22 @@ private
     unless params[:filter_by_project].blank?
       @pbi_filter = {:filter_by_project => params[:filter_by_project]}
     end
+  end
+
+  def includes_option_for_pbis
+    @includes_option = {
+      :includes => [
+        :tracker,
+        :priority,
+        :status,
+        :author,
+        :custom_values,
+        [:project => :custom_values],
+        :sprint,
+        :children,
+        :relations_from
+      ]
+    }
   end
 
   def calculate_path(product_backlog, project = nil)
