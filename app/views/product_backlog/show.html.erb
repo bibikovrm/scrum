@@ -13,7 +13,8 @@
              :locals => {:project => @project, :top => true} %>
   <div id="messages"></div>
   <ul id="pbis" class="pbis">
-    <%- @product_backlog.pbis(@pbi_filter).each do |pbi| -%>
+    <%- # Added option to include relations preloads -%>
+    <%- @product_backlog.pbis(@pbi_filter.merge(@includes_option)).each do |pbi| -%>
       <%= render :partial => 'post_its/product_backlog/pbi',
                  :locals => {:project => @project, :pbi => pbi, :read_only => false} %>
     <%- end -%>
