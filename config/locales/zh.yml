@@ -15,6 +15,7 @@ zh:
   error_creating_pbi: "不能新建PBI（%{message}）。"
   error_creating_task: "不能新建任务（%{message}）。"
   error_creating_time_entry: "不能新建工时（%{message}）。"
+  error_new_status_no_allowed: "It is not allowed to go from status ’%{status_from}’ to status ’%{status_to}’"
   error_no_product_backlog: "当前尚不存在 Product Backlog，请联系项目管理员通过设置页创建 Product Backlog。"
   error_no_sprints: "当前尚未定义 Sprints，请联系系统管理员通过设置页创建 Sprints。"
   error_updating_pbi: "更新PBI报错：（%{message}）"

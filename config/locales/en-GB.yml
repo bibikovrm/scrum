@@ -7,7 +7,7 @@
 #   * No derivates of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-en:
+en-gb:
   error_changing_pbi_order: "Fail to sort the PBI, check its dependencies. The page will be reloaded."
   error_changing_task_status: "Fail to change the task status."
   error_changing_task_assigned_to: "Fail to change the task assignee."

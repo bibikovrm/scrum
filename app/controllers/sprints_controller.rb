@@ -101,10 +101,23 @@ class SprintsController < ApplicationController
   def change_task_status
     @issue = Issue.find(params[:task].match(/^task_(\d+)$/)[1].to_i)
     @old_status = @issue.status
-    @issue.init_journal(User.current)
-    @issue.status = IssueStatus.find(params[:status].to_i)
-    raise 'New status is not allowed' unless @issue.new_statuses_allowed_to.include?(@issue.status)
-    @issue.save!
+
+    # Do not change issue status if not necessary
+    new_status = IssueStatus.find(params[:status].to_i)
+
+    # Manage case where new status is allowed
+    if new_status && @issue.new_statuses_allowed_to.include?(new_status)
+      @issue.init_journal(User.current)
+      @issue.status = new_status
+      @issue.save!
+    else
+      # Exception replaced by an instance variable
+      # Create error message if new status not allowed
+      @error_message = l(:error_new_status_no_allowed,
+                         :status_from => @old_status,
+                         :status_to => new_status)
+    end
+
     respond_to do |format|
       format.js { render 'scrum/update_task' }
     end
