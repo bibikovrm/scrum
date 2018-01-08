@@ -13,16 +13,22 @@
                              :locals => {:project => (@issue.sprint.nil? ? @project : @issue.sprint.project),
                                          :sprint_board_id => 'sprint_board',
                                          :pbi => @issue.parent,
-                                         :task_statuses => IssueStatus.task_statuses})).html_safe
+                                         # Add lost Tasks
+                                         :task_statuses => IssueStatus.task_statuses(true)})).html_safe
   %>");
   <%- # Scrum Board : do not throw an exception if new statut is not allowed -%>
   <%- if @error_message -%>
     alert('<%= @error_message %>');
   <%- end -%>
 
-  <%- if @old_status != @issue.status -%>
+  <%- if @old_status != @issue.status
+      # Craft status for lost task column
+      task_status = @issue.lost_task? ? 'lost' : @issue.status.id
+  -%>
     var task = $("#<%= "task_#{@issue.id}" %>");
     task.detach();
-    task.appendTo($("#<%= "pbi_#{@issue.parent_id}_status_#{@issue.status.id}" %>"));
+    task.appendTo($("#<%= "pbi_#{@issue.parent_id}_status_#{task_status}" %>"));
   <%- end -%>
+  <%- # Show or hide lost Task cells -%>
+  toggle_lost_tasks_cells();
 <%- end -%>

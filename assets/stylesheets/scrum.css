@@ -607,3 +607,10 @@ table.scrum-stats-chart-table {
 .scrum-content-fullscreen .icon-fullscreen {
 	display: none;
 }
+
+/*
+	To hide lost Tasks cells when there is no lost Task
+*/
+.no-lost-task {
+	display: none;
+}

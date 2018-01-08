@@ -60,6 +60,14 @@ class Sprint < ActiveRecord::Base
     issues.where(conditions).order(order).select{|issue| issue.visible?}
   end
 
+  # Scrum Board : lost tasks columm has to be displayed ?
+  def has_lost_tasks?
+    # Cached
+    return @has_lost_tasks if defined?(@has_lost_tasks)
+
+    @has_lost_tasks = pbis.detect{|pbi| pbi.has_lost_tasks?}.present?
+  end
+
   def closed_pbis(options = {})
     pbis(options).select {|pbi| pbi.scrum_closed?}
   end

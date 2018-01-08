@@ -9,13 +9,32 @@
                              :read_only => false} %>
     <%- end -%>
   </td>
-  <%- tasks = pbi.tasks_by_status_id -%>
+  <%- # Include lost tasks -%>
+  <%- tasks = pbi.tasks_by_status_id(true)
+  -%>
+  <%-
+      # To decide if we will display the Lost Tasks column
+      sprint_has_lost_tasks = pbi.sprint.has_lost_tasks?
+  -%>
   <%- task_statuses.each do |status| -%>
-    <%- pbi_status_id = "pbi_#{pbi.id}_status_#{status.id}" -%>
-    <%- other_pbi_status_ids = task_statuses.select{|other| other != status}.collect{
-          |other| "pbi_#{pbi.id}_status_#{other.id}"
+    <%-
+      # Task status id specific for lost statuses column
+      # Css class for column + class to hide the cells if no lost task
+      if status.id.nil?
+        task_status_id = 'lost'
+        class_lost_task = ' lost-task'
+        class_lost_task += ' no-lost-task' unless sprint_has_lost_tasks
+      else
+        task_status_id = "#{status.id}"
+        class_lost_task = ''
+      end
+      pbi_status_id = "pbi_#{pbi.id}_status_#{task_status_id}"
+    -%>
+    <%- other_pbi_status_ids = task_statuses.select{|other| other != status}.collect{ |other|
+          other_task_status_id = other.id.nil? ? 'all' : "#{other.id}"
+          "pbi_#{pbi.id}_status_#{other_task_status_id}"
         } -%>
-    <td id="<%= pbi_status_id %>" class="sprint-board">
+    <td id="<%= pbi_status_id %>" class="sprint-board<%= class_lost_task %>">
       <%- if is_simple -%>
         <%- if pbi.status == status -%>
           <%= render :partial => 'post_its/sprint_board/pbi', :formats => [:html],
@@ -24,13 +43,21 @@
                                  :read_only => false} %>
         <%- end -%>
       <%- else -%>
-        <%- tasks[status.id].each do |task| -%>
+        <%-
+            # Calculate fake status to get all lost issues
+            status_id = status.id.nil? ? 'lost' : status.id
+            tasks_for_status = tasks[status_id]
+            next if tasks_for_status.nil?
+
+            tasks_for_status.each do |task| -%>
           <%= render :partial => 'post_its/sprint_board/task', :formats => [:html],
                      :locals => {:project => project,
                                  :task => task,
                                  :pbi_status_id => pbi_status_id,
                                  :other_pbi_status_ids => other_pbi_status_ids,
-                                 :read_only => false} %>
+                                 :read_only => false,
+                                 # New parameter to distinguish a lost task
+                                 :lost_task => status.id.nil?} %>
         <%- end -%>
       <%- end -%>
     </td>

@@ -103,7 +103,14 @@ class SprintsController < ApplicationController
     @old_status = @issue.status
 
     # Do not change issue status if not necessary
-    new_status = IssueStatus.find(params[:status].to_i)
+    # Multi-statuses column for lost Tasks
+    # Craft an issue status if lost Task
+    new_status_id = params[:status].to_i
+    if new_status_id != 0
+      new_status = IssueStatus.find(new_status_id)
+    else
+      new_status = IssueStatus.new(name: l(:label_lost_tasks), id: nil)
+    end
 
     # Manage case where new status is allowed
     if new_status && @issue.new_statuses_allowed_to.include?(new_status)

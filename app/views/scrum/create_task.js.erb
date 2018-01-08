@@ -19,7 +19,10 @@
 		$("#<%= pbi_row %>").replaceWith("<%=
 			escape_javascript(render :partial => "post_its/sprint_board/pbi_row", :formats => [:html],
 															 :locals => {:project => @project, :pbi => @task.parent,
-																					 :task_statuses => IssueStatus.task_statuses}).html_safe
+																					 # Add lost Tasks
+																					 :task_statuses => IssueStatus.task_statuses(true)}).html_safe
 		%>");
 	}
+	<%- # Show or hide lost Task cells -%>
+	toggle_lost_tasks_cells();
 <%- end -%>

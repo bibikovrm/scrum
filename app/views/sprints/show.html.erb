@@ -15,9 +15,24 @@
     <thead class="sprint-board">
       <tr class="sprint-board">
         <th class="sprint-board"><%= l(:label_pbi_plural) %></th>
-        <%- task_statuses = IssueStatus.task_statuses
-            task_statuses.each do |status| -%>
-          <th class="sprint-board"><%= status.name %></th>
+        <%-
+            # Param value = true => add a first status column to display lost tasks
+            # (tasks with statuses not enabled in scrum board)
+        -%>
+        <%- # Add lost Tasks -%>
+        <%- task_statuses = IssueStatus.task_statuses(true)
+            task_statuses.each do |status|
+              status_id = status.id ? status.id : 'lost'
+              # To be able to hide / unhide column depending if lost tasks exist
+              if status.id.nil?
+                class_lost_task = ' lost-task'
+                class_lost_task += ' no-lost-task' unless @sprint.has_lost_tasks?
+              else
+                class_lost_task = ''
+              end
+        -%>
+          <%- # Added id to th, css class for lost Tasks -%>
+          <th id="status_<%= status_id %>" class="sprint-board<%= class_lost_task %>"><%= status.name %></th>
         <%- end -%>
       </tr>
     </thead>

@@ -1,8 +1,10 @@
 <%- task_id = "task_#{task.id}" -%>
+<%- # Css class for Lost Task -%>
 <table id="<%= task_id %>"
        class="<%= task.post_it_css_class(:rotate => true,
                                          :scale => true,
-                                         :draggable => true) %>"
+                                         :draggable => true,
+                                         :lost_task => lost_task) %>"
        old-status="<%= task.status.id %>">
   <tr>
     <td class="content" colspan="3">

@@ -30,3 +30,19 @@ function draggableOnTouchScreen(element_id) {
 		element.addEventListener("touchcancel", touchHandler, true);
 	}
 }
+
+// Hide or show lost Tasks cells depending if lost Tasks exist
+function toggle_lost_tasks_cells() {
+  var lost_tasks_cells = $('.lost-task');
+
+  if (lost_tasks_cells.length == 0)
+    return;
+
+  var lost_tasks = $('.sprint-task.lost-task');
+
+  if (lost_tasks.length == 0) {
+    lost_tasks_cells.addClass('no-lost-task');
+  } else {
+    lost_tasks_cells.removeClass('no-lost-task');
+  }
+};

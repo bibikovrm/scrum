@@ -169,12 +169,52 @@ module Scrum
           tracker.is_task?
         end
 
-        def tasks_by_status_id
+        # Does the Task has a status that is not enabled in the Scrum Board ?
+        def lost_task?
+          # Cached
+          return @lost_task if defined?(@lost_task)
+
+          if is_task?
+            @lost_task = ! Scrum::Setting.task_status_ids.include?(status.id)
+          else
+            @lost_task = false
+          end
+
+          @lost_task
+        end
+
+        # Return the lost sub-Tasks if issue is a PBI
+        def pbi_lost_tasks
+          raise 'Issue is not an user story' unless is_pbi?
+
+          # Cached
+          return @pbi_lost_tasks if defined?(@pbi_lost_tasks)
+
+          @pbi_lost_tasks = children.select{|issue|
+              issue.lost_task? and issue.visible?
+            }
+        end
+
+        # To know if we have to show / hide the lost Tasks cells
+        def has_lost_tasks?
+          raise 'Issue is not an user story' unless is_pbi?
+
+          pbi_lost_tasks.any?
+        end
+
+        # New parameter to add tasks having a status not enabled for scrum board
+        def tasks_by_status_id(include_lost=false)
           raise 'Issue is not an user story' unless is_pbi?
           statuses = {}
           IssueStatus.task_statuses.each do |status|
             statuses[status.id] = children.select{|issue| (issue.status == status) and issue.visible?}
           end
+
+          # Smile specific #642208 Scrum board : colonne multi-statuts pour tâches perdues
+          if include_lost && has_lost_tasks?
+            statuses['lost'] = pbi_lost_tasks
+          end
+
           statuses
         end
 
@@ -208,6 +248,8 @@ module Scrum
                User.current.allowed_to?(:edit_sprint_board, project) and !sprint.is_product_backlog?
               classes << 'post-it-horizontal-move-cursor'
             end
+            # Lost-task class
+            classes << 'lost-task' if options[:lost_task]
           end
           if Scrum::Setting.random_posit_rotation
             classes << "post-it-rotation-#{rand(5)}" if options[:rotate]

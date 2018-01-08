@@ -30,10 +30,13 @@
 		$("#sprint_board").append("<%=
 			escape_javascript(render :partial => "post_its/sprint_board/pbi_row", :formats => [:html],
 															 :locals => {:project => @project, :pbi => @pbi,
-																					 :task_statuses => IssueStatus.task_statuses}).html_safe
+																					 # Add lost Tasks
+																					 :task_statuses => IssueStatus.task_statuses(true)}).html_safe
 		%>");
 	}
   <%- if (!(IssueStatus.pbi_statuses.include?(@pbi.status))) -%>
     $("#<%= @pbi.sprint.is_product_backlog? ? "pbi_#{@pbi.id}" : "pbi_#{@pbi.id}_row" %>").remove();
   <%- end -%>
+	<%- # Show or hide lost Task cells -%>
+	toggle_lost_tasks_cells();
 <%- end -%>

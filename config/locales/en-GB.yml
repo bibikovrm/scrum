@@ -57,6 +57,7 @@ en-gb:
   label_issue_deviation: "This issue has a deviation of %{deviation}%"
   label_issue_speed: "The speed of this issue is %{speed}%"
   label_limited_to_n_series: "Project series have been limited to %{n}. Criteria: not closed projects, pending SPs."
+  label_lost_tasks: "Lost Tasks"
   label_media_last_n_sprints: "Last %{n} Sprints media"
   label_menu_product_backlog: "Backlog"
   label_menu_sprint: "Sprint"
