@@ -12,8 +12,16 @@ module Scrum
     def self.included(base)
       base.class_eval do
 
-        def self.task_statuses
-          IssueStatus.where(:id => Scrum::Setting.task_status_ids).order("position ASC")
+        # New parameter to include lost Tasks fake status
+        def self.task_statuses(include_lost_tasks=false)
+          the_task_statuses = IssueStatus.where(:id => Scrum::Setting.task_status_ids).order("position ASC")
+
+          # Add lost Tasks fake status
+          if include_lost_tasks
+            the_task_statuses.unshift(IssueStatus.new(name: I18n.t(:label_lost_tasks), id: nil))
+          end
+
+          the_task_statuses
         end
 
         def self.pbi_statuses
