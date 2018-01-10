@@ -9,18 +9,18 @@ require_dependency "journal"
 
 module Scrum
   module JournalPatch
-    def self.included(base)
+    # Prepended to ensure compatibility with other plugins
+    def self.prepended(base)
       base.class_eval do
+      end
 
-      private
+    private
 
-        def add_attribute_detail_with_scrum(attribute, old_value, value)
-          if Scrum::Setting.create_journal_on_pbi_position_change or (attribute != 'position')
-            add_attribute_detail_without_scrum(attribute, old_value, value)
-          end
+      def add_attribute_detail(attribute, old_value, value)
+        # Do not check setting if attribute is not position
+        if (attribute != 'position') || Scrum::Setting.create_journal_on_pbi_position_change
+          super(attribute, old_value, value)
         end
-        alias_method_chain :add_attribute_detail, :scrum
-
       end
     end
   end
