@@ -15,6 +15,7 @@ es:
   error_creating_pbi: "No se pudo crear el elemento de la pila de producto (%{message})."
   error_creating_task: "No se pudo crear la tarea (%{message})."
   error_creating_time_entry: "No se pudo crear la imputación de tiempo (%{message})."
+  error_new_status_no_allowed: "No está permitido pasar del estado ’%{status_from}’ a estado ’%{status_to}’"
   error_no_product_backlog: "No hay pila de producto definida todavía, por favor pide al administrador de este proyecto que la cree en la solapa de configuración."
   error_no_sprints: "No hay Sprints definidos todavía, por favor pide al administrador de este proyecto que los cree en la solapa de configuración."
   error_updating_pbi: "Error actualizando el EPP (%{message})"

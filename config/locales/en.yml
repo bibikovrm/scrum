@@ -15,6 +15,7 @@ en:
   error_creating_pbi: "Fail to create a product backlog item (%{message})."
   error_creating_task: "Fail to create a task (%{message})."
   error_creating_time_entry: "Fail to create a time entry (%{message})."
+  error_new_status_no_allowed: "It is not allowed to go from status ’%{status_from}’ to status ’%{status_to}’"
   error_no_product_backlog: "There is none product backlog yet, please ask this project administrator to create it in settings tab."
   error_no_sprints: "There are none Sprints defined yet, please ask this project administrator to create them in settings tab."
   error_updating_pbi: "Error updating the PBI (%{message})"
