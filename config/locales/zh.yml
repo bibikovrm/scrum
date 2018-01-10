@@ -86,7 +86,6 @@ zh:
   label_setting_product_burndown_sprints: "用如下数量的 Sprints 计算燃尽速率"
   label_setting_random_postit_rotation: "便利贴随机回转动画"
   label_setting_render_author_on_pbi: "显示作者"
-  label_setting_render_assigned_to_on_pbi: "Render assigned to"
   label_setting_render_category_on_pbi: "显示类别"
   label_setting_render_pbis_speed: "显示 PBIs 速度"
   label_setting_render_plugin_tips: "显示 Scrum 插件提示"
