@@ -7,7 +7,7 @@
 #   * No derivates of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-en:
+en-gb:
   error_changing_pbi_order: "Fail to sort the PBI, check its dependencies. The page will be reloaded."
   error_changing_task_status: "Fail to change the task status."
   error_changing_task_assigned_to: "Fail to change the task assignee."
@@ -15,7 +15,6 @@ en:
   error_creating_pbi: "Fail to create a product backlog item (%{message})."
   error_creating_task: "Fail to create a task (%{message})."
   error_creating_time_entry: "Fail to create a time entry (%{message})."
-  error_new_status_no_allowed: "It is not allowed to go from status ’%{status_from}’ to status ’%{status_to}’"
   error_no_product_backlog: "There is none product backlog yet, please ask this project administrator to create it in settings tab."
   error_no_sprints: "There are none Sprints defined yet, please ask this project administrator to create them in settings tab."
   error_updating_pbi: "Error updating the PBI (%{message})"

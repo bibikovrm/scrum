@@ -115,6 +115,7 @@ es:
   label_setting_random_postit_rotation: "Rotación aleatoria de los post-its"
   label_setting_remaining_story_points_custom_field: "Campo personalizado para puntos de historia pendientes"
   label_setting_render_author_on_pbi: "Mostrar autor"
+  label_setting_render_assigned_to_on_pbi: "Mostrar asignado a"
   label_setting_render_category_on_pbi: "Mostrar categoría"
   label_setting_render_pbis_speed: "Mostrar velocidad de los EPPs"
   label_setting_render_plugin_tips: "Mostrar consejos del plugin de Scrum"
