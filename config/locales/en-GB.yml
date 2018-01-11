@@ -7,7 +7,7 @@
 #   * No derivates of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-en:
+en-gb:
   error_changing_pbi_order: "Fail to sort the PBI, check its dependencies. The page will be reloaded."
   error_changing_task_status: "Fail to change the task status."
   error_changing_task_assigned_to: "Fail to change the task assignee."
@@ -17,7 +17,6 @@ en:
   error_creating_time_entry: "Fail to create a time entry (%{message})."
   error_no_product_backlog: "There is none product backlog yet, please ask this project administrator to create it in settings tab."
   error_no_sprints: "There are none Sprints defined yet, please ask this project administrator to create them in settings tab."
-  error_sorting_issue_depends_on_other: "#%{id} depends on other issues (%{others}), it cannot be sorted."
   error_updating_pbi: "Error updating the PBI (%{message})"
   error_updating_task: "Error updating the task (%{message})"
   field_end_date: "End date"
@@ -115,6 +114,7 @@ en:
   label_setting_random_postit_rotation: "Random post-it rotation"
   label_setting_remaining_story_points_custom_field: "Remaining story points custom field"
   label_setting_render_author_on_pbi: "Render author"
+  label_setting_render_assigned_to_on_pbi: "Render assigned to"
   label_setting_render_category_on_pbi: "Render category"
   label_setting_render_pbis_speed: "Render PBIs speed"
   label_setting_render_plugin_tips: "Render Scrum plugin tips"
