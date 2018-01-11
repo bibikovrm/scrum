@@ -15,6 +15,11 @@
                                          :pbi => @issue.parent,
                                          :task_statuses => IssueStatus.task_statuses})).html_safe
   %>");
+  <%- # Scrum Board : do not throw an exception if new statut is not allowed -%>
+  <%- if @error_message -%>
+    alert('<%= @error_message %>');
+  <%- end -%>
+
   <%- if @old_status != @issue.status -%>
     var task = $("#<%= "task_#{@issue.id}" %>");
     task.detach();
