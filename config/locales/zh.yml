@@ -46,7 +46,6 @@ zh:
   label_invalid_dependencies_for_pbi: "%{pbi} 已锁定， but it comes after:"
   label_issue_deviation: "当前问题偏向于：%{deviation}%"
   label_issue_speed: "当前问题的速度为 %{speed}%"
-  label_lost_tasks: "Lost Tasks"
   label_media_last_n_sprints: "上 %{n} 个 Sprints 的中位数"
   label_menu_product_backlog: "Backlog"
   label_menu_sprint: "Sprint"
