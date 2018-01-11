@@ -116,6 +116,7 @@ en:
   label_setting_random_postit_rotation: "Random post-it rotation"
   label_setting_remaining_story_points_custom_field: "Remaining story points custom field"
   label_setting_render_author_on_pbi: "Render author"
+  label_setting_render_assigned_to_on_pbi: "Render assigned to"
   label_setting_render_category_on_pbi: "Render category"
   label_setting_render_pbis_speed: "Render PBIs speed"
   label_setting_render_plugin_tips: "Render Scrum plugin tips"
