@@ -17,7 +17,6 @@ en-gb:
   error_creating_time_entry: "Fail to create a time entry (%{message})."
   error_no_product_backlog: "There is none product backlog yet, please ask this project administrator to create it in settings tab."
   error_no_sprints: "There are none Sprints defined yet, please ask this project administrator to create them in settings tab."
-  error_sorting_issue_depends_on_other: "#%{id} depends on other issues (%{others}), it cannot be sorted."
   error_updating_pbi: "Error updating the PBI (%{message})"
   error_updating_task: "Error updating the task (%{message})"
   field_end_date: "End date"

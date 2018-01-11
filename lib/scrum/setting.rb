@@ -23,6 +23,7 @@ module Scrum
        render_tasks_speed
        render_updated_on_pbi
        render_version_on_pbi
+       render_assigned_to_on_pbi
        show_project_totals_on_sprint
        show_project_totals_on_backlog
        sprint_burndown_day_zero
