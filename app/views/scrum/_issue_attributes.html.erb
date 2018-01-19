@@ -46,7 +46,7 @@
     </p>
   <%- end -%>
 
-  <%- method = (Redmine::VERSION::STRING < '3.3.0') ? :text_date : :date_field -%>
+  <%- method = (Redmine::VERSION::STRING < '3.3.0') ? :text_field : :date_field -%>
 
   <%- if issue.field?(:start_date) -%>
     <p>
