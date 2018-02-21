@@ -12,10 +12,10 @@ class ProductBacklogController < ApplicationController
 
   before_filter :find_model_object,
                 :only => [:show, :edit, :update, :destroy, :edit_effort, :update_effort, :burndown,
-                          :release_plan, :stats, :sort]
+                          :release_plan, :stats, :sort, :check_dependencies]
   before_filter :find_project_from_association,
                 :only => [:show, :edit, :update, :destroy, :edit_effort, :update_effort, :burndown,
-                          :release_plan, :stats, :sort]
+                          :release_plan, :stats, :sort, :check_dependencies]
   before_filter :find_project_by_project_id,
                 :only => [:index, :new, :create, :change_task_status, :burndown_index,
                           :stats_index]
