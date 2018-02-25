@@ -438,14 +438,17 @@ module Scrum
           return dependencies
         end
 
-        def check_bad_dependencies
+        def check_bad_dependencies(raise_exception = true)
+          message = nil
           if Scrum::Setting.check_dependencies_on_pbi_sorting
             dependencies = get_dependencies
             if dependencies.count > 0
               others = dependencies.collect{ |issue| "##{issue.id}" }.join(', ')
-              raise l(:error_sorting_issue_depends_on_other, :id => id, :others => others)
+              message = l(:error_sorting_other_issues_depends_on_issue, :id => id, :others => others)
             end
           end
+          raise message if !(message.nil?) and raise_exception
+          return message
         end
 
       protected

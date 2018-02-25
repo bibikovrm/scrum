@@ -46,38 +46,25 @@ class ProductBacklogController < ApplicationController
   end
 
   def sort
+    # First, detect dependent issues.
+    error_messages = []
     the_pbis = @product_backlog.pbis
-
-    # First, detect dependent issues
     the_pbis.each do |pbi|
+      pbi.init_journal(User.current)
       pbi.position = params['pbi'].index(pbi.id.to_s) + 1
+      message = pbi.check_bad_dependencies(false)
+      error_messages << message unless message.nil?
+    end
 
-      # Transform exception in an instance error message
-      begin
-        pbi.check_bad_dependencies
-      rescue Exception => e
-        @error_message = e.message
-
-        break # Display only first dependency issue
+    if error_messages.empty?
+      # No dependency issue, we can sort.
+      the_pbis.each do |pbi|
+        pbi.save!
       end
     end
 
-    if @error_message
-      # Return json if error detected
-      respond_to do |format|
-        format.json {render :json => @error_message.to_json}
-      end
-    else
-      # Second, No dependency issue, we can sort
-
-      the_pbis.each do |pbi|
-        # New position already set during the bad dependency check
-
-        pbi.init_journal(User.current)
-        pbi.save!
-      end
-
-      render :nothing => true
+    respond_to do |format|
+      format.json {render :json => error_messages.to_json}
     end
   end
 

@@ -18,7 +18,7 @@ es:
   error_new_status_no_allowed: "No está permitido pasar del estado ’%{status_from}’ a estado ’%{status_to}’"
   error_no_product_backlog: "No hay pila de producto definida todavía, por favor pide al administrador de este proyecto que la cree en la solapa de configuración."
   error_no_sprints: "No hay Sprints definidos todavía, por favor pide al administrador de este proyecto que los cree en la solapa de configuración."
-  error_sorting_issue_depends_on_other: "#%{id} depende de otros peticiónes (%{others}), no se puede ordenar."
+  error_sorting_other_issues_depends_on_issue: "Otros peticiones (%{others}) dependen de #%{id}, no se puede ordenar."
   error_updating_pbi: "Error actualizando el EPP (%{message})"
   error_updating_task: "Error actualizando la tarea (%{message})"
   field_end_date: "Fecha de fin"

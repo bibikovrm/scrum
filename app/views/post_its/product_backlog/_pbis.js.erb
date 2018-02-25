@@ -2,18 +2,18 @@
 	  params[:filter_by_project].blank? -%>
 	<%= javascript_tag do %>
 		$(document).ready(function() {
-			$("#pbis").sortable({
+			$('#pbis').sortable({
 				update: function() {
 					if ($.isFunction($.fn.setupAjaxIndicator)) {
 						setupAjaxIndicator();
 					}
 					$.ajax({
-						url: "<%= sort_product_backlog_path(product_backlog) %>",
-						type: "POST",
-						data: $("#pbis").sortable("serialize"),
-						dataType: "script",
+						url: '<%= sort_product_backlog_path(product_backlog) %>',
+						type: 'POST',
+						data: $('#pbis').sortable('serialize'),
+						dataType: 'script',
 						error: function() {
-							alert("<%= l(:error_changing_pbi_order) %>");
+							alert('<%= l(:error_changing_pbi_order) %>');
 							location.reload(true);
 						},
 						complete: function() {
@@ -21,10 +21,14 @@
 								hideOnLoad();
 							}
 						},
-						success: function(error_message) {
-							if (error_message && error_message.trim() != '') {
-								alert("<%= l(:error_changing_pbi_order) %>\n" + JSON.parse(error_message));
+						success: function(data) {
+							var error_messages = JSON.parse(data);
+							if (error_messages && error_messages.length > 0) {
+								alert('<%= l(:error_changing_pbi_order) %>\n' +
+											error_messages.join('\n'));
 								location.reload(true);
+							} else if ($.isFunction($.fn.hideOnLoad)) {
+								hideOnLoad();
 							}
 						}
 					});
