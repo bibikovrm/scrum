@@ -12,10 +12,10 @@ class ProductBacklogController < ApplicationController
 
   before_filter :find_model_object,
                 :only => [:show, :edit, :update, :destroy, :edit_effort, :update_effort, :burndown,
-                          :release_plan, :stats, :sort]
+                          :release_plan, :stats, :sort, :check_dependencies]
   before_filter :find_project_from_association,
                 :only => [:show, :edit, :update, :destroy, :edit_effort, :update_effort, :burndown,
-                          :release_plan, :stats, :sort]
+                          :release_plan, :stats, :sort, :check_dependencies]
   before_filter :find_project_by_project_id,
                 :only => [:index, :new, :create, :change_task_status, :burndown_index,
                           :stats_index]
@@ -46,13 +46,26 @@ class ProductBacklogController < ApplicationController
   end
 
   def sort
-    @product_backlog.pbis.each do |pbi|
+    # First, detect dependent issues.
+    error_messages = []
+    the_pbis = @product_backlog.pbis
+    the_pbis.each do |pbi|
       pbi.init_journal(User.current)
       pbi.position = params['pbi'].index(pbi.id.to_s) + 1
-      pbi.check_bad_dependencies
-      pbi.save!
+      message = pbi.check_bad_dependencies(false)
+      error_messages << message unless message.nil?
     end
-    render :nothing => true
+
+    if error_messages.empty?
+      # No dependency issue, we can sort.
+      the_pbis.each do |pbi|
+        pbi.save!
+      end
+    end
+
+    respond_to do |format|
+      format.json {render :json => error_messages.to_json}
+    end
   end
 
   def check_dependencies
