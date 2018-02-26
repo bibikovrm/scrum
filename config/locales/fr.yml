@@ -18,7 +18,7 @@ fr:
   error_new_status_no_allowed: "Il n’est pas autorisé de passer du statut ’%{status_from}’ au statut ’%{status_to}’"
   error_no_product_backlog: "Il n’y a aucun Product Backlog de défini pour le moment, merci de solliciter un administrateur du projet pour en créer dans l’onglet configuration."
   error_no_sprints: "Il n’y a aucun Sprint de défini pour le moment, merci de solliciter un administrateur du projet pour en créer dans l’onglet configuration."
-  error_sorting_other_issues_depends_on_issue: "Autres demandes (%{others}) depends de #%{id}, elle ne peut être ordonnée."
+  error_sorting_other_issues_depends_on_issue: "D’autres demandes (%{others}) dépendent de #%{id}, elle ne peut être ordonnée."
   error_updating_pbi: "Erreur à la mise à jour du PBI (%{message})"
   error_updating_task: "Erreur à la mise à jour de la tâche (%{message})"
   field_end_date: "Fin"
