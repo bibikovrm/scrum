@@ -564,7 +564,7 @@ module Scrum
           min = nil
           unless sprint.nil?
             sprint.pbis.each do |pbi|
-              min = pbi.position if min.nil? or (pbi.position < min)
+              min = pbi.position if min.nil? or ((!pbi.position.nil?) and (pbi.position < min))
             end
           end
           return min
@@ -574,7 +574,7 @@ module Scrum
           max = nil
           unless sprint.nil?
             sprint.pbis.each do |pbi|
-              max = pbi.position if max.nil? or (pbi.position > max)
+              max = pbi.position if max.nil? or ((!pbi.position.nil?) and (pbi.position > max))
             end
           end
           return max
