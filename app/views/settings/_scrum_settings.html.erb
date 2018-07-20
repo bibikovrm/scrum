@@ -96,9 +96,11 @@
     <%= check_box_tag('settings[random_posit_rotation]', 1,
                       Scrum::Setting.random_posit_rotation) %>
   </p>
-  <%- colors = {1  => 'post-it-color-1',  2  => 'post-it-color-2', 3 => 'post-it-color-3',
-                4  => 'post-it-color-4',  5  => 'post-it-color-5', 6 => 'post-it-color-6',
-                7  => 'post-it-color-7',  8  => 'post-it-color-8'}
+  <%- colors = {1  => 'post-it-color-1',  2  => 'post-it-color-2',  3  => 'post-it-color-3',
+                9  => 'post-it-color-9',  4  => 'post-it-color-4',  10 => 'post-it-color-10',
+                5  => 'post-it-color-5',  6  => 'post-it-color-6',  7  => 'post-it-color-7',
+                8  => 'post-it-color-8'}
+      mini_postit_content = raw('&nbsp;&nbsp;&nbsp;')
       Tracker.all.each do |tracker| -%>
     <%- included = (Scrum::Setting.pbi_tracker_ids.include?(tracker.id) or
                     Scrum::Setting.task_tracker_ids.include?(tracker.id)) -%>
@@ -112,7 +114,7 @@
               selected = (@settings[setting_name].nil? and (color_id == 1)) ? true : (@settings[setting_name] == color_css_class) -%>
           <%= radio_button_tag("settings[#{setting_name}]", color_css_class, selected) %>
           <span class="post-it settings-post-it <%= color_css_class %>">
-            &nbsp;&nbsp;&nbsp;&nbsp;
+            <%= mini_postit_content %>
           </span>
         </span>
       <%- end -%>
@@ -126,7 +128,7 @@
         <%- selected = (color_css_class == Scrum::Setting.doer_color) -%>
         <%= radio_button_tag('settings[doer_color]', color_css_class, selected) %>
         <span class="post-it settings-post-it <%= color_css_class %>">
-          &nbsp;&nbsp;&nbsp;&nbsp;
+          <%= mini_postit_content %>
         </span>
       </span>
     <%- end -%>
@@ -138,7 +140,7 @@
         <%- selected = (color_css_class == Scrum::Setting.reviewer_color) -%>
         <%= radio_button_tag('settings[reviewer_color]', color_css_class, selected) %>
         <span class="post-it settings-post-it <%= color_css_class %>">
-          &nbsp;&nbsp;&nbsp;&nbsp;
+          <%= mini_postit_content %>
         </span>
       </span>
     <%- end -%>
@@ -150,7 +152,7 @@
         <%- selected = (color_css_class == Scrum::Setting.blocked_color) -%>
         <%= radio_button_tag('settings[blocked_color]', color_css_class, selected) %>
         <span class="post-it settings-post-it <%= color_css_class %>">
-          &nbsp;&nbsp;&nbsp;&nbsp;
+          <%= mini_postit_content %>
         </span>
       </span>
     <%- end -%>
