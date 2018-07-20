@@ -1,10 +1,10 @@
 # encoding: UTF-8
 
 # Copyright © Emilio González Montaña
-# Licence: Attribution & no derivates
+# Licence: Attribution & no derivatives
 #   * Attribution to the plugin web page URL should be done if you want to use it.
 #     https://redmine.ociotec.com/projects/redmine-plugin-scrum
-#   * No derivates of this plugin (or partial) are allowed.
+#   * No derivatives of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
 # This plugin should be reloaded in development mode.
@@ -32,7 +32,7 @@ Redmine::Plugin.register :scrum do
   name              'Scrum Redmine plugin'
   author            'Emilio González Montaña'
   description       'This plugin for Redmine allows to follow Scrum methodology with Redmine projects'
-  version           '0.18.2'
+  version           '0.19.0'
   url               'https://redmine.ociotec.com/projects/redmine-plugin-scrum'
   author_url        'http://ociotec.com'
   requires_redmine  :version_or_higher => '3.0.0'
