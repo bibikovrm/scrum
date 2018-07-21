@@ -17,8 +17,7 @@ class ProductBacklogController < ApplicationController
                 :only => [:show, :edit, :update, :destroy, :edit_effort, :update_effort, :burndown,
                           :release_plan, :stats, :sort, :check_dependencies]
   before_filter :find_project_by_project_id,
-                :only => [:index, :new, :create, :change_task_status, :burndown_index,
-                          :stats_index]
+                :only => [:index, :new, :create]
   before_filter :find_subprojects,
                 :only => [:show, :burndown, :release_plan]
   before_filter :filter_by_project,

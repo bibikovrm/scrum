@@ -193,14 +193,30 @@ module Scrum
           users.concat(time_entries.collect{|t| t.user}).uniq.sort
         end
 
+        def sortable?()
+          is_sortable = false
+          if is_pbi? and editable? and sprint and
+             ((User.current.allowed_to?(:edit_product_backlog, project) and (sprint.is_product_backlog?)) or
+              (User.current.allowed_to?(:edit_sprint_board, project) and (!(sprint.is_product_backlog?))))
+            is_sortable = true
+          elsif is_task? and editable? and sprint and
+                User.current.allowed_to?(:edit_sprint_board, project) and !sprint.is_product_backlog?
+            is_sortable = true
+          end
+          return is_sortable
+        end
+
         def post_it_css_class(options = {})
           classes = ['post-it', 'big-post-it', tracker.post_it_css_class]
           if is_pbi?
             classes << 'sprint-pbi'
-            if options[:draggable] and editable? and sprint and
-               ((User.current.allowed_to?(:edit_product_backlog, project) and (sprint.is_product_backlog?)) or
-                (User.current.allowed_to?(:edit_sprint_board, project) and (!(sprint.is_product_backlog?))))
-              classes << 'post-it-vertical-move-cursor'
+            if options[:draggable] and editable? and sprint
+              if User.current.allowed_to?(:edit_product_backlog, project) and sprint.is_product_backlog?
+                classes << 'post-it-vertical-move-cursor'
+              elsif User.current.allowed_to?(:edit_sprint_board, project) and !(sprint.is_product_backlog?) and
+                    is_simple_pbi?
+                classes << 'post-it-horizontal-move-cursor'
+              end
             end
           elsif is_task?
             classes << 'sprint-task'

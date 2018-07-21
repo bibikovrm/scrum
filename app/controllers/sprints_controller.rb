@@ -17,7 +17,7 @@ class SprintsController < ApplicationController
                 :only => [:show, :edit, :update, :destroy, :edit_effort, :update_effort, :burndown,
                           :stats, :sort]
   before_filter :find_project_by_project_id,
-                :only => [:index, :new, :create, :change_task_status, :burndown_index,
+                :only => [:index, :new, :create, :change_issue_status, :burndown_index,
                           :stats_index]
   before_filter :find_pbis, :only => [:sort]
   before_filter :find_subprojects,
@@ -98,8 +98,10 @@ class SprintsController < ApplicationController
     redirect_to settings_project_path(@project, :tab => 'sprints')
   end
 
-  def change_task_status
-    @issue = Issue.find(params[:task].match(/^task_(\d+)$/)[1].to_i)
+  def change_issue_status
+    result = params[:task].match(/^(task|pbi)_(\d+)$/)
+    issue_id = result[2].to_i
+    @issue = Issue.find(issue_id)
     @old_status = @issue.status
 
     # Do not change issue status if not necessary
@@ -119,7 +121,7 @@ class SprintsController < ApplicationController
     end
 
     respond_to do |format|
-      format.js { render 'scrum/update_task' }
+      format.js { render 'scrum/update_issue' }
     end
   end
 

@@ -3,3 +3,20 @@
     draggableOnTouchScreen("<%= pbi_id %>");
   <% end %>
 <%- end -%>
+
+<%- if User.current.allowed_to?(:edit_sprint_board, project) and pbi.editable? and pbi.is_simple_pbi? -%>
+  <%= javascript_tag do %>
+    <%- other_pbi_status_ids.each do |pbi_status_id| -%>
+      $(document).ready(function() {
+          $("#<%= pbi_id %>").draggable({
+              revert: "invalid",
+              axis: "x",
+              containment: "<%= pbi_status_id %>",
+              cursor: "ew-resize",
+              stack: "table"
+          });
+          draggableOnTouchScreen("<%= pbi_id %>");
+      });
+    <%- end -%>
+  <% end %>
+<%- end -%>

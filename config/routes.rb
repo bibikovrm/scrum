@@ -23,9 +23,9 @@ resources :projects do
       get :stats_index
     end
   end
-  post "sprints/change_task_status",
-       :controller => :sprints, :action => :change_task_status,
-       :as => :sprints_change_task_status
+  post "sprints/change_issue_status",
+       :controller => :sprints, :action => :change_issue_status,
+       :as => :sprints_change_issue_status
 
   resources :product_backlog, :shallow => true do
     member do

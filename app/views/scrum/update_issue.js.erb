@@ -12,7 +12,7 @@
                              :formats => [:html],
                              :locals => {:project => (@issue.sprint.nil? ? @project : @issue.sprint.project),
                                          :sprint_board_id => 'sprint_board',
-                                         :pbi => @issue.parent,
+                                         :pbi => @issue.is_pbi? ? @issue : @issue.parent,
                                          :task_statuses => IssueStatus.task_statuses})).html_safe
   %>");
   <%- # Scrum Board : do not throw an exception if new statut is not allowed -%>
@@ -21,8 +21,8 @@
   <%- end -%>
 
   <%- if @old_status != @issue.status -%>
-    var task = $("#<%= "task_#{@issue.id}" %>");
-    task.detach();
-    task.appendTo($("#<%= "pbi_#{@issue.parent_id}_status_#{@issue.status.id}" %>"));
+    var issue = $("#<%= "#{@issue.is_pbi? ? 'pbi' : 'task'}_#{@issue.id}" %>");
+    issue.detach();
+    issue.appendTo($("#<%= "pbi_#{@issue.is_pbi? ? @issue.id : @issue.parent_id}_status_#{@issue.status.id}" %>"));
   <%- end -%>
 <%- end -%>
