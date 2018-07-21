@@ -54,12 +54,16 @@
 	background-image: url(../../../images/time_add.png);
 }
 
+.icon-vertical-drag-and-drop {
+	background-image: url(../../../images/reorder.png);
+}
+
 .float-icon {
 	float: right;
 	min-height: 16px;
 	padding-left: 16px;
 	padding-top: 0px;
-  padding-bottom: 0px;
+	padding-bottom: 0px;
 }
 
 .post-it, .post-it input {
@@ -624,4 +628,11 @@ table.scrum-stats-chart-table {
 
 .scrum-content-fullscreen .icon-fullscreen {
 	display: none;
+}
+
+.sprint-board-pbi-handle {
+	background-image: url(../../../images/reorder.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	min-width: 16px;
 }

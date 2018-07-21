@@ -1,6 +1,6 @@
 <%- if User.current.allowed_to?(:sort_sprint_board, project) and pbi.editable? -%>
   <%= javascript_tag do %>
-    draggableOnTouchScreen("<%= pbi_id %>");
+    draggableOnTouchScreen("pbi_<%= pbi.id %>_handle");
   <% end %>
 <%- end -%>
 

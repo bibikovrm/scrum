@@ -29,7 +29,7 @@
 
     <%- if User.current.allowed_to?(:sort_sprint_board, sprint.project) -%>
       $("#<%= sprint_board_id %>").sortable({
-        handle: "td",
+        handle: ".sprint-board-pbi-handle",
         placeholder: "sprint-row-space",
         update: function() {
           if ($.isFunction($.fn.setupAjaxIndicator)) {
