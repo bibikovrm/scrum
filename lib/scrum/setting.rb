@@ -27,7 +27,8 @@ module Scrum
        show_project_totals_on_sprint
        show_project_totals_on_backlog
        sprint_burndown_day_zero
-       use_remaining_story_points).each do |setting|
+       use_remaining_story_points
+       default_sprint_shared).each do |setting|
       src = <<-END_SRC
       def self.#{setting}
         setting_or_default_boolean(:#{setting})
@@ -41,7 +42,8 @@ module Scrum
 
     %w(blocked_color
        doer_color
-       reviewer_color).each do |setting|
+       reviewer_color
+       default_sprint_name).each do |setting|
       src = <<-END_SRC
       def self.#{setting}
         setting_or_default(:#{setting})
@@ -120,6 +122,10 @@ module Scrum
 
     def self.high_speed
       setting_or_default_integer(:high_speed, :min => 101, :max => 10000)
+    end
+
+    def self.default_sprint_days
+      setting_or_default_integer(:default_sprint_days, :min => 1, :max => 20)
     end
 
   private

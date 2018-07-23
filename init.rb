@@ -123,10 +123,13 @@ Redmine::Plugin.register :scrum do
                                  :high_speed => 140,
                                  :render_plugin_tips => '1',
                                  :sprint_burndown_day_zero => '1',
-                                 :pbi_is_closed_if_tasks_are_closed => false,
-                                 :show_project_totals_on_sprint => false,
-                                 :show_project_totals_on_backlog => false,
-                                 :use_remaining_story_points => false,
-                                 :product_burndown_extra_sprints => 3},
+                                 :pbi_is_closed_if_tasks_are_closed => '0',
+                                 :show_project_totals_on_sprint => '0',
+                                 :show_project_totals_on_backlog => '0',
+                                 :use_remaining_story_points => '0',
+                                 :product_burndown_extra_sprints => 3,
+                                 :default_sprint_name => 'Sprint 1',
+                                 :default_sprint_days => 10,
+                                 :default_sprint_shared => '1'},
                     :partial => 'settings/scrum_settings'
 end

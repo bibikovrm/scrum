@@ -31,6 +31,8 @@ class SprintsController < ApplicationController
   helper :scrum
   helper :timelog
 
+  include Redmine::Utils::DateCalculation
+
   def index
     if (current_sprint = @project.current_sprint)
       redirect_to sprint_path(current_sprint)
@@ -50,6 +52,20 @@ class SprintsController < ApplicationController
     if @sprint.is_product_backlog
       @sprint.name = l(:label_product_backlog)
       @sprint.sprint_start_date = @sprint.sprint_end_date = Date.today
+    elsif @project.sprints.empty?
+      @sprint.name = Scrum::Setting.default_sprint_name
+      @sprint.sprint_start_date = Date.today
+      @sprint.sprint_end_date = add_working_days(@sprint.sprint_start_date, Scrum::Setting.default_sprint_days - 1)
+      @sprint.shared = Scrum::Setting.default_sprint_shared
+    else
+      last_sprint = @project.sprints.last
+      result = last_sprint.name.match(/^(.*)(\d+)(.*)$/)
+      @sprint.name = result.nil? ? Scrum::Setting.default_sprint_name : (result[1] + (result[2].to_i + 1).to_s + result[3])
+      @sprint.description = last_sprint.description
+      @sprint.sprint_start_date = next_working_date(last_sprint.sprint_end_date + 1)
+      last_sprint_duration = last_sprint.sprint_end_date - last_sprint.sprint_start_date
+      @sprint.sprint_end_date = next_working_date(@sprint.sprint_start_date + last_sprint_duration)
+      @sprint.shared = last_sprint.shared
     end
   end
 
