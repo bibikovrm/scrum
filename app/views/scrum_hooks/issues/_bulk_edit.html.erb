@@ -2,7 +2,7 @@
   <% if @safe_attributes.include?("sprint_id") -%>
     <p>
       <label for="sprint_id"><%= l(:field_sprint) %></label>
-      <%- sprints = @project.all_open_sprints_and_product_backlogs
+      <%- sprints = @project.all_open_sprints_product_backlogs_and_kanbans
           options = content_tag("option", l(:label_no_change_option), :value => "") +
                     options_from_collection_for_select(sprints, :id, :name) -%>
       <%= select_tag "issue[sprint_id]", options %>

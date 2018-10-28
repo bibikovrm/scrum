@@ -72,7 +72,7 @@ module Scrum
                   if ((element_id_text == 'latest') or (element_id_text == 'current'))
                     sprint = project.last_sprint
                   else
-                    sprint = project.sprints_and_product_backlogs.find_by_id(element_id)
+                    sprint = project.sprints_product_backlogs_and_kanbans.find_by_id(element_id)
                   end
               end
               unless sprint.nil?
@@ -267,6 +267,8 @@ module Scrum
                 template = 'project_settings/sprints'
               elsif unique_id == 'product_backlogs'
                 template = 'project_settings/product_backlogs'
+              elsif unique_id == 'kanbans'
+                template = 'project_settings/kanbans'
               end
             end
           when :settings

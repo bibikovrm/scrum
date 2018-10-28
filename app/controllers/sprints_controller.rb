@@ -48,9 +48,14 @@ class SprintsController < ApplicationController
   end
 
   def new
-    @sprint = Sprint.new(:project => @project, :is_product_backlog => params[:create_product_backlog])
-    if @sprint.is_product_backlog
+    @sprint = Sprint.new(:project => @project,
+                         :is_product_backlog => params[:create_product_backlog],
+                         :is_kanban => params[:create_kanban])
+    if @sprint.is_product_backlog?
       @sprint.name = l(:label_product_backlog)
+      @sprint.sprint_start_date = @sprint.sprint_end_date = Date.today
+    elsif @sprint.is_kanban?
+      @sprint.name = l(:label_kanban)
       @sprint.sprint_start_date = @sprint.sprint_end_date = Date.today
     elsif @project.sprints.empty?
       @sprint.name = Scrum::Setting.default_sprint_name
@@ -72,8 +77,11 @@ class SprintsController < ApplicationController
   def create
     @sprint = Sprint.new(:user => User.current,
                          :project => @project,
-                         :is_product_backlog => (!(params[:create_product_backlog].nil?)))
+                         :is_product_backlog => (!(params[:create_product_backlog].nil?)),
+                         :is_kanban => (!(params[:create_kanban].nil?)))
     @sprint.safe_attributes = params[:sprint]
+    puts("###########################")
+    puts("### @sprint: #{@sprint.inspect}")
     if request.post? and @sprint.save
       if params[:create_product_backlog]
         @project.product_backlogs << @sprint
@@ -89,7 +97,7 @@ class SprintsController < ApplicationController
   end
 
   def edit
-    @product_backlog = @sprint if @sprint.is_product_backlog
+    @product_backlog = @sprint if @sprint.is_product_backlog?
   end
 
   def update

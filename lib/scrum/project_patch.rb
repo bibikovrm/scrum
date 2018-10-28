@@ -14,11 +14,13 @@ module Scrum
 
         has_many :product_backlogs, -> { where(:is_product_backlog => true).order('name ASC') },
                  :class_name => 'Sprint'
-        has_many :sprints, -> { where(:is_product_backlog => false).order('sprint_start_date ASC, name ASC') },
+        has_many :sprints, -> { where(:is_product_backlog => false, :is_kanban => false).order('sprint_start_date ASC, name ASC') },
                  :dependent => :destroy
-        has_many :sprints_and_product_backlogs, -> { order('sprint_start_date ASC, name ASC') },
+        has_many :kanbans, -> { where(:is_kanban => true).order('name ASC') },
+                 :class_name => 'Sprint'
+        has_many :sprints_product_backlogs_and_kanbans, -> { order('sprint_start_date ASC, name ASC') },
                  :class_name => 'Sprint', :dependent => :destroy
-        has_many :open_sprints_and_product_backlogs, -> { where(:status => 'open').order('sprint_start_date ASC, name ASC') },
+        has_many :open_sprints_product_backlogs_and_kanbans, -> { where(:status => 'open').order('sprint_start_date ASC, name ASC') },
                  :class_name => 'Sprint', :dependent => :destroy
 
         def last_sprint
@@ -80,14 +82,14 @@ module Scrum
           sps_by_pbi_field(:activity, :time_entries_by_activity)
         end
 
-        def all_open_sprints_and_product_backlogs(only_shared = false)
+        def all_open_sprints_product_backlogs_and_kanbans(only_shared = false)
           # Get this project Sprints.
           conditions = {}
           conditions[:shared] = true if only_shared
-          all_sprints = scrum? ? open_sprints_and_product_backlogs.where(conditions).to_a : []
+          all_sprints = scrum? ? open_sprints_product_backlogs_and_kanbans.where(conditions).to_a : []
           # If parent try to recursively add shared Sprints from parents.
           unless parent.nil?
-            all_sprints += parent.all_open_sprints_and_product_backlogs(true)
+            all_sprints += parent.all_open_sprints_product_backlogs_and_kanbans(true)
           end
           return all_sprints
         end
@@ -141,7 +143,7 @@ module Scrum
         def sps_by_pbi_field(field, method)
           results = {}
           total = 0.0
-          all_sprints = sprints_and_product_backlogs
+          all_sprints = sprints_product_backlogs_and_kanbans
           all_sprints.each do |sprint|
             sprint_results, sprint_total = sprint.send(method)
             sprint_results.each do |result|

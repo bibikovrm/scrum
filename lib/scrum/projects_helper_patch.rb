@@ -31,6 +31,10 @@ module Scrum
                            :partial => 'projects/settings/product_backlogs',
                            :label => :label_product_backlog_plural})
               tabs.insert(index,
+                          {:name => 'kanbans', :action => :edit_sprints,
+                           :partial => 'projects/settings/kanbans',
+                           :label => :label_kanban_plural})
+              tabs.insert(index,
                           {:name => 'sprints', :action => :edit_sprints,
                            :partial => 'projects/settings/sprints',
                            :label => :label_sprint_plural})

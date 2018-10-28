@@ -415,7 +415,7 @@ module Scrum
 
         def assignable_sprints
           unless @assignable_sprints
-            sprints = project.all_open_sprints_and_product_backlogs.to_a
+            sprints = project.all_open_sprints_product_backlogs_and_kanbans.to_a
             sprints << sprint unless sprint.nil? or sprint_id_changed?
             @assignable_sprints = sprints.uniq.sort
           end

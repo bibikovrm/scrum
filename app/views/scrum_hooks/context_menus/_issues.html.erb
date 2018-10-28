@@ -8,7 +8,7 @@
                                                         :back_url => @back),
                                 :method => :post, :selected => (@issue && @issue.sprint.nil?),
                                 :disabled => !@can[:edit] %></li>
-      <%- @project.all_open_sprints_and_product_backlogs.sort.each do |sprint| -%>
+      <%- @project.all_open_sprints_product_backlogs_and_kanbans.sort.each do |sprint| -%>
         <li><%= context_menu_link sprint.name,
                                   bulk_update_issues_path(:ids => issue_ids, :issue => {:sprint_id => sprint},
                                                           :back_url => @back),
