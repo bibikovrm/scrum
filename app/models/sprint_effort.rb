@@ -9,7 +9,5 @@ class SprintEffort < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :sprint
-
-  attr_protected :id
-
+  
 end

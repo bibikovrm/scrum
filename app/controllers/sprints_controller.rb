@@ -10,22 +10,22 @@ class SprintsController < ApplicationController
   menu_item :sprint
   model_object Sprint
 
-  before_filter :find_model_object,
+  before_action :find_model_object,
                 :only => [:show, :edit, :update, :destroy, :edit_effort, :update_effort, :burndown,
                           :stats, :sort]
-  before_filter :find_project_from_association,
+  before_action :find_project_from_association,
                 :only => [:show, :edit, :update, :destroy, :edit_effort, :update_effort, :burndown,
                           :stats, :sort]
-  before_filter :find_project_by_project_id,
+  before_action :find_project_by_project_id,
                 :only => [:index, :new, :create, :change_issue_status, :burndown_index,
                           :stats_index]
-  before_filter :find_pbis, :only => [:sort]
-  before_filter :find_subprojects,
+  before_action :find_pbis, :only => [:sort]
+  before_action :find_subprojects,
                 :only => [:burndown]
-  before_filter :filter_by_project,
+  before_action :filter_by_project,
                 :only => [:burndown]
-  before_filter :calculate_stats, :only => [:show, :burndown, :stats]
-  before_filter :authorize
+  before_action :calculate_stats, :only => [:show, :burndown, :stats]
+  before_action :authorize
 
   helper :custom_fields
   helper :scrum

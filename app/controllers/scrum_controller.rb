@@ -10,35 +10,35 @@ class ScrumController < ApplicationController
   menu_item :product_backlog, :except => [:stats]
   menu_item :overview, :only => [:stats]
 
-  before_filter :find_issue,
+  before_action :find_issue,
                 :only => [:change_story_points, :change_remaining_story_points,
                           :change_pending_effort,
                           :change_assigned_to, :new_time_entry,
                           :create_time_entry, :edit_task, :update_task,
                           :change_pending_efforts]
-  before_filter :find_sprint,
+  before_action :find_sprint,
                 :only => [:new_pbi, :create_pbi,
                           :move_not_closed_pbis_to_last_sprint]
-  before_filter :find_pbi,
+  before_action :find_pbi,
                 :only => [:new_task, :create_task, :edit_pbi, :update_pbi,
                           :move_pbi, :move_to_last_sprint,
                           :move_to_product_backlog]
-  before_filter :find_project_by_project_id,
+  before_action :find_project_by_project_id,
                 :only => [:stats]
 
-  before_filter :authorize,
+  before_action :authorize,
                 :except => [:new_pbi, :create_pbi, :new_task, :create_task,
                             :move_to_last_sprint,
                             :move_not_closed_pbis_to_last_sprint,
                             :move_to_product_backlog,
                             :new_time_entry, :create_time_entry]
-  before_filter :authorize_add_issues,
+  before_action :authorize_add_issues,
                 :only => [:new_pbi, :create_pbi, :new_task, :create_task]
-  before_filter :authorize_edit_issues,
+  before_action :authorize_edit_issues,
                 :only => [:move_to_last_sprint,
                           :move_not_closed_pbis_to_last_sprint,
                           :move_to_product_backlog]
-  before_filter :authorize_log_time,
+  before_action :authorize_log_time,
                 :only => [:new_time_entry, :create_time_entry]
 
   helper :custom_fields
