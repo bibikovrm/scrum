@@ -5,7 +5,7 @@
 #   * No derivatives of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-class AddSprintsShared < ActiveRecord::Migration
+class AddSprintsShared < ActiveRecord::Migration[4.2]
   def self.up
     add_column :sprints, :shared, :boolean, :default => false
     add_index :sprints, [:shared], :name => "sprints_shared"

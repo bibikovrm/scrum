@@ -12,7 +12,8 @@ module Scrum
     def self.included(base)
       base.class_eval do
 
-        def project_settings_tabs_with_scrum
+        alias_method :project_settings_tabs_without_scrum, :project_settings_tabs
+        def project_settings_tabs
           tabs = project_settings_tabs_without_scrum
           if User.current.allowed_to?(:manage_sprints, @project)
             options = {:name => 'versions', :action => :manage_versions,
@@ -39,7 +40,6 @@ module Scrum
           end
           return(tabs)
         end
-        alias_method_chain :project_settings_tabs, :scrum
 
       end
     end

@@ -5,7 +5,7 @@
 #   * No derivatives of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-class AddSprintsIsProductBacklog < ActiveRecord::Migration
+class AddSprintsIsProductBacklog < ActiveRecord::Migration[4.2]
   class Sprint < ActiveRecord::Base
     belongs_to :project
   end

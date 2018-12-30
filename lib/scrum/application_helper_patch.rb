@@ -55,7 +55,8 @@ module Scrum
           return link_to(label, release_plan_product_backlog_path(sprint))
         end
 
-        def parse_redmine_links_with_scrum(text, default_project, obj, attr, only_path, options)
+        alias_method :parse_redmine_links_without_scrum, :parse_redmine_links
+        def parse_redmine_links(text, default_project, obj, attr, only_path, options)
           result = parse_redmine_links_without_scrum(text, default_project, obj, attr, only_path, options)
           text.gsub!(%r{([\s\(,\-\[\>]|^)(!)?(([a-z0-9\-_]+):)?(sprint|burndown|stats|product\-backlog|release\-plan)?((#)((\d*)|(current|latest)))(?=(?=[[:punct:]][^A-Za-z0-9_/])|,|\s|\]|<|$)}) do |m|
             leading, project_identifier, element_type, separator, element_id_text = $1, $4, $5, $7, $8
@@ -92,7 +93,6 @@ module Scrum
           end
           return result
         end
-        alias_method_chain :parse_redmine_links, :scrum
 
         def scrum_tips
           tips = []

@@ -12,8 +12,8 @@ module Scrum
     def self.included(base)
       base.class_eval do
 
-        after_filter :save_pending_effort, :only => [:create, :update]
-        before_filter :add_default_sprint, :only => [:new, :update_form]
+        after_action :save_pending_effort, :only => [:create, :update]
+        before_action :add_default_sprint, :only => [:new, :update_form]
 
       private
 
