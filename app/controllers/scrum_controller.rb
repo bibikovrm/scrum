@@ -301,7 +301,9 @@ class ScrumController < ApplicationController
       logger.error("Exception: #{@exception.inspect}")
     end
     respond_to do |format|
-      format.js
+      format.js do
+        render "scrum/update_issue"
+      end
     end
   end
 
