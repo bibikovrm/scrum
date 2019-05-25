@@ -53,17 +53,17 @@ class ScrumController < ApplicationController
     rescue
       status = 503
     end
-    render :nothing => true, :status => status
+    render :body => nil, :status => status
   end
 
   def change_remaining_story_points
     @issue.remaining_story_points = params[:value]
-    render :nothing => true, :status => status
+    render :body => nil, :status => status
   end
 
   def change_pending_effort
     @issue.pending_effort = params[:value]
-    render :nothing => true, :status => 200
+    render :body => nil, :status => 200
   end
 
   def change_pending_efforts

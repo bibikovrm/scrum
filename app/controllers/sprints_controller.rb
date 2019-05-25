@@ -297,7 +297,7 @@ class SprintsController < ApplicationController
         pbi.save!
       end
     end
-    render :nothing => true
+    render :body => nil
   end
 
 private
