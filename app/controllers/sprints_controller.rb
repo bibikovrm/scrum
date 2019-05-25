@@ -266,22 +266,7 @@ class SprintsController < ApplicationController
             @estimated_efforts_totals[:total] += sprint_effort.effort
           end
         end
-        @project.time_entries.where(done_effort_conditions).each do |time_entry|
-          if time_entry.hours
-            init_members_efforts(@members_efforts,
-                                 time_entry.user)
-            member_done_efforts_days = init_member_efforts_days(@members_efforts,
-                                                                @sprint,
-                                                                time_entry.user,
-                                                                date,
-                                                                false)
-            member_done_efforts_days[date] += time_entry.hours
-            @members_efforts[time_entry.user.id][:done_efforts][:total] += time_entry.hours
-            @done_efforts_totals[:days][date] = 0.0 unless @done_efforts_totals[:days].include?(date)
-            @done_efforts_totals[:days][date] += time_entry.hours
-            @done_efforts_totals[:total] += time_entry.hours
-          end
-        end
+        project_efforts_for_stats(@project, @sprint, date, done_effort_conditions, @members_efforts, @done_efforts_totals)
       end
     end
     @members_efforts = @members_efforts.values.sort{|a, b| a[:member] <=> b[:member]}
@@ -339,6 +324,29 @@ private
       member_efforts_days[date] = 0.0
     end
     return member_efforts_days
+  end
+
+  def project_efforts_for_stats(project, sprint, date, done_effort_conditions, members_efforts, done_efforts_totals)
+    project.time_entries.where(done_effort_conditions).each do |time_entry|
+      if time_entry.hours
+        init_members_efforts(members_efforts, time_entry.user)
+        member_done_efforts_days = init_member_efforts_days(members_efforts,
+                                                            sprint,
+                                                            time_entry.user,
+                                                            date,
+                                                            false)
+        member_done_efforts_days[date] += time_entry.hours
+        members_efforts[time_entry.user.id][:done_efforts][:total] += time_entry.hours
+        done_efforts_totals[:days][date] = 0.0 unless done_efforts_totals[:days].include?(date)
+        done_efforts_totals[:days][date] += time_entry.hours
+        done_efforts_totals[:total] += time_entry.hours
+      end
+    end
+    if sprint.shared
+      project.children.visible.each do |sub_project|
+        project_efforts_for_stats(sub_project, sprint, date, done_effort_conditions, members_efforts, done_efforts_totals)
+      end
+    end
   end
 
   def find_pbis
