@@ -99,7 +99,7 @@ class ScrumController < ApplicationController
 
   def create_time_entry
     begin
-      time_entry = TimeEntry.new(params[:time_entry])
+      time_entry = TimeEntry.new(params.require(:time_entry).permit(:hours, :spent_on, :comments, :activity_id, :user_id))
       time_entry.project_id = @project.id
       time_entry.issue_id = @issue.id
       time_entry.user_id = params[:time_entry][:user_id]
