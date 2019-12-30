@@ -70,17 +70,16 @@ class SprintsController < ApplicationController
   end
 
   def create
-    @sprint = Sprint.new(:user => User.current,
-                         :project => @project,
-                         :is_product_backlog => (!(params[:create_product_backlog].nil?)))
+    is_product_backlog = !(params[:create_product_backlog].nil?)
+    @sprint = Sprint.new(:user => User.current, :project => @project, :is_product_backlog => is_product_backlog)
     @sprint.safe_attributes = params[:sprint]
     if request.post? and @sprint.save
-      if params[:create_product_backlog]
+      if is_product_backlog
         @project.product_backlogs << @sprint
         raise 'Fail to update project with product backlog' unless @project.save!
       end
       flash[:notice] = l(:notice_successful_create)
-      redirect_back_or_default settings_project_path(@project, :tab => 'sprints')
+      redirect_back_or_default settings_project_path(@project, :tab => is_product_backlog ? 'product_backlogs' : 'sprints')
     else
       render :action => :new
     end
