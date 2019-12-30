@@ -5,7 +5,7 @@
 #   * No derivatives of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-class CreatePendingEfforts < ActiveRecord::Migration
+class CreatePendingEfforts < ActiveRecord::Migration[4.2]
   class Issue < ActiveRecord::Base
   end
   class CustomValue < ActiveRecord::Base

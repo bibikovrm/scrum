@@ -5,7 +5,7 @@
 #   * No derivatives of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-class UpdateSprintsDateConstraints < ActiveRecord::Migration
+class UpdateSprintsDateConstraints < ActiveRecord::Migration[4.2]
   def self.up
     change_column :sprints, :sprint_start_date, :date, :null => true
     change_column :sprints, :sprint_end_date, :date, :null => true

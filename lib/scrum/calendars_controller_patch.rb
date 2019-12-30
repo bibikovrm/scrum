@@ -12,7 +12,7 @@ module Scrum
     def self.included(base)
       base.class_eval do
 
-        around_filter :add_sprints, :only => [:show]
+        around_action :add_sprints, :only => [:show]
 
         def add_sprints
           yield

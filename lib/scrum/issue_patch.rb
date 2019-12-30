@@ -15,8 +15,6 @@ module Scrum
         belongs_to :sprint
         has_many :pending_efforts, -> { order('date ASC') }
 
-        acts_as_list :scope => :sprint
-
         safe_attributes :sprint_id, :if => lambda { |issue, user|
           issue.project and issue.project.scrum? and user.allowed_to?(:edit_issues, issue.project)
         }

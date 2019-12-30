@@ -10,22 +10,22 @@ class SprintsController < ApplicationController
   menu_item :sprint
   model_object Sprint
 
-  before_filter :find_model_object,
+  before_action :find_model_object,
                 :only => [:show, :edit, :update, :destroy, :edit_effort, :update_effort, :burndown,
                           :stats, :sort]
-  before_filter :find_project_from_association,
+  before_action :find_project_from_association,
                 :only => [:show, :edit, :update, :destroy, :edit_effort, :update_effort, :burndown,
                           :stats, :sort]
-  before_filter :find_project_by_project_id,
+  before_action :find_project_by_project_id,
                 :only => [:index, :new, :create, :change_issue_status, :burndown_index,
                           :stats_index]
-  before_filter :find_pbis, :only => [:sort]
-  before_filter :find_subprojects,
+  before_action :find_pbis, :only => [:sort]
+  before_action :find_subprojects,
                 :only => [:burndown]
-  before_filter :filter_by_project,
+  before_action :filter_by_project,
                 :only => [:burndown]
-  before_filter :calculate_stats, :only => [:show, :burndown, :stats]
-  before_filter :authorize
+  before_action :calculate_stats, :only => [:show, :burndown, :stats]
+  before_action :authorize
 
   helper :custom_fields
   helper :scrum
@@ -70,17 +70,16 @@ class SprintsController < ApplicationController
   end
 
   def create
-    @sprint = Sprint.new(:user => User.current,
-                         :project => @project,
-                         :is_product_backlog => (!(params[:create_product_backlog].nil?)))
+    is_product_backlog = !(params[:create_product_backlog].nil?)
+    @sprint = Sprint.new(:user => User.current, :project => @project, :is_product_backlog => is_product_backlog)
     @sprint.safe_attributes = params[:sprint]
     if request.post? and @sprint.save
-      if params[:create_product_backlog]
+      if is_product_backlog
         @project.product_backlogs << @sprint
         raise 'Fail to update project with product backlog' unless @project.save!
       end
       flash[:notice] = l(:notice_successful_create)
-      redirect_back_or_default settings_project_path(@project, :tab => 'sprints')
+      redirect_back_or_default settings_project_path(@project, :tab => is_product_backlog ? 'product_backlogs' : 'sprints')
     else
       render :action => :new
     end
@@ -297,7 +296,7 @@ class SprintsController < ApplicationController
         pbi.save!
       end
     end
-    render :nothing => true
+    render :body => nil
   end
 
 private

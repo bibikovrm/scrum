@@ -14,12 +14,12 @@ module Scrum
 
       private
 
-        def add_attribute_detail_with_scrum(attribute, old_value, value)
+      alias_method :add_attribute_detail_without_scrum, :add_attribute_detail
+        def add_attribute_detail(attribute, old_value, value)
           if Scrum::Setting.create_journal_on_pbi_position_change or (attribute != 'position')
             add_attribute_detail_without_scrum(attribute, old_value, value)
           end
         end
-        alias_method_chain :add_attribute_detail, :scrum
 
       end
     end

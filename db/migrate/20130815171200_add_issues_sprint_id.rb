@@ -5,7 +5,7 @@
 #   * No derivatives of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-class AddIssuesSprintId < ActiveRecord::Migration
+class AddIssuesSprintId < ActiveRecord::Migration[4.2]
   def self.up
     add_column :issues, :sprint_id, :integer
     add_index :issues, [:sprint_id], :name => "issues_sprint_id"

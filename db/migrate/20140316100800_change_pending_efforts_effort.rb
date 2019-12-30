@@ -5,7 +5,7 @@
 #   * No derivatives of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-class ChangePendingEffortsEffort < ActiveRecord::Migration
+class ChangePendingEffortsEffort < ActiveRecord::Migration[4.2]
   def self.up
     change_column :pending_efforts, :effort, :float
   end

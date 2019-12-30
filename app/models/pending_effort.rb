@@ -11,6 +11,5 @@ class PendingEffort < ActiveRecord::Base
 
   include Redmine::SafeAttributes
   safe_attributes :issue_id, :date, :effort
-  attr_protected :id
 
 end

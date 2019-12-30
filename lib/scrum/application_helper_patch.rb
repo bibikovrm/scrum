@@ -55,7 +55,8 @@ module Scrum
           return link_to(label, release_plan_product_backlog_path(sprint))
         end
 
-        def parse_redmine_links_with_scrum(text, default_project, obj, attr, only_path, options)
+        alias_method :parse_redmine_links_without_scrum, :parse_redmine_links
+        def parse_redmine_links(text, default_project, obj, attr, only_path, options)
           result = parse_redmine_links_without_scrum(text, default_project, obj, attr, only_path, options)
           text.gsub!(%r{([\s\(,\-\[\>]|^)(!)?(([a-z0-9\-_]+):)?(sprint|burndown|stats|product\-backlog|release\-plan)?((#)((\d*)|(current|latest)))(?=(?=[[:punct:]][^A-Za-z0-9_/])|,|\s|\]|<|$)}) do |m|
             leading, project_identifier, element_type, separator, element_id_text = $1, $4, $5, $7, $8
@@ -92,11 +93,11 @@ module Scrum
           end
           return result
         end
-        alias_method_chain :parse_redmine_links, :scrum
 
         def scrum_tips
           tips = []
           if Scrum::Setting.render_plugin_tips
+            back_url = url_for(params.permit!)
             # Plugin permissions check.
             unless @project and !(@project.module_enabled?(:scrum))
               scrum_permissions = Redmine::AccessControl.modules_permissions(['scrum']).select{|p| p.project_module}.collect{|p| p.name}
@@ -138,13 +139,13 @@ module Scrum
                 tips << l(:label_tip_no_product_backlogs,
                           :link => link_to(l(:label_tip_new_product_backlog_link),
                                            new_project_sprint_path(@project, :create_product_backlog => true,
-                                                                   :back_url => url_for(params))))
+                                                                   :back_url => back_url)))
               end
               # At least one Sprint check.
               if @project.sprints.empty?
                 tips << l(:label_tip_no_sprints,
                           :link => link_to(l(:label_tip_new_sprint_link),
-                                           new_project_sprint_path(@project, :back_url => url_for(params))))
+                                           new_project_sprint_path(@project, :back_url => back_url)))
               end
               # Product backlog (+release plan) checks.
               if @product_backlog and @product_backlog.persisted?
@@ -158,7 +159,7 @@ module Scrum
                   if @project.versions.empty?
                     tips << l(:label_tip_project_without_versions,
                               :link => link_to(l(:label_tip_new_version_link),
-                                               new_project_version_path(@project, :back_url => url_for(params))))
+                                               new_project_version_path(@project, :back_url => back_url)))
                   end
                 end
               end
@@ -186,7 +187,7 @@ module Scrum
                 if @sprint.efforts.empty?
                   tips << l(:label_tip_sprint_without_efforts,
                             :link => link_to(l(:label_tip_sprint_effort_link),
-                                             edit_effort_sprint_path(@sprint, :back_url => url_for(params))))
+                                             edit_effort_sprint_path(@sprint, :back_url => back_url)))
                 end
                 # No project members on edit Sprint effort view.
                 if @project.members.empty? and params[:action].to_s == 'edit_effort'
@@ -286,7 +287,7 @@ module Scrum
                                           permissions_roles_path)
             links[:sprint_effort] = link_to(l(:label_tip_sprint_effort_link),
                                             edit_effort_sprint_path(@sprint,
-                                                                    :back_url => url_for(params))) if @sprint and not @sprint.new_record?
+                                                                    :back_url => url_for(params.permit!))) if @sprint and not @sprint.new_record?
           end
           return template.nil? ? '' : render(:partial => 'help/help',
                                              :formats => [:html],

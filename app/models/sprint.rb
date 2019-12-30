@@ -16,7 +16,6 @@ class Sprint < ActiveRecord::Base
 
   include Redmine::SafeAttributes
   safe_attributes :name, :description, :sprint_start_date, :sprint_end_date, :status, :shared
-  attr_protected :id
 
   SPRINT_STATUSES = %w(open closed)
 

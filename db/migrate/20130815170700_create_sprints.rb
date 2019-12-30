@@ -5,7 +5,7 @@
 #   * No derivatives of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-class CreateSprints < ActiveRecord::Migration
+class CreateSprints < ActiveRecord::Migration[4.2]
   def self.up
     create_table :sprints, :force => true do |t|
       t.column :name,             :string,                            :null => false

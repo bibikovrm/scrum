@@ -5,7 +5,7 @@
 #   * No derivatives of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-class AddProjectsProductBacklogId < ActiveRecord::Migration
+class AddProjectsProductBacklogId < ActiveRecord::Migration[4.2]
   def self.up
     add_column :projects, :product_backlog_id, :integer
     add_index :projects, [:product_backlog_id], :name => "projects_product_backlog_id"

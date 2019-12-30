@@ -10,21 +10,21 @@ class ProductBacklogController < ApplicationController
   menu_item :product_backlog
   model_object Sprint
 
-  before_filter :find_model_object,
+  before_action :find_model_object,
                 :only => [:show, :edit, :update, :destroy, :edit_effort, :update_effort, :burndown,
                           :release_plan, :stats, :sort, :check_dependencies]
-  before_filter :find_project_from_association,
+  before_action :find_project_from_association,
                 :only => [:show, :edit, :update, :destroy, :edit_effort, :update_effort, :burndown,
                           :release_plan, :stats, :sort, :check_dependencies]
-  before_filter :find_project_by_project_id,
+  before_action :find_project_by_project_id,
                 :only => [:index, :new, :create]
-  before_filter :find_subprojects,
+  before_action :find_subprojects,
                 :only => [:show, :burndown, :release_plan]
-  before_filter :filter_by_project,
+  before_action :filter_by_project,
                 :only => [:show, :burndown, :release_plan]
-  before_filter :check_issue_positions, :only => [:show]
-  before_filter :calculate_stats, :only => [:show, :burndown, :release_plan]
-  before_filter :authorize
+  before_action :check_issue_positions, :only => [:show]
+  before_action :calculate_stats, :only => [:show, :burndown, :release_plan]
+  before_action :authorize
 
   helper :scrum
 
