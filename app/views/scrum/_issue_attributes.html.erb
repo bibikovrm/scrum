@@ -1,4 +1,10 @@
 <div class="box tabular">
+  <%- if issue.field?(:assigned_to_id) -%>
+    <div class="gravatar" style="position: absolute;">
+      <%= avatar(issue.assigned_to, :size => "50", :title => l(:field_assigned_to)) %>
+    </div>
+  <%- end -%>
+
   <%- if issue.safe_attribute?(:subject) -%>
     <p>
       <%= f.text_field :subject, :size => 10, :maxlength => 255, :required => true %>
