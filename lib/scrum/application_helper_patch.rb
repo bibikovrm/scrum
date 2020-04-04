@@ -172,9 +172,15 @@ module Scrum
                   tips << l(:label_tip_sprint_without_pbis, :sprint_board_link => sprint_board_link,
                             :product_backlog_link => product_backlog_link)
                 end
-                # No tasks check.
+                # No tasks check (or any simple PBI).
                 if @sprint.tasks.empty?
-                  tips << l(:label_tip_sprint_without_tasks, :link => sprint_board_link)
+                  there_are_simple_pbis = false
+                  @sprint.pbis.each do |pbi|
+                    if pbi.is_simple_pbi?
+                      there_are_simple_pbis = true
+                    end
+                  end
+                  tips << l(:label_tip_sprint_without_tasks, :link => sprint_board_link) unless there_are_simple_pbis
                 end
                 # Orphan tasks check.
                 if (orphan_tasks = @sprint.orphan_tasks).any?
