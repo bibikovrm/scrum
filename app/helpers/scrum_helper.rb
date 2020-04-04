@@ -52,7 +52,7 @@ module ScrumHelper
       end
     end
     icons << render_issue_icon(BLOCKED_ICON, l(:label_blocked)) if issue.scrum_blocked?
-    render :inline => icons.join('\n')
+    render :inline => icons.compact.join(' ')
   end
 
   def project_selector_tree(project, indent = '')

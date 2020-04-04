@@ -40,8 +40,7 @@ module Scrum
       class_eval src, __FILE__, __LINE__
     end
 
-    %w(blocked_color
-       doer_color
+    %w(doer_color
        reviewer_color
        default_sprint_name).each do |setting|
       src = <<-END_SRC
@@ -68,7 +67,8 @@ module Scrum
     %w(blocked_custom_field_id
        closed_pbi_status_id
        simple_pbi_custom_field_id
-       story_points_custom_field_id).each do |setting|
+       story_points_custom_field_id
+       doer_reviewer_postit_user_field_id).each do |setting|
       src = <<-END_SRC
       def self.#{setting}
         ::Setting.plugin_scrum[:#{setting}.to_s]

@@ -104,11 +104,11 @@
 }
 
 .settings-post-it {
-	margin-right: 20px;
+	margin-right: 15px;
 	white-space: nowrap;
 	padding: 2px;
 	padding-right: 9px;
-	border-radius: 9px;
+	border-radius: 4px;
 }
 
 .post-it-color-1 {
