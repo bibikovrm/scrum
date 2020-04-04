@@ -21,10 +21,15 @@ api.sprint do
         api.blocked(pbi.scrum_blocked?) unless pbi.scrum_blocked?.nil?
         api.scheduled(pbi.scheduled?)
         api.story_points(pbi.story_points) unless pbi.story_points.nil?
+        api.remaining_story_points(pbi.remaining_story_points) unless pbi.remaining_story_points.nil?
         api.closed_story_points(pbi.closed_story_points) unless pbi.closed_story_points.nil?
-        api.total_time(pbi.total_time) unless pbi.total_time.nil?
-        api.pending_effort(pbi.pending_effort_children) unless pbi.pending_effort_children.nil?
-        api.speed(pbi.speed) unless pbi.speed.nil?
+        if User.current.allowed_to?(:view_pending_effort, pbi.project)
+          api.pending_effort(pbi.pending_effort_children) unless pbi.pending_effort_children.nil?
+        end
+        if User.current.allowed_to?(:view_time_entries, pbi.project)
+          api.total_time(pbi.total_time) unless pbi.total_time.nil?
+          api.speed(pbi.speed) unless pbi.speed.nil?
+        end
         api.array(:tasks, api_meta(:tasks_total_count => pbi.children.size)) do
           pbi.children.each do |task|
             api.task do
@@ -38,9 +43,13 @@ api.sprint do
               api.blocked(task.scrum_blocked?) unless task.scrum_blocked?.nil?
               api.scheduled(task.scheduled?)
               api.estimated_hours(task.estimated_hours) unless task.estimated_hours.nil?
-              api.logged_time(task.total_time) unless task.total_time.nil?
-              api.pending_effort(task.pending_effort) unless task.pending_effort.nil?
-              api.speed(task.speed) unless task.speed.nil?
+              if User.current.allowed_to?(:view_pending_effort, pbi.project)
+                api.pending_effort(task.pending_effort) unless task.pending_effort.nil?
+              end
+              if User.current.allowed_to?(:view_time_entries, task.project)
+                api.logged_time(task.total_time) unless task.total_time.nil?
+                api.speed(task.speed) unless task.speed.nil?
+              end
               api.array(:doers, api_meta(:doers_total_count => task.doers.size)) do
                 task.doers.each do |user|
                   api.user do
