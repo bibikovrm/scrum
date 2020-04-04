@@ -50,7 +50,7 @@
                     Scrum::Setting.task_tracker_ids.include?(tracker.id)) -%>
     <p id="fields_tracker_<%= tracker.id %>"
        style="display: <%= included ? 'block' : 'none' %>;">
-      <label><%= l(:label_setting_fields_on_tracker, :tracker => tracker.name) %></label>
+      <label><%= l(:label_setting_fields_on_tracker, :tracker => tracker.name) %>:</label>
       <%- fields = tracker.core_fields.collect{|f| [l("field_#{f}".sub(/_id$/, '')), f]}
           options = options_for_select(fields, Scrum::Setting.tracker_fields(tracker.id)) -%>
       <%= select_tag "settings[tracker_#{tracker.id}_fields]", options, :multiple => true %>
@@ -119,7 +119,7 @@
                 9  => 'post-it-color-9',  4  => 'post-it-color-4',  10 => 'post-it-color-10',
                 5  => 'post-it-color-5',  6  => 'post-it-color-6',  7  => 'post-it-color-7',
                 8  => 'post-it-color-8'}
-      mini_postit_content = raw('&nbsp;&nbsp;&nbsp;')
+      mini_postit_content = raw('&nbsp;&nbsp;')
       Tracker.all.each do |tracker| -%>
     <%- included = (Scrum::Setting.pbi_tracker_ids.include?(tracker.id) or
                     Scrum::Setting.task_tracker_ids.include?(tracker.id)) -%>
@@ -142,6 +142,7 @@
   <%- end -%>
   <p>
     <label><%= l(:label_doer) %>:</label>
+    <nobr>
     <%- colors.each_pair do |color_id, color_css_class| -%>
       <span style="white-space: nowrap;">
         <%- selected = (color_css_class == Scrum::Setting.doer_color) -%>
@@ -151,9 +152,11 @@
         </span>
       </span>
     <%- end -%>
+    <nobr>
   </p>
   <p>
     <label><%= l(:label_reviewer) %>:</label>
+    <nobr>
     <%- colors.each_pair do |color_id, color_css_class| -%>
       <span style="white-space: nowrap;">
         <%- selected = (color_css_class == Scrum::Setting.reviewer_color) -%>
@@ -163,18 +166,15 @@
         </span>
       </span>
     <%- end -%>
+    <nobr>
   </p>
   <p>
-    <label><%= l(:label_blocked) %>:</label>
-    <%- colors.each_pair do |color_id, color_css_class| -%>
-      <span style="white-space: nowrap;">
-        <%- selected = (color_css_class == Scrum::Setting.blocked_color) -%>
-        <%= radio_button_tag('settings[blocked_color]', color_css_class, selected) %>
-        <span class="post-it settings-post-it <%= color_css_class %>">
-          <%= mini_postit_content %>
-        </span>
-      </span>
-    <%- end -%>
+    <label><%= l(:label_doer_reviewer_postit) %>:</label>
+    <%- custom_fields = CustomField.where(:type => 'UserCustomField', :field_format => ['string'])
+        custom_fields = custom_fields.collect{|c| [c.name, c.id]}
+        options = options_for_select(custom_fields, Scrum::Setting.doer_reviewer_postit_user_field_id) -%>
+    <%= select_tag 'settings[doer_reviewer_postit_user_field_id]', options, :include_blank => true %>
+    <em><%= l(:label_doer_reviewer_postit_explanation) %></em>
   </p>
 </fieldset>
 
@@ -209,6 +209,7 @@
     <%= hidden_field_tag('settings[inherit_pbi_attributes]', 0) %>
     <%= check_box_tag('settings[inherit_pbi_attributes]', 1,
                       Scrum::Setting.inherit_pbi_attributes) %>
+    <em><%= l(:label_setting_inherit_pbi_attributes_explanation) %></em>
   </p>
   <p>
     <label>
@@ -251,7 +252,7 @@
                     Scrum::Setting.task_tracker_ids.include?(tracker.id)) -%>
     <p id="sprint_board_fields_tracker_<%= tracker.id %>"
        style="display: <%= included ? 'block' : 'none' %>;">
-      <label><%= l(:label_setting_sprint_board_fields_on_tracker, :tracker => tracker.name) %></label>
+      <label><%= l(:label_setting_sprint_board_fields_on_tracker, :tracker => tracker.name) %>:</label>
       <%- fields = tracker.core_fields.select{|f| Scrum::Setting::sprint_board_fields.include?(f.to_sym)}.collect{|f| [l("field_#{f}".sub(/_id$/, '')), f]}
           values = Scrum::Setting.tracker_fields(tracker.id, Scrum::Setting::TrackerFields::SPRINT_BOARD_FIELDS)
           options = options_for_select(fields, values) -%>
@@ -288,6 +289,7 @@
     <%= hidden_field_tag('settings[create_journal_on_pbi_position_change]', 0) %>
     <%= check_box_tag('settings[create_journal_on_pbi_position_change]', 1,
                       Scrum::Setting.create_journal_on_pbi_position_change) %>
+    <em><%= l(:label_setting_create_journal_on_pbi_position_change_explanation) %></em>
   </p>
   <p>
     <label><%= l(:label_setting_check_dependencies_on_pbi_sorting) %>:</label>
