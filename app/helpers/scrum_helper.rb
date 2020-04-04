@@ -44,13 +44,14 @@ module ScrumHelper
          (issue.is_task? and Scrum::Setting.render_tasks_speed)) and
         (speed = issue.speed))
       if speed <= Scrum::Setting.lowest_speed
-        icons << render_issue_icon(LOWEST_SPEED_ICON, speed)
+        icons << render_issue_speed_icon(LOWEST_SPEED_ICON, speed)
       elsif speed <= Scrum::Setting.low_speed
-        icons << render_issue_icon(LOW_SPEED_ICON, speed)
+        icons << render_issue_speed_icon(LOW_SPEED_ICON, speed)
       elsif speed >= Scrum::Setting.high_speed
-        icons << render_issue_icon(HIGH_SPEED_ICON, speed)
+        icons << render_issue_speed_icon(HIGH_SPEED_ICON, speed)
       end
     end
+    icons << render_issue_icon(BLOCKED_ICON, l(:label_blocked)) if issue.scrum_blocked?
     render :inline => icons.join('\n')
   end
 
@@ -65,12 +66,16 @@ module ScrumHelper
   DEVIATION_ICONS = [LOWEST_SPEED_ICON = "icon-major-deviation",
                      LOW_SPEED_ICON = "icon-minor-deviation",
                      HIGH_SPEED_ICON = "icon-below-deviation"]
+  BLOCKED_ICON = "icon-blocked"
 
 private
 
-  def render_issue_icon(icon, speed)
-    link_to("", "#", :class => "icon float-icon #{icon}",
-            :title => l(:label_issue_speed, :speed => speed))
-  end
+def render_issue_icon(icon, title = nil)
+  link_to("", "#", :class => "icon float-icon #{icon}", :title => title)
+end
+
+def render_issue_speed_icon(icon, speed)
+  render_issue_icon(icon, l(:label_issue_speed, :speed => speed))
+end
 
 end

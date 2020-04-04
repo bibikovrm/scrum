@@ -372,10 +372,6 @@ module Scrum
           end
         end
 
-        def self.blocked_post_it_css_class
-          return doer_or_reviewer_post_it_css_class(:blocked)
-        end
-
         def move_pbi_to(position, other_pbi_id = nil)
           if !(sprint.nil?) and is_pbi?
             case position
@@ -637,9 +633,6 @@ module Scrum
             when :reviewer
               classes << 'reviewer-post-it'
               classes << Scrum::Setting.reviewer_color
-            when :blocked
-              classes << 'blocked-post-it'
-              classes << Scrum::Setting.blocked_color
           end
           if Scrum::Setting.random_posit_rotation
             classes << "post-it-rotation-#{rand(5)}"
