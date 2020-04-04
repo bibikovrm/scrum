@@ -27,6 +27,8 @@ class SprintsController < ApplicationController
   before_action :calculate_stats, :only => [:show, :burndown, :stats]
   before_action :authorize
 
+  accept_api_auth :index, :show
+
   helper :custom_fields
   helper :scrum
   helper :timelog
@@ -34,10 +36,15 @@ class SprintsController < ApplicationController
   include Redmine::Utils::DateCalculation
 
   def index
-    if (current_sprint = @project.current_sprint)
-      redirect_to sprint_path(current_sprint)
-    else
-      render_error l(:error_no_sprints)
+    respond_to do |format|
+      format.html {
+        if (current_sprint = @project.current_sprint)
+          redirect_to sprint_path(current_sprint)
+        else
+          render_error l(:error_no_sprints)
+        end
+      }
+      format.api
     end
   rescue
     render_404
@@ -45,6 +52,10 @@ class SprintsController < ApplicationController
 
   def show
     redirect_to project_product_backlog_index_path(@project) if @sprint.is_product_backlog?
+    respond_to do |format|
+      format.html
+      format.api
+    end
   end
 
   def new
