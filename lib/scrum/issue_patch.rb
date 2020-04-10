@@ -152,15 +152,18 @@ module Scrum
         end
 
         def is_pbi?
-          tracker.is_pbi?
+          self.tracker.is_pbi?
+        end
+
+        def is_complex_pbi?
+          self.is_pbi? and not self.is_simple_pbi?
         end
 
         def is_simple_pbi?
-          is_pbi? and
+          self.is_pbi? and
           !((custom_field_id = Scrum::Setting.simple_pbi_custom_field_id).nil?) and
           !((custom_value = self.custom_value_for(custom_field_id)).nil?) and
-          (custom_value.value == '1') and
-          self.children.empty?
+          (custom_value.value == '1')
         end
 
         def is_task?
@@ -241,20 +244,20 @@ module Scrum
         end
 
         def has_pending_effort?
-          is_task? and pending_efforts.any?
+          self.is_task? and self.pending_efforts.any?
         end
 
         def pending_effort
           value = nil
-          if self.is_task? and self.has_pending_effort?
-            value = pending_efforts.last.effort
+          if self.has_pending_effort?
+            value = self.pending_efforts.last.effort
           elsif self.is_pbi?
             if Scrum::Setting.use_remaining_story_points?
               if self.has_remaining_story_points?
-                value = pending_efforts.last.effort
+                value = self.pending_efforts.last.effort
               end
             else
-              value = self.children.collect{|task| task.pending_effort}.compact.sum
+              value = self.pending_effort_children
             end
           end
           return value
@@ -262,7 +265,7 @@ module Scrum
 
         def pending_effort_children
           value = nil
-          if self.is_pbi? and self.children.any?
+          if self.is_complex_pbi? and self.children.any?
             value = self.children.collect{|task| task.pending_effort}.compact.sum
           end
           return value
@@ -334,7 +337,10 @@ module Scrum
         def total_time
           # Cache added
           unless defined?(@total_time)
-            if self.is_pbi?
+            if self.is_simple_pbi?
+              the_pending_effort = self.pending_effort
+              the_spent_hours = self.spent_hours
+            elsif self.is_pbi?
               the_pending_effort = self.pending_effort_children
               the_spent_hours = self.children.collect{|task| task.spent_hours}.compact.sum
             elsif self.is_task?
