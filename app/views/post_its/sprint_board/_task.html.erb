@@ -18,7 +18,7 @@
                         new_scrum_time_entry_path(task,
                                                   :pbi_status_id => pbi_status_id,
                                                   :other_pbi_status_ids => other_pbi_status_ids.join(','),
-                                                  :task_id => task_id),
+                                                  :issue_id => task_id),
                         :remote => true, :method => 'GET',
                         :class => 'icon icon-log-time float-icon',
                         :title => l(:button_log_time)) %>

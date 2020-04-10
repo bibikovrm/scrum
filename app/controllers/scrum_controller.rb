@@ -91,7 +91,7 @@ class ScrumController < ApplicationController
   def new_time_entry
     @pbi_status_id = params[:pbi_status_id]
     @other_pbi_status_ids = params[:other_pbi_status_ids]
-    @task_id = params[:task_id]
+    @issue_id = params[:issue_id]
     respond_to do |format|
       format.js
     end
