@@ -39,8 +39,8 @@
                  :locals => {:project => project, :issue => pbi} %>
       <%= render :partial => "post_its/sprint_board/custom_fields", :formats => [:html],
                  :locals => {:project => project, :issue => pbi} %>
-      <div class="doers-reviewers-post-its-container">
-      </div>
+      <%= render :partial => "post_its/sprint_board/doers_reviewers", :formats => [:html],
+                 :locals => {:issue => pbi} %>
     </td>
   </tr>
   <tr>
@@ -56,8 +56,8 @@
     </td>
     <td class="spent">
       <%- if User.current.allowed_to?(:view_time_entries, project) -%>
-        <%= render_hours(pbi.total_time, :title => l(:label_total_effort),
-                         :ignore_zero => pbi.is_complex_pbi?) %>
+        <%= render_hours(pbi.spent_hours, :title => l(:label_spent_time), :ignore_zero => true,
+                         :link => project_time_entries_path(pbi.project, :issue_id => pbi.id)) %>
       <%- end -%>
     </td>
     <td class="pending">
