@@ -167,20 +167,23 @@ module Scrum
               if @sprint and @sprint.persisted? and !(@sprint.is_product_backlog?)
                 sprint_board_link = link_to(l(:label_tip_sprint_board_link),
                                             sprint_path(@sprint))
+                there_are_simple_pbis = false
+                there_are_only_simple_pbis = true
+                @sprint.pbis.each do |pbi|
+                  if pbi.is_simple_pbi?
+                    there_are_simple_pbis = true
+                  else
+                    there_are_only_simple_pbis = false
+                  end
+                end
                 # No PBIs check.
                 if @sprint.pbis.empty?
                   tips << l(:label_tip_sprint_without_pbis, :sprint_board_link => sprint_board_link,
                             :product_backlog_link => product_backlog_link)
                 end
-                # No tasks check (or any simple PBI).
-                if @sprint.tasks.empty?
-                  there_are_simple_pbis = false
-                  @sprint.pbis.each do |pbi|
-                    if pbi.is_simple_pbi?
-                      there_are_simple_pbis = true
-                    end
-                  end
-                  tips << l(:label_tip_sprint_without_tasks, :link => sprint_board_link) unless there_are_simple_pbis
+                # No tasks check.
+                if @sprint.tasks.empty? and not there_are_simple_pbis
+                  tips << l(:label_tip_sprint_without_tasks, :link => sprint_board_link)
                 end
                 # Orphan tasks check.
                 if (orphan_tasks = @sprint.orphan_tasks).any?
@@ -190,7 +193,7 @@ module Scrum
                   tips << l(:label_tip_sprint_with_orphan_tasks, :link => issues_link)
                 end
                 # No estimated effort check.
-                if @sprint.efforts.empty?
+                if @sprint.efforts.empty? and not there_are_only_simple_pbis
                   tips << l(:label_tip_sprint_without_efforts,
                             :link => link_to(l(:label_tip_sprint_effort_link),
                                              edit_effort_sprint_path(@sprint, :back_url => back_url)))
