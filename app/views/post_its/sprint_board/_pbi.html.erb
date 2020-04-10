@@ -39,8 +39,8 @@
                  :locals => {:project => project, :issue => pbi} %>
       <%= render :partial => "post_its/sprint_board/custom_fields", :formats => [:html],
                  :locals => {:project => project, :issue => pbi} %>
-      <div class="doers-reviewers-post-its-container">
-      </div>
+      <%= render :partial => "post_its/sprint_board/doers_reviewers", :formats => [:html],
+                 :locals => {:issue => pbi} %>
     </td>
   </tr>
   <tr>

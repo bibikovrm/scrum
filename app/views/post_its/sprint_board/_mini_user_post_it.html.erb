@@ -1,0 +1,5 @@
+<%- issue.doers.each do |user| -%>
+  <div class="<%= css_class %>">
+    <%= avatar(user, :size => '14') %> <%= user.has_alias? ? user.alias : link_to_user(user) %>
+  </div>
+<%- end -%>
