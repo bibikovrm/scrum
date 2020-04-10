@@ -408,19 +408,24 @@ table.sprint-pbi tr td.pending, table.sprint-task tr td.pending {
 }
 
 table.sprint-pbi tr td.estimation, table.sprint-task tr td.estimation {
+	vertical-align: middle;
 }
 
 table.sprint-pbi tr td.spent, table.sprint-task tr td.spent {
 	text-align: center;
+	vertical-align: middle;
 }
 
 table.sprint-pbi tr td.pending, table.sprint-task tr td.pending {
 	text-align: right;
+	vertical-align: middle;
 }
 
 table.sprint-pbi input, table.sprint-task input {
 	text-align: right;
+	vertical-align: middle;
 	width: 2em;
+	height: min-content;
 }
 
 .editable-time {
