@@ -368,18 +368,52 @@ table.sprint-board tr.sprint-board td.sprint-board {
 }
 
 table.sprint-pbi, table.sprint-task {
-	height: 9em;
 	margin-right: 0.8em;
 	margin-bottom: 0.8em;
 }
 
 table.sprint-pbi {
+	float: left;
+}
+
+table.sprint-pbi-big {
+	width: 26em;
+	height: 17em;
+	font-size: 160%;
+}
+
+table.sprint-pbi-medium {
+	width: 21em;
+	height: 13em;
+	font-size: 130%;
+}
+
+table.sprint-pbi-small {
 	width: 16em;
+	height: 9em;
+	font-size: 100%;
 }
 
 table.sprint-task {
-	width: 13em;
 	float: left;
+}
+
+table.sprint-task-big {
+	width: 23em;
+	height: 17em;
+	font-size: 160%;
+}
+
+table.sprint-task-medium {
+	width: 18em;
+	height: 13em;
+	font-size: 130%;
+}
+
+table.sprint-task-small {
+	width: 13em;
+	height: 9em;
+	font-size: 100%;
 }
 
 table.sprint-pbi tr, table.sprint-task tr {

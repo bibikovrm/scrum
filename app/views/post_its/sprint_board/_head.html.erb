@@ -8,7 +8,8 @@
                 [other_sprint.name, path.call(other_sprint, :type => @type)]}
               options = options_for_select(options, path.call(sprint, :type => @type)) -%>
           <%= select_tag "selected_sprint_id", options,
-                         :onchange => "if (this.value != '') { window.location = this.value; }" %>
+                         :onchange => "if (this.value != '') { window.location = this.value; }",
+                         :autofocus => true %>
         </p>
         <p>
           <label><%= l(:field_start_date) %>:</label>

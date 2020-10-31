@@ -110,6 +110,13 @@
 <fieldset>
   <legend><%= l(:label_post_it) %></legend>
   <p>
+    <label><%= l(:label_setting_postit_size) %>:</label>
+    <%- setting_postit_size = Scrum::Setting.postit_size -%>
+    <%- ['small', 'medium', 'big'].each do |size| -%>
+      <%= radio_button_tag("settings[postit_size]", size, setting_postit_size == size) %> <%= l("label_setting_postit_size_#{size}") %>
+    <%- end -%>
+  </p>
+  <p>
     <label><%= l(:label_setting_random_postit_rotation) %>:</label>
     <%= hidden_field_tag('settings[random_posit_rotation]', 0) %>
     <%= check_box_tag('settings[random_posit_rotation]', 1,

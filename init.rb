@@ -107,6 +107,7 @@ Redmine::Plugin.register :scrum do
                                  :clear_new_tasks_assignee => '1',
                                  :verification_activity_ids => [],
                                  :inherit_pbi_attributes => '1',
+                                 :postit_size => 'small',
                                  :random_posit_rotation => '1',
                                  :render_position_on_pbi => '0',
                                  :render_category_on_pbi => '1',

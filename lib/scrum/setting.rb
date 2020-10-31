@@ -42,7 +42,8 @@ module Scrum
 
     %w(doer_color
        reviewer_color
-       default_sprint_name).each do |setting|
+       default_sprint_name
+       postit_size).each do |setting|
       src = <<-END_SRC
       def self.#{setting}
         setting_or_default(:#{setting})

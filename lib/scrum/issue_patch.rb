@@ -211,6 +211,7 @@ module Scrum
           classes = ['post-it', 'big-post-it', tracker.post_it_css_class]
           if is_pbi?
             classes << 'sprint-pbi'
+            classes << "sprint-pbi-#{Scrum::Setting.postit_size}"
             if options[:draggable] and editable? and sprint
               if User.current.allowed_to?(:edit_product_backlog, project) and sprint.is_product_backlog?
                 classes << 'post-it-vertical-move-cursor'
@@ -221,6 +222,7 @@ module Scrum
             end
           elsif is_task?
             classes << 'sprint-task'
+            classes << "sprint-task-#{Scrum::Setting.postit_size}"
             if options[:draggable] and editable? and sprint and
                User.current.allowed_to?(:edit_sprint_board, project) and !sprint.is_product_backlog?
               classes << 'post-it-horizontal-move-cursor'
