@@ -15,7 +15,7 @@
     <thead class="sprint-board">
       <tr class="sprint-board">
         <th></th>
-        <th class="sprint-board"><%= l(:label_pbi_plural) %></th>
+        <th class="sprint-board pbi-column"><%= l(:label_pbi_plural) %></th>
         <%- task_statuses = IssueStatus.task_statuses
             task_statuses.each do |status| -%>
           <th class="sprint-board"><%= status.name %></th>

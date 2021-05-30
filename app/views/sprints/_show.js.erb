@@ -1,4 +1,18 @@
 <%= javascript_tag do %>
+  function hidePbiColumnIfNeeded() {
+    isEmpty = true;
+    $('td.pbi-column').each(function(i) {
+      if (this.innerHTML.trim() != '') {
+        isEmpty = false;
+      }
+    });
+    var columnCells = $('th.pbi-column, td.pbi-column');
+    if (isEmpty) {
+      columnCells.hide();
+    } else {
+      columnCells.show();
+    }
+  }
   $(document).ready(function() {
     var $assignees = $("#tasks-assignees");
     var users = { };
@@ -53,5 +67,6 @@
         }
       });
     <%- end -%>
+    hidePbiColumnIfNeeded();
   });
 <% end %>

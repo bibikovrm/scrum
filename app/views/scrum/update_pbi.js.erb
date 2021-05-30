@@ -28,3 +28,5 @@
     $("#<%= @pbi.sprint.is_product_backlog? ? "pbi_#{@pbi.id}" : "pbi_#{@pbi.id}_row" %>").remove();
   <%- end -%>
 <%- end -%>
+
+hidePbiColumnIfNeeded();

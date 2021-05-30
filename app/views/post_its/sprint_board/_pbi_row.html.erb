@@ -5,7 +5,7 @@
   <td class="<%= pbi.sortable? ? 'sprint-board-pbi-handle post-it-vertical-move-cursor' : '' %>"
       id="pbi_<%= pbi.id %>_handle">
   </td>
-  <td class="sprint-board">
+  <td class="sprint-board pbi-column">
     <%- unless is_simple -%>
       <%= render :partial => 'post_its/sprint_board/pbi', :formats => [:html],
                  :locals => {:project => project,
