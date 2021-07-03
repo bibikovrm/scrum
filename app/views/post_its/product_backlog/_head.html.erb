@@ -1,7 +1,7 @@
 <tr valign="top">
   <td width="300px">
     <div class="tabular">
-      <%- filtered_params = params.to_h.symbolize_keys.except(:controller, :action, :id) -%>
+      <%- filtered_params = params.permit.to_h.symbolize_keys.except(:controller, :action, :id) -%>
       <p>
         <label><%= l(:label_product_backlog) %>:</label>
         <%- options = product_backlog.project.product_backlogs.collect{ |other_product_backlog|
