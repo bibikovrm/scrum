@@ -20,8 +20,8 @@ Query.send(:include, Scrum::QueryPatch)
 Tracker.send(:include, Scrum::TrackerPatch)
 User.send(:include, Scrum::UserPatch)
 
-require_dependency 'scrum/helper_hooks'
-require_dependency 'scrum/view_hooks'
+require_dependency File.dirname(__FILE__) + '/lib/scrum/helper_hooks'
+require_dependency File.dirname(__FILE__) + '/lib/scrum/view_hooks'
 
 Redmine::Plugin.register :scrum do
   name              'Scrum Redmine plugin'
