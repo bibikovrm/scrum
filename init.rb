@@ -34,7 +34,7 @@ Redmine::Plugin.register :scrum do
   description       'This plugin for Redmine allows to follow Scrum methodology with Redmine projects'
   version           '0.23.0'
   url               'https://redmine.ociotec.com/projects/redmine-plugin-scrum'
-  author_url        'http://ociotec.com'
+  author_url        'https://ociotec.com'
   requires_redmine  :version_or_higher => '4.0.0'
 
   project_module    :scrum do
