@@ -16,15 +16,12 @@ module Scrum
 
         def add_sprints
           yield
-          view = ActionView::Base.new(File.join(File.dirname(__FILE__), '..', '..', 'app', 'views'))
-          view.class_eval do
-            include ApplicationHelper
-          end
+          renderer = ApplicationController.renderer
           sprints = []
           query_sprints(sprints, @query, @calendar, true)
           query_sprints(sprints, @query, @calendar, false)
-          response.body += view.render(:partial => 'scrum_hooks/calendars/sprints',
-                                       :locals => {:sprints => sprints})
+          response.body += renderer.render(:partial => 'scrum_hooks/calendars/sprints',
+                                           :locals => {:sprints => sprints})
         end
 
       private
