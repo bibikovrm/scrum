@@ -29,7 +29,7 @@ module ScrumHelper
       parts << authoring(pbi.created_on, pbi.author)
     end
     if Scrum::Setting.render_assigned_to_on_pbi and pbi.assigned_to
-      parts << "#{l(:field_assigned_to)}: #{link_to_user(pbi.assigned_to)}"
+      parts << "#{l(:field_assigned_to)}: #{link_to_user(pbi.assigned_to, :class => 'assignee')}"
     end
     if Scrum::Setting.render_updated_on_pbi and pbi.created_on != pbi.updated_on
       parts << "#{l(:label_updated_time, time_tag(pbi.updated_on))}"

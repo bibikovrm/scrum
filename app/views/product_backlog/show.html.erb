@@ -28,6 +28,9 @@
              :locals => {:project => @project, :product_backlog => @product_backlog} %>
 <%- end -%>
 
+<%= render :partial => 'product_backlog/show', :formats => [:js],
+           :locals => {:product_backlog => @product_backlog} %>
+
 <%= render :partial => 'common/scrum_footer' %>
 
 <%- heads_for_wiki_formatter -%>

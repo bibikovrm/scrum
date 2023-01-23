@@ -11,6 +11,12 @@
                        :onchange => "if (this.value != '') { window.location = this.value; }",
                        :autofocus => true) %>
       </p>
+      <%- if params[:action] == 'show' -%>
+        <p>
+          <label><%= l(:label_filter_by_assignee) %>:</label>
+          <select id="pbis-assignees"></select>
+        </p>
+      <%- end -%>
       <%- if product_backlog.shared and @subprojects and !@project.children.visible.empty? -%>
         <p>
           <label><%= l(:label_filter_by_project) %>:</label>

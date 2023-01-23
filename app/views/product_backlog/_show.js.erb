@@ -1,0 +1,30 @@
+<%= javascript_tag do %>
+  $(document).ready(function() {
+    var $assignees = $("#pbis-assignees");
+    var users = { };
+    $assignees.append("<option value='all'><%= l(:label_any) %></option>");
+    $("ul.pbis li.sprint-pbi a.user").each(function(row_index, user_link) {
+      users[$.trim(user_link.text)] = row_index;
+    });
+
+    <% # put "Me" in first in the list %>
+    var current_user_name = '<%= User.current.name %>';
+    if (current_user_name in users) {
+      var label_me = '<< <%= l(:label_me) %> >>';
+      $assignees.append("<option value='" + current_user_name + "'>" + label_me + "</option>");
+    }
+
+    $.each(users, function(user, row_index) {
+      $assignees.append("<option value='" + user + "'>" + user + "</option>");
+    });
+    $assignees.change(function(user){
+      var user = $assignees.val();
+      if (user === "all") {
+        $("ul.pbis li.sprint-pbi").show();
+      } else {
+        $("ul.pbis li.sprint-pbi").hide();
+        $("ul.pbis a.assignee:contains('" + user + "')").parents("li.sprint-pbi").show();
+      }
+    });
+  });
+<% end %>
